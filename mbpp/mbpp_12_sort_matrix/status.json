@@ -14,8 +14,16 @@
         "stage": "run"
       },
       "outcome": "check:missing_context"
+    },
+    {
+      "attempt": 2,
+      "tests": {
+        "passed": true,
+        "stage": "run"
+      },
+      "outcome": "pass"
     }
   ],
-  "done": false,
+  "done": true,
   "first_attempt_pass": false
 }
