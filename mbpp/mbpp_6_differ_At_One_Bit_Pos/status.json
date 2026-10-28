@@ -1,5 +1,11 @@
 {
   "name": "mbpp_6_differ_At_One_Bit_Pos",
+  "source": {
+    "dataset": "nuprl/MultiPL-E",
+    "config": "mbpp-rs",
+    "split": "test",
+    "name": "mbpp_6_differ_At_One_Bit_Pos"
+  },
   "attempts": [
     {
       "attempt": 1,

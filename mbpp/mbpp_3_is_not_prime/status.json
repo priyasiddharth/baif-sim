@@ -1,5 +1,11 @@
 {
   "name": "mbpp_3_is_not_prime",
+  "source": {
+    "dataset": "nuprl/MultiPL-E",
+    "config": "mbpp-rs",
+    "split": "test",
+    "name": "mbpp_3_is_not_prime"
+  },
   "attempts": [
     {
       "attempt": 1,

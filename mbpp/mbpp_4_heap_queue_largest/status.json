@@ -1,5 +1,11 @@
 {
   "name": "mbpp_4_heap_queue_largest",
+  "source": {
+    "dataset": "nuprl/MultiPL-E",
+    "config": "mbpp-rs",
+    "split": "test",
+    "name": "mbpp_4_heap_queue_largest"
+  },
   "attempts": [
     {
       "attempt": 1,

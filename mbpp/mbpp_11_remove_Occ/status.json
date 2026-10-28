@@ -1,5 +1,11 @@
 {
   "name": "mbpp_11_remove_Occ",
+  "source": {
+    "dataset": "nuprl/MultiPL-E",
+    "config": "mbpp-rs",
+    "split": "test",
+    "name": "mbpp_11_remove_Occ"
+  },
   "attempts": [
     {
       "attempt": 1,
