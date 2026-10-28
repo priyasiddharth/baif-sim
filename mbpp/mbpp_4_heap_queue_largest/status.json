@@ -7,27 +7,6 @@
         "passed": true,
         "stage": "run"
       },
-      "check": {
-        "verdict": "missing_context",
-        "reasons": [
-          "missing_context: no Lean model for standard-library item: alloc::vec::{alloc::vec::Vec<T>}::truncate",
-          "missing_context: no Lean model for standard-library item: core::slice::{[T"
-        ],
-        "functions": [
-          [
-            "mbpp_4_heap_queue_largest::heap_queue_largest",
-            "translated"
-          ],
-          [
-            "mbpp_4_heap_queue_largest::heap_queue_largest::{impl core::ops::function::FnOnce<(&'_0 isize, &'_1 isize), core::cmp::Ordering> for mbpp_4_heap_queue_largest::heap_queue_largest::{closure}}::call_once",
-            "translated"
-          ]
-        ],
-        "axioms": [
-          "alloc::vec::{alloc::vec::Vec<T>}::truncate",
-          "core::slice::{[T"
-        ]
-      },
       "outcome": "check:missing_context"
     },
     {
@@ -35,17 +14,6 @@
       "tests": {
         "passed": true,
         "stage": "run"
-      },
-      "check": {
-        "verdict": "translates",
-        "reasons": [],
-        "functions": [
-          [
-            "mbpp_4_heap_queue_largest::heap_queue_largest",
-            "translated"
-          ]
-        ],
-        "axioms": []
       },
       "outcome": "pass"
     }

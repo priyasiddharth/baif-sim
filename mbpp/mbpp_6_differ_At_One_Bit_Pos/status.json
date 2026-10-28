@@ -7,21 +7,6 @@
         "passed": true,
         "stage": "run"
       },
-      "check": {
-        "verdict": "missing_context",
-        "reasons": [
-          "missing_context: no Lean model for standard-library item: core::num::{isize}::count_ones"
-        ],
-        "functions": [
-          [
-            "mbpp_6_differ_At_One_Bit_Pos::differ_At_One_Bit_Pos",
-            "translated"
-          ]
-        ],
-        "axioms": [
-          "core::num::{isize}::count_ones"
-        ]
-      },
       "outcome": "check:missing_context"
     },
     {
@@ -29,17 +14,6 @@
       "tests": {
         "passed": true,
         "stage": "run"
-      },
-      "check": {
-        "verdict": "translates",
-        "reasons": [],
-        "functions": [
-          [
-            "mbpp_6_differ_At_One_Bit_Pos::differ_At_One_Bit_Pos",
-            "translated"
-          ]
-        ],
-        "axioms": []
       },
       "outcome": "pass"
     }

@@ -7,37 +7,6 @@
         "passed": true,
         "stage": "run"
       },
-      "check": {
-        "verdict": "unsupported_code",
-        "reasons": [
-          "unsupported_code: Aeneas: Unimplemented \u2014 in `core::str::{str}::rfind` at /rustc/library/core/src/str/mod.rs:1542 (`pub fn rfind<P: Pattern>(&self, pat: P) -> Option<usize>`), used from mbpp_11_remove_Occ.rs:8:15",
-          "unsupported_code: Aeneas: Unimplemented at /rustc/library/core/src/str/pattern.rs:99 (`pub trait Pattern: Sized {`)",
-          "unsupported_code: Aeneas: Aeneas aborted with exception Aeneas.Errors.CFailure(_) in Aeneas__SymbolicToPureTypes.translate_fwd_ty (symbolic/SymbolicToPureTypes.ml:392); no functions were translated"
-        ],
-        "functions": [
-          [
-            "mbpp_11_remove_Occ::remove_Occ",
-            "missing"
-          ],
-          [
-            "mbpp_11_remove_Occ::remove_Occ::{impl}::call_mut",
-            "missing"
-          ],
-          [
-            "mbpp_11_remove_Occ::remove_Occ::{impl}::call_mut",
-            "missing"
-          ],
-          [
-            "mbpp_11_remove_Occ::remove_Occ::{impl}::call_once",
-            "missing"
-          ],
-          [
-            "mbpp_11_remove_Occ::remove_Occ::{impl}::call_once",
-            "missing"
-          ]
-        ],
-        "axioms": []
-      },
       "outcome": "check:unsupported_code"
     },
     {
@@ -45,26 +14,6 @@
       "tests": {
         "passed": true,
         "stage": "run"
-      },
-      "check": {
-        "verdict": "unsupported_code",
-        "reasons": [
-          "unsupported_code: Aeneas: Could not match the contexts \u2014 in `mbpp_11_remove_Occ::remove_Occ` at mbpp_11_remove_Occ.rs:9, used from mbpp_11_remove_Occ.rs:9:4",
-          "missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new",
-          "missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push",
-          "missing_context: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref"
-        ],
-        "functions": [
-          [
-            "mbpp_11_remove_Occ::remove_Occ",
-            "sorry"
-          ]
-        ],
-        "axioms": [
-          "alloc::string::{alloc::string::String}::new",
-          "alloc::string::{alloc::string::String}::push",
-          "alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref"
-        ]
       },
       "outcome": "check:unsupported_code"
     }
