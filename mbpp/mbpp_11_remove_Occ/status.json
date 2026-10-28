@@ -24,6 +24,14 @@
         "stage": "run"
       },
       "outcome": "check:unsupported_code"
+    },
+    {
+      "attempt": 4,
+      "tests": {
+        "passed": true,
+        "stage": "run"
+      },
+      "outcome": "check:missing_context"
     }
   ],
   "done": false,

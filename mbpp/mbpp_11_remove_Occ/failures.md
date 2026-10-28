@@ -138,3 +138,57 @@ Code diff from attempt 2:
      out
  }
 ```
+
+## Attempt 4 — check:missing_context
+
+Delta from attempt 3:
+- resolved: 1
+  - unsupported_code: Aeneas: Could not match the contexts — in `mbpp_11_remove_Occ::remove_Occ` at mbpp_11_remove_Occ.rs:14, used from mbpp_11_remove_Occ.rs:14:8
+- still failing: 3
+  - missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new
+  - missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push
+  - missing_context: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
+- new: 0
+
+Functions: remove_Occ translated
+Axioms: alloc::string::{alloc::string::String}::new, alloc::string::{alloc::string::String}::push, alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
+
+Code diff from attempt 3:
+```diff
+--- attempt-3
++++ attempt-4
+@@ -1,11 +1,12 @@
+ /// Write a rsthon function to remove first and last occurrence of a given character from the string.
+ fn remove_Occ(s: String, ch: String) -> String {
+-    let c = match ch.chars().next() {
+-        Some(c) => c,
+-        None => return s,
+-    };
+-    // Materialise the characters so the loops index a Vec instead of
+-    // holding a borrowing iterator across iterations.
++    // Take the character via a materialised Vec<char> rather than a Chars
++    // iterator, so no borrow of `ch` outlives this statement.
++    let chv: Vec<char> = ch.chars().collect();
++    if chv.len() == 0 {
++        return s;
++    }
++    let c = chv[0];
+     let chars: Vec<char> = s.chars().collect();
+     let n = chars.len();
+     let mut total = 0;
+@@ -21,10 +22,13 @@
+     let mut j = 0;
+     while j < n {
+         let x = chars[j];
++        // Branch on the condition instead of storing `a || b` in a bool.
+         let mut skip = false;
+         if x == c {
+             seen += 1;
+-            skip = seen == 1 || seen == total;
++            if seen == 1 || seen == total {
++                skip = true;
++            }
+         }
+         if !skip {
+             out.push(x);
+```
