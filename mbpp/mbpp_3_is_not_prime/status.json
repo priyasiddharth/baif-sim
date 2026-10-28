@@ -43,8 +43,27 @@
         ]
       },
       "outcome": "check:missing_context"
+    },
+    {
+      "attempt": 2,
+      "tests": {
+        "passed": true,
+        "stage": "run"
+      },
+      "check": {
+        "verdict": "translates",
+        "reasons": [],
+        "functions": [
+          [
+            "mbpp_3_is_not_prime::is_not_prime",
+            "translated"
+          ]
+        ],
+        "axioms": []
+      },
+      "outcome": "pass"
     }
   ],
-  "done": false,
+  "done": true,
   "first_attempt_pass": false
 }
