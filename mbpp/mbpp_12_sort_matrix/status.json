@@ -6,6 +6,16 @@
     "split": "test",
     "name": "mbpp_12_sort_matrix"
   },
-  "attempts": [],
-  "done": false
+  "attempts": [
+    {
+      "attempt": 1,
+      "tests": {
+        "passed": true,
+        "stage": "run"
+      },
+      "outcome": "check:missing_context"
+    }
+  ],
+  "done": false,
+  "first_attempt_pass": false
 }

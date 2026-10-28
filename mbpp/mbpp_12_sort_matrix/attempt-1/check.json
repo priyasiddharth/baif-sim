@@ -1,0 +1,89 @@
+{
+  "input": "/home/siddharth/baif/sim/mbpp/mbpp_12_sort_matrix/attempt-1/mbpp_12_sort_matrix.rs",
+  "versions": {
+    "aeneas": "399081f2",
+    "charon": "2ec7e964e",
+    "charon_matches_pin": true,
+    "rustc": "nightly-2026-09-17",
+    "lean": "v4.35.0"
+  },
+  "stages": {
+    "charon": {
+      "status": "ok",
+      "rust_compiled": true,
+      "warnings": [],
+      "errors": []
+    },
+    "aeneas": {
+      "status": "ok",
+      "warnings": [
+        {
+          "message": "When retrieving the builtin information for trait decl 'core::iter::traits::iterator::Iterator', could not find the information for item 'sum'. The model defined in the Lean library seems to be missing the corresponding field.",
+          "file": "/rustc/library/core/src/iter/traits/iterator.rs",
+          "line": 42,
+          "col": 0,
+          "end_line": 42,
+          "snippet": "pub const trait Iterator {"
+        },
+        {
+          "message": "The crate contains extracted external, unknown definitions: we advise using the option -split-files to allow manually providing these definitions in separate files."
+        }
+      ],
+      "errors": []
+    },
+    "lean": {
+      "status": "ok",
+      "errors": []
+    }
+  },
+  "functions": [
+    {
+      "rust": "mbpp_12_sort_matrix::sort_matrix",
+      "lean": "Mbpp12SortMatrix.sort_matrix",
+      "status": "translated",
+      "reason": null,
+      "error_ref": null
+    },
+    {
+      "rust": "mbpp_12_sort_matrix::sort_matrix::{impl core::ops::function::FnOnce<(&'_0 alloc::vec::Vec<isize>,), isize> for mbpp_12_sort_matrix::sort_matrix::{closure}}::call_once",
+      "lean": "Mbpp12SortMatrix.sort_matrix.closure.Insts.CoreOpsFunctionFnOnceTupleShared0VecIsizeIsize.call_once",
+      "status": "translated",
+      "reason": null,
+      "error_ref": null
+    }
+  ],
+  "axioms": [
+    {
+      "lean": "Mbpp12SortMatrix.Isize.Insts.CoreIterTraitsAccumSumSharedAIsize.sum",
+      "rust": "core::iter::traits::accum::{impl core::iter::traits::accum::Sum<&'a isize> for isize}::sum",
+      "origin": "stdlib",
+      "used_by": [
+        "Mbpp12SortMatrix.sort_matrix",
+        "Mbpp12SortMatrix.sort_matrix.closure.Insts.CoreOpsFunctionFnOnceTupleShared0VecIsizeIsize.call_once"
+      ]
+    },
+    {
+      "lean": "Mbpp12SortMatrix.alloc.slice.Slice.sort_by_key",
+      "rust": "alloc::slice::{[T",
+      "origin": "stdlib",
+      "used_by": [
+        "Mbpp12SortMatrix.sort_matrix"
+      ]
+    },
+    {
+      "lean": "Mbpp12SortMatrix.core.iter.traits.iterator.Iterator.sum.default",
+      "rust": "core::iter::traits::iterator::Iterator::sum",
+      "origin": "stdlib",
+      "used_by": [
+        "Mbpp12SortMatrix.sort_matrix",
+        "Mbpp12SortMatrix.sort_matrix.closure.Insts.CoreOpsFunctionFnOnceTupleShared0VecIsizeIsize.call_once"
+      ]
+    }
+  ],
+  "verdict": "missing_context",
+  "reasons": [
+    "missing_context: no Lean model for standard-library item: core::iter::traits::accum::{impl core::iter::traits::accum::Sum<&'a isize> for isize}::sum",
+    "missing_context: no Lean model for standard-library item: alloc::slice::{[T",
+    "missing_context: no Lean model for standard-library item: core::iter::traits::iterator::Iterator::sum"
+  ]
+}
