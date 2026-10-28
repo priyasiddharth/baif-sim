@@ -9,24 +9,9 @@
   },
   "stages": {
     "charon": {
-      "status": "partial",
+      "status": "ok",
       "rust_compiled": true,
-      "warnings": [
-        {
-          "message": "function `differ_At_One_Bit_Pos` is never used",
-          "code": null,
-          "file": "mbpp_6_differ_At_One_Bit_Pos.rs",
-          "line": 2,
-          "col": 4
-        },
-        {
-          "message": "function `differ_At_One_Bit_Pos` should have a snake case name",
-          "code": null,
-          "file": "mbpp_6_differ_At_One_Bit_Pos.rs",
-          "line": 2,
-          "col": 4
-        }
-      ],
+      "warnings": [],
       "errors": []
     },
     "aeneas": {
@@ -62,10 +47,8 @@
       ]
     }
   ],
-  "verdict": "unsupported_code",
+  "verdict": "missing_context",
   "reasons": [
-    "unsupported_code: Charon: function `differ_At_One_Bit_Pos` is never used",
-    "unsupported_code: Charon: function `differ_At_One_Bit_Pos` should have a snake case name",
     "missing_context: no Lean model for standard-library item: core::num::{isize}::count_ones"
   ]
 }

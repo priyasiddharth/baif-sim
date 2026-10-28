@@ -5,10 +5,8 @@
     "stage": "run"
   },
   "check": {
-    "verdict": "unsupported_code",
+    "verdict": "missing_context",
     "reasons": [
-      "unsupported_code: Charon: function `differ_At_One_Bit_Pos` is never used",
-      "unsupported_code: Charon: function `differ_At_One_Bit_Pos` should have a snake case name",
       "missing_context: no Lean model for standard-library item: core::num::{isize}::count_ones"
     ],
     "functions": [
@@ -21,5 +19,5 @@
       "core::num::{isize}::count_ones"
     ]
   },
-  "outcome": "check:unsupported_code"
+  "outcome": "check:missing_context"
 }
