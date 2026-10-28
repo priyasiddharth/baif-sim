@@ -29,8 +29,27 @@
         ]
       },
       "outcome": "check:missing_context"
+    },
+    {
+      "attempt": 2,
+      "tests": {
+        "passed": true,
+        "stage": "run"
+      },
+      "check": {
+        "verdict": "translates",
+        "reasons": [],
+        "functions": [
+          [
+            "mbpp_4_heap_queue_largest::heap_queue_largest",
+            "translated"
+          ]
+        ],
+        "axioms": []
+      },
+      "outcome": "pass"
     }
   ],
-  "done": false,
+  "done": true,
   "first_attempt_pass": false
 }
