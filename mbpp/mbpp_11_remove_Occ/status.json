@@ -16,6 +16,14 @@
         "stage": "run"
       },
       "outcome": "check:unsupported_code"
+    },
+    {
+      "attempt": 3,
+      "tests": {
+        "passed": true,
+        "stage": "run"
+      },
+      "outcome": "check:unsupported_code"
     }
   ],
   "done": false,

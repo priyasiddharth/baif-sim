@@ -81,3 +81,60 @@ Code diff from attempt 1:
 +    out
  }
 ```
+
+## Attempt 3 — check:unsupported_code
+
+Delta from attempt 2:
+- resolved: 1
+  - unsupported_code: Aeneas: Could not match the contexts — in `mbpp_11_remove_Occ::remove_Occ` at mbpp_11_remove_Occ.rs:9, used from mbpp_11_remove_Occ.rs:9:4
+- still failing: 3
+  - missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new
+  - missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push
+  - missing_context: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
+- new: 1
+  - unsupported_code: Aeneas: Could not match the contexts — in `mbpp_11_remove_Occ::remove_Occ` at mbpp_11_remove_Occ.rs:14, used from mbpp_11_remove_Occ.rs:14:8
+
+Functions: remove_Occ sorry
+Axioms: alloc::string::{alloc::string::String}::new, alloc::string::{alloc::string::String}::push, alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
+
+Code diff from attempt 2:
+```diff
+--- attempt-2
++++ attempt-3
+@@ -4,16 +4,23 @@
+         Some(c) => c,
+         None => return s,
+     };
+-    // Count occurrences so we know which one is the last.
++    // Materialise the characters so the loops index a Vec instead of
++    // holding a borrowing iterator across iterations.
++    let chars: Vec<char> = s.chars().collect();
++    let n = chars.len();
+     let mut total = 0;
+-    for x in s.chars() {
+-        if x == c {
++    let mut i = 0;
++    while i < n {
++        if chars[i] == c {
+             total += 1;
+         }
++        i += 1;
+     }
+     let mut out = String::new();
+     let mut seen = 0;
+-    for x in s.chars() {
++    let mut j = 0;
++    while j < n {
++        let x = chars[j];
+         let mut skip = false;
+         if x == c {
+             seen += 1;
+@@ -22,6 +29,7 @@
+         if !skip {
+             out.push(x);
+         }
++        j += 1;
+     }
+     out
+ }
+```
