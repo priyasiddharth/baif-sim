@@ -1,0 +1,86 @@
+{
+  "input": "/home/siddharth/baif/sim/mbpp/mbpp_4_heap_queue_largest/attempt-1/mbpp_4_heap_queue_largest.rs",
+  "versions": {
+    "aeneas": "399081f2",
+    "charon": "2ec7e964e",
+    "charon_matches_pin": true,
+    "rustc": "nightly-2026-09-17",
+    "lean": "v4.35.0"
+  },
+  "stages": {
+    "charon": {
+      "status": "partial",
+      "rust_compiled": true,
+      "warnings": [
+        {
+          "message": "function `heap_queue_largest` is never used",
+          "code": null,
+          "file": "mbpp_4_heap_queue_largest.rs",
+          "line": 2,
+          "col": 4
+        }
+      ],
+      "errors": []
+    },
+    "aeneas": {
+      "status": "ok",
+      "warnings": [
+        {
+          "message": "The crate contains extracted external, unknown definitions: we advise using the option -split-files to allow manually providing these definitions in separate files."
+        }
+      ],
+      "errors": []
+    },
+    "lean": {
+      "status": "ok",
+      "errors": []
+    }
+  },
+  "functions": [
+    {
+      "rust": "mbpp_4_heap_queue_largest::heap_queue_largest",
+      "lean": "Mbpp4HeapQueueLargest.heap_queue_largest",
+      "status": "translated",
+      "reason": null,
+      "error_ref": null
+    },
+    {
+      "rust": "mbpp_4_heap_queue_largest::heap_queue_largest::{impl core::ops::function::FnOnce<(&'_0 isize, &'_1 isize), core::cmp::Ordering> for mbpp_4_heap_queue_largest::heap_queue_largest::{closure}}::call_once",
+      "lean": "Mbpp4HeapQueueLargest.heap_queue_largest.closure.Insts.CoreOpsFunctionFnOncePairShared0IsizeShared1IsizeOrdering.call_once",
+      "status": "translated",
+      "reason": null,
+      "error_ref": null
+    },
+    {
+      "rust": "mbpp_4_heap_queue_largest::heap_queue_largest::{impl core::ops::function::FnOnce<(&'_0 isize, &'_1 isize), core::cmp::Ordering> for mbpp_4_heap_queue_largest::heap_queue_largest::{closure}}::call_once",
+      "lean": "Mbpp4HeapQueueLargest.heap_queue_largest.closure.Insts.CoreOpsFunctionFnOncePairShared0IsizeShared1IsizeOrdering.call_once",
+      "status": "translated",
+      "reason": null,
+      "error_ref": null
+    }
+  ],
+  "axioms": [
+    {
+      "lean": "Mbpp4HeapQueueLargest.alloc.vec.Vec.truncate",
+      "rust": "alloc::vec::{alloc::vec::Vec<T>}::truncate",
+      "origin": "stdlib",
+      "used_by": [
+        "Mbpp4HeapQueueLargest.heap_queue_largest"
+      ]
+    },
+    {
+      "lean": "Mbpp4HeapQueueLargest.core.slice.Slice.sort_unstable_by",
+      "rust": "core::slice::{[T]}::sort_unstable_by",
+      "origin": "stdlib",
+      "used_by": [
+        "Mbpp4HeapQueueLargest.heap_queue_largest"
+      ]
+    }
+  ],
+  "verdict": "unsupported_code",
+  "reasons": [
+    "unsupported_code: Charon: function `heap_queue_largest` is never used",
+    "missing_context: no Lean model for standard-library item: alloc::vec::{alloc::vec::Vec<T>}::truncate",
+    "missing_context: no Lean model for standard-library item: core::slice::{[T]}::sort_unstable_by"
+  ]
+}
