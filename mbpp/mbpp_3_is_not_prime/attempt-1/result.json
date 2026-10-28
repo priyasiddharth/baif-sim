@@ -5,19 +5,16 @@
     "stage": "run"
   },
   "check": {
-    "verdict": "toolchain_problem",
+    "verdict": "missing_context",
     "reasons": [
-      "unsupported_code: Charon: function `is_not_prime` is never used",
-      "toolchain_problem: generated Lean does not type-check: `take_while` is not a field of structure `core.iter.traits.iterator.Iterator`",
-      "toolchain_problem: generated Lean does not type-check: `any` is not a field of structure `core.iter.traits.iterator.Iterator`",
-      "toolchain_problem: generated Lean does not type-check: `take_while` is not a field of structure `core.iter.traits.iterator.Iterator`",
-      "toolchain_problem: generated Lean does not type-check: `any` is not a field of structure `core.iter.traits.iterator.Iterator`",
-      "missing_context: axiom from the Aeneas Lean library: Mbpp3IsNotPrime.Shared1Isize.Insts.CoreOpsArithMulShared0IsizeIsize.mul",
-      "missing_context: axiom from the Aeneas Lean library: Mbpp3IsNotPrime.core.iter.adapters.take_while.TakeWhile",
+      "missing_context: Lean library lacks a model: `take_while` is not a field of structure `core.iter.traits.iterator.Iterator`",
+      "missing_context: Lean library lacks a model: `any` is not a field of structure `core.iter.traits.iterator.Iterator`",
+      "missing_context: no Lean model for standard-library item: core::ops::arith::{impl core::ops::arith::Mul<&'_0 isize, isize> for &'_1 isize}::mul",
+      "missing_context: no Lean model for standard-library item: core::iter::adapters::take_while::TakeWhile",
       "missing_context: no Lean model for standard-library item: core::iter::traits::iterator::Iterator::any",
       "missing_context: no Lean model for standard-library item: core::iter::traits::iterator::Iterator::take_while",
-      "missing_context: axiom from the Aeneas Lean library: Mbpp3IsNotPrime.core.ops.range.RangeFrom.Insts.CoreIterTraitsIteratorIterator.next",
-      "missing_context: axiom from the Aeneas Lean library: Mbpp3IsNotPrime.core.iter.adapters.take_while.TakeWhile.Insts.CoreIterTraitsIteratorIterator.next"
+      "missing_context: no Lean model for standard-library item: core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::RangeFrom<A>}::next",
+      "missing_context: no Lean model for standard-library item: core::iter::adapters::take_while::{impl core::iter::traits::iterator::Iterator<Clause0_Item> for core::iter::adapters::take_while::TakeWhile<I, P>}::next"
     ],
     "functions": [
       [
@@ -31,24 +28,16 @@
       [
         "mbpp_3_is_not_prime::is_not_prime::{impl core::ops::function::FnOnce<(isize,), bool> for mbpp_3_is_not_prime::is_not_prime::{closure#1}<'_0>}::call_once",
         "translated"
-      ],
-      [
-        "mbpp_3_is_not_prime::is_not_prime::{impl core::ops::function::FnOnce<(&'_1 isize,), bool> for mbpp_3_is_not_prime::is_not_prime::{closure}<'_0>}::call_once",
-        "translated"
-      ],
-      [
-        "mbpp_3_is_not_prime::is_not_prime::{impl core::ops::function::FnOnce<(isize,), bool> for mbpp_3_is_not_prime::is_not_prime::{closure#1}<'_0>}::call_once",
-        "translated"
       ]
     ],
     "axioms": [
-      "Mbpp3IsNotPrime.Shared1Isize.Insts.CoreOpsArithMulShared0IsizeIsize.mul",
-      "Mbpp3IsNotPrime.core.iter.adapters.take_while.TakeWhile",
+      "core::ops::arith::{impl core::ops::arith::Mul<&'_0 isize, isize> for &'_1 isize}::mul",
+      "core::iter::adapters::take_while::TakeWhile",
       "core::iter::traits::iterator::Iterator::any",
       "core::iter::traits::iterator::Iterator::take_while",
-      "Mbpp3IsNotPrime.core.ops.range.RangeFrom.Insts.CoreIterTraitsIteratorIterator.next",
-      "Mbpp3IsNotPrime.core.iter.adapters.take_while.TakeWhile.Insts.CoreIterTraitsIteratorIterator.next"
+      "core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::RangeFrom<A>}::next",
+      "core::iter::adapters::take_while::{impl core::iter::traits::iterator::Iterator<Clause0_Item> for core::iter::adapters::take_while::TakeWhile<I, P>}::next"
     ]
   },
-  "outcome": "check:toolchain_problem"
+  "outcome": "check:missing_context"
 }
