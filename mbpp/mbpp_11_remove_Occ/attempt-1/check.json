@@ -18,11 +18,15 @@
       "status": "failed",
       "warnings": [
         {
-          "message": "Could not translate the function signature of 'core::str::{str}::rfind because of previous error This definition is (transitively) used at the following locations:",
+          "message": "Could not translate the function signature of 'core::str::{str}::rfind because of previous error",
+          "item": "core::str::{str}::rfind",
           "file": "mbpp_11_remove_Occ.rs",
           "line": 8,
           "col": 15,
-          "end_line": 8
+          "end_line": 8,
+          "used_at": [
+            "mbpp_11_remove_Occ.rs:8:15"
+          ]
         }
       ],
       "errors": [
@@ -31,14 +35,24 @@
           "file": "/rustc/library/core/src/str/mod.rs",
           "line": 1542,
           "col": 4,
-          "end_line": 1544
+          "end_line": 1544,
+          "snippet": "pub fn rfind<P: Pattern>(&self, pat: P) -> Option<usize>",
+          "item": "core::str::{str}::rfind",
+          "used_at": [
+            "mbpp_11_remove_Occ.rs:8:15"
+          ]
         },
         {
           "message": "Unimplemented",
           "file": "/rustc/library/core/src/str/pattern.rs",
           "line": 99,
           "col": 0,
-          "end_line": 99
+          "end_line": 99,
+          "snippet": "pub trait Pattern: Sized {"
+        },
+        {
+          "message": "Aeneas aborted with exception Aeneas.Errors.CFailure(_) in Aeneas__SymbolicToPureTypes.translate_fwd_ty (symbolic/SymbolicToPureTypes.ml:392); no functions were translated",
+          "crash": true
         }
       ]
     },
@@ -99,6 +113,8 @@
   "axioms": [],
   "verdict": "unsupported_code",
   "reasons": [
-    "unsupported_code: Aeneas: Unimplemented"
+    "unsupported_code: Aeneas: Unimplemented \u2014 in `core::str::{str}::rfind` at /rustc/library/core/src/str/mod.rs:1542 (`pub fn rfind<P: Pattern>(&self, pat: P) -> Option<usize>`), used from mbpp_11_remove_Occ.rs:8:15",
+    "unsupported_code: Aeneas: Unimplemented at /rustc/library/core/src/str/pattern.rs:99 (`pub trait Pattern: Sized {`)",
+    "unsupported_code: Aeneas: Aeneas aborted with exception Aeneas.Errors.CFailure(_) in Aeneas__SymbolicToPureTypes.translate_fwd_ty (symbolic/SymbolicToPureTypes.ml:392); no functions were translated"
   ]
 }

@@ -4,7 +4,9 @@
 
 Initial version.
 Reasons:
-- unsupported_code: Aeneas: Unimplemented
+- unsupported_code: Aeneas: Unimplemented — in `core::str::{str}::rfind` at /rustc/library/core/src/str/mod.rs:1542 (`pub fn rfind<P: Pattern>(&self, pat: P) -> Option<usize>`), used from mbpp_11_remove_Occ.rs:8:15
+- unsupported_code: Aeneas: Unimplemented at /rustc/library/core/src/str/pattern.rs:99 (`pub trait Pattern: Sized {`)
+- unsupported_code: Aeneas: Aeneas aborted with exception Aeneas.Errors.CFailure(_) in Aeneas__SymbolicToPureTypes.translate_fwd_ty (symbolic/SymbolicToPureTypes.ml:392); no functions were translated
 
 Functions: remove_Occ missing, {closure} missing, {closure} missing, {closure} missing, {closure} missing
 Axioms: none
