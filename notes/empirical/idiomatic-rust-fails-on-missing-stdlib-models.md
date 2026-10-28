@@ -2,12 +2,15 @@
 
 **Verified against:** aeneas 399081f, charon 2ec7e96, rustc nightly-2026-09-17, Lean v4.35.0 (Aeneas Lean lib at the same aeneas commit)
 **Last verified:** 2026-10-28
-**Status:** single-benchmark (3 MBPP problems, 1 generator)
+**Status:** single-benchmark (5 MBPP problems, 1 generator)
 
-[EMP] 0/3 first-attempt passes on MBPP problems 3, 4, 6 written as a model
-      would normally write them; 3/3 after one revision driven by the check
-      report. Every attempt-1 verdict was `missing_context`; none was
+[EMP] 0/5 first-attempt passes on MBPP problems 3, 4, 6, 11, 12 written as a
+      model would normally write them; 4/5 after one revision driven by the
+      check report (11, the `String` one, is unreachable — see below). Every
+      non-string attempt-1 verdict was `missing_context`; none was
       unsupported Rust. Items with no model in `aeneas/backends/lean`:
+      - `Iterator::sum`, `Sum<&isize> for isize`, `slice::sort_by_key`
+        (sort_matrix).
       - `Iterator::take_while`, `Iterator::any`, `RangeFrom::next`,
         `TakeWhile` (iterator adapters). Lean type-check also failed:
         "`take_while` is not a field of structure `core.iter.traits.iterator.Iterator`".
@@ -17,9 +20,11 @@
       (mbpp/*/failures.md has the diffs.)
 
 [EMP] What translated cleanly with no axioms: `while` + indexing, `Vec::new`
-      /`push`/`len`, index assignment `v[i] = x`, integer `+ - * % ^ & << >>`,
-      `as` casts, comparisons, early `return`, struct/enum/match, `&mut`
-      params (tests/compile_ok1.rs and the three attempt-2 solutions).
+      /`push`/`len`, index assignment `v[i] = x`, nested `Vec<Vec<_>>` with
+      `M[i][j]` and pushing owned rows, `Vec<bool>` flags, integer
+      `+ - * % ^ & << >>`, `as` casts, comparisons, early `return`,
+      struct/enum/match, `&mut` params (tests/compile_ok1.rs and the four
+      attempt-2 solutions). Avoid `swap`/`clone`/`remove` (unmodelled).
 
 [HYP] Feeding the generator the list of modelled stdlib items
       (`aeneas/src/extract/ExtractBuiltinLean.ml`) up front would turn most of

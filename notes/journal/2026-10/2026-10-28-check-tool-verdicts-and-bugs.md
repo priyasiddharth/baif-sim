@@ -29,6 +29,16 @@ invalid → 3). `toolchain_problem` (4) has no test case yet. [OPEN]
 Attempt-1 verdicts were re-derived with `mbpp.py recheck` and committed;
 the wrong originals stay in git history.
 
+[OBS 2026-10-28] Later the same day: with the Aeneas Lean library not built,
+the Lean stage was `skipped` but the verdict could still be `translates`
+(no type-check, no `#print axioms`; only file-declared `axiom`s were seen).
+Now a skipped Lean stage is a `toolchain_problem` reason; missing `lake` is
+a clean skip; a missing `charon`/`aeneas` binary still emits a JSON report
+(exit 4) instead of a bare stderr line. Also on the user's call: `result.json`
+and `problem.json` dropped — `check.json` is the result record (written by
+`mbpp.py` from check.py's stdout), `status.json` holds provenance + attempt
+index.
+
 [HYP] Matching LLBC functions to Lean decls by source span will break on
 trait-impl methods and generated code; untested beyond free functions and
 closures.
