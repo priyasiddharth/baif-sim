@@ -1,0 +1,104 @@
+{
+  "input": "/home/siddharth/baif/sim/mbpp/mbpp_11_remove_Occ/attempt-1/mbpp_11_remove_Occ.rs",
+  "versions": {
+    "aeneas": "399081f2",
+    "charon": "2ec7e964e",
+    "charon_matches_pin": true,
+    "rustc": "nightly-2026-09-17",
+    "lean": "v4.35.0"
+  },
+  "stages": {
+    "charon": {
+      "status": "ok",
+      "rust_compiled": true,
+      "warnings": [],
+      "errors": []
+    },
+    "aeneas": {
+      "status": "failed",
+      "warnings": [
+        {
+          "message": "Could not translate the function signature of 'core::str::{str}::rfind because of previous error This definition is (transitively) used at the following locations:",
+          "file": "mbpp_11_remove_Occ.rs",
+          "line": 8,
+          "col": 15,
+          "end_line": 8
+        }
+      ],
+      "errors": [
+        {
+          "message": "Unimplemented",
+          "file": "/rustc/library/core/src/str/mod.rs",
+          "line": 1542,
+          "col": 4,
+          "end_line": 1544
+        },
+        {
+          "message": "Unimplemented",
+          "file": "/rustc/library/core/src/str/pattern.rs",
+          "line": 99,
+          "col": 0,
+          "end_line": 99
+        }
+      ]
+    },
+    "lean": {
+      "status": "skipped",
+      "errors": []
+    }
+  },
+  "functions": [
+    {
+      "rust": "mbpp_11_remove_Occ::remove_Occ",
+      "lean": null,
+      "status": "missing",
+      "reason": "aeneas_error",
+      "error_ref": {
+        "stage": "aeneas",
+        "list": "warnings",
+        "index": 0
+      }
+    },
+    {
+      "rust": "mbpp_11_remove_Occ::remove_Occ::{impl}::call_mut",
+      "lean": null,
+      "status": "missing",
+      "reason": "aeneas_error",
+      "error_ref": null
+    },
+    {
+      "rust": "mbpp_11_remove_Occ::remove_Occ::{impl}::call_mut",
+      "lean": null,
+      "status": "missing",
+      "reason": "aeneas_error",
+      "error_ref": {
+        "stage": "aeneas",
+        "list": "errors",
+        "index": 0
+      }
+    },
+    {
+      "rust": "mbpp_11_remove_Occ::remove_Occ::{impl}::call_once",
+      "lean": null,
+      "status": "missing",
+      "reason": "aeneas_error",
+      "error_ref": null
+    },
+    {
+      "rust": "mbpp_11_remove_Occ::remove_Occ::{impl}::call_once",
+      "lean": null,
+      "status": "missing",
+      "reason": "aeneas_error",
+      "error_ref": {
+        "stage": "aeneas",
+        "list": "errors",
+        "index": 0
+      }
+    }
+  ],
+  "axioms": [],
+  "verdict": "unsupported_code",
+  "reasons": [
+    "unsupported_code: Aeneas: Unimplemented"
+  ]
+}

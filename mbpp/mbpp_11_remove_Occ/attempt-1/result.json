@@ -1,0 +1,37 @@
+{
+  "attempt": 1,
+  "tests": {
+    "passed": true,
+    "stage": "run"
+  },
+  "check": {
+    "verdict": "unsupported_code",
+    "reasons": [
+      "unsupported_code: Aeneas: Unimplemented"
+    ],
+    "functions": [
+      [
+        "mbpp_11_remove_Occ::remove_Occ",
+        "missing"
+      ],
+      [
+        "mbpp_11_remove_Occ::remove_Occ::{impl}::call_mut",
+        "missing"
+      ],
+      [
+        "mbpp_11_remove_Occ::remove_Occ::{impl}::call_mut",
+        "missing"
+      ],
+      [
+        "mbpp_11_remove_Occ::remove_Occ::{impl}::call_once",
+        "missing"
+      ],
+      [
+        "mbpp_11_remove_Occ::remove_Occ::{impl}::call_once",
+        "missing"
+      ]
+    ],
+    "axioms": []
+  },
+  "outcome": "check:unsupported_code"
+}
