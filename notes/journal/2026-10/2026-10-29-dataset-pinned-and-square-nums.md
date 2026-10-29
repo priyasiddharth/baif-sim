@@ -64,8 +64,24 @@ ended loan projector the loop matcher cannot handle. abs@3 exists
 because `next` takes `&mut Chars` and returns an owned `Option<char>`;
 region `'2` ended right after the call, which turns its loan projector
 into `AEndedProjLoans`, and nothing ever removes the abstraction before
-the loop. The `Vec<char>` route works because `collect` consumes the
-iterator, so the abstractions end before the loop. [OPEN] whether
+the loop.
+[SUPERSEDED same day] I first wrote that the `Vec<char>` route works
+"because `collect` consumes the iterator, so the abstractions end before
+the loop". Wrong: the passing log has the same three abstractions at
+loop entry (Deref, chars, and abs@2 for `collect`). The difference is the
+*shape*: `collect(self)` takes `Chars` by value, so abs@2 holds a live
+borrow projector `(s@4 <: Chars<'2>)` (`AProjBorrows`, which the matcher
+handles); `next(&mut self)` borrows the temporary `Chars` mutably, the
+borrow's region ends after the call, and what remains is
+`@ended_ignored_mut_borrow(…, ended_aproj_loans)`. Misled by not
+rereading the passing context before explaining it.
+Confirmed by varying the receiver mode alone (same loop, same `s`):
+`ch.chars().last()` (`fn last(self)`) → join succeeds, verdict
+`missing_context` only (no model for `Chars::last`);
+`ch.chars().nth(0)` (`fn nth(&mut self, _)`) → "Could not match the
+contexts" at the `while`, like `next`. Rule for generated code: do not
+call a `&mut self` iterator method on a temporary before a loop; use a
+by-value consumer (`collect`, `last`) or index into a `Vec`. [OPEN] whether
 Aeneas intends to collapse such ended abstractions before entering a loop
 or whether this is simply an unimplemented matcher arm — parked as an
 upstream question.
