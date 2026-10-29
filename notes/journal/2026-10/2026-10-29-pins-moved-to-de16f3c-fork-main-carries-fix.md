@@ -92,4 +92,8 @@ preserves upstream signatures; only locally built outputs are unsigned.
 client's; the per-store `trusted=1` URL parameter is the supported way to
 accept unsigned paths from one substituter. Changed to
 `--extra-substituters "file:///tmp/nix-cache?trusted=1"`.
-[OPEN] run 5 — does the fork's Aeneas substitute?
+[OBS 2026-10-29] Run 5 (40861394107, cache hit, `trusted=1`): success,
+5.5 min wall; Nix step 70 s, all 516 paths including both Aeneas binaries
+from the file cache, nothing built; Lean cache hit; 38 verdicts 68 s. The
+`[HYP]` above held. Cold → warm: 30 min → 5.5 min, of which ~2.5 min is
+"free disk space" plus the two cache downloads (3.7 GB + 2.8 GB).

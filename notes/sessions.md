@@ -38,6 +38,6 @@
   - `journal/2026-10/2026-10-29-pins-moved-to-de16f3c-fork-main-carries-fix.md` — pins moved to aeneas de16f3c / charon 373d840, fork `main` = pin + fix, all verdicts unchanged.
   - `journal/2026-10/2026-10-29-swap-list-raw-pointers-become-opaque-values.md` — raw-pointer probe: `missing_context` but the write is lost; reclassification parked.
   - Aeneas fork: second matcher arm (ended shared loans) + upstream-style regression test `tests/src/loop-ended-loans.rs` (fork `main` ee1c669, `make test` 117/117).
-  - CI: `.github/workflows/check.yml` + `tests/expected.json`/`tests/run_expected.py` (38 verdicts locally); first GitHub run in progress at note time.
+  - CI: `.github/workflows/check.yml` + `tests/expected.json`/`tests/run_expected.py` (38 verdicts locally). Five runs: cold 30 min; whole-store caching failed (GC + broken tar restore); replaced by a file binary cache of the result closures with `trusted=1`; warm run 5.5 min (Nix step 70 s).
 - **Status:** complete. Tally 0/6 first attempt (+1 deliberate pointer probe), 6/7 at attempt 2, remove_Occ unresolved.
 - **Next-session pickup candidates:** unchanged from 2026-10-28 (skill split; part-3 allowlist experiment; `||`-in-loop upstream report) plus the new ended-loan-projector upstream report. Next untried rows: offset 4 `mbpp_9_find_Rotations`, offset 7 `mbpp_14_find_Volume`.
