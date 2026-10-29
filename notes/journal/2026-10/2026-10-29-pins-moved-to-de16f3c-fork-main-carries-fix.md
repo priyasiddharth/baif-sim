@@ -46,5 +46,8 @@ the same Charon as `charon-pin`), upstream's hacl Cachix as substituter,
 Nix store cached with nix-community/cache-nix-action, `~/.elan` and
 `aeneas/backends/lean/.lake` cached with actions/cache keyed on the Aeneas
 commit + manifest. `aeneas_mod` URL in `.gitmodules` switched to HTTPS so
-the CI checkout works without a key (local remote stays SSH). [OPEN] first
-run result and cold/warm timings — appended when seen.
+the CI checkout works without a key (local remote stays SSH). First (cold) run
+40850930973: success, 30 min wall: free disk 3 min, Nix builds 15 min
+(Charon + pristine from hacl, fork built), Lean lib 5.5 min (`cache get`
++ build), 34 verdicts 46 s, saving caches 6 min. [OPEN] warm-run timing —
+appended after the next push.
