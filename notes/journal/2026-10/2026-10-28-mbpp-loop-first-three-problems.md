@@ -6,6 +6,9 @@ log / report) and the `mbpp-aeneas` skill. Problems come from MultiPL-E
 API: `prompt` = doc comment + signature, `tests` = a `main` of
 `assert_eq!`s prefixed by the `}` that closes the prompt. Tests compile
 with Charon's pinned nightly so test and translation use one rustc.
+[OBS 2026-10-29] The rows API was unpinned; the split is now snapshotted
+in `data/mbpp-rs.json` with its HF revision — see
+2026-10-29-dataset-pinned-and-square-nums.md.
 
 [OBS 2026-10-28] Loop discipline that the user asked for, now enforced:
 unit tests run immediately after every codegen; `attempt` refuses to

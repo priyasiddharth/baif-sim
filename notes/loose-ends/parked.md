@@ -2,7 +2,7 @@
 
 ## Split mbpp-aeneas skill into generic loop + dataset adapter
 **Status:** parked 2026-10-28
-**Context:** The generate → test-immediately → check → delta-log → commit → revise loop is generic. MBPP-specific: `fetch` (HF MultiPL-E API, field names), `split_tests` (leading `}`), the "solution + tests.rs main" harness, `mbpp/` layout.
+**Context:** The generate → test-immediately → check → delta-log → commit → revise loop is generic. MBPP-specific: `fetch`/`snapshot` (HF MultiPL-E rows API → `data/mbpp-rs.json`, field names), `split_tests` (leading `}`), the "solution + tests.rs main" harness, `mbpp/` layout. Since 2026-10-29 the adapter's "read rows" is just the pinned JSON, which makes the split easier.
 **Why parked:** User: "at some point"; three problems done first.
 **To resume:** `tools/loop.py` taking a problem dir (`prompt.rs`, `tests.rs`, a test command) + `tools/sources/mbpp.py`; generic skill `aeneas-loop`. Keep `mbpp.py` CLI as a thin wrapper.
 **Effort estimate:** ~2 h

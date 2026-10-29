@@ -23,3 +23,15 @@
   - loose-ends: "Split mbpp-aeneas skill into generic loop + dataset adapter" (user flagged).
   - loose-ends: "Brief parts 2 and 3" — stdlib-allowlist guide experiment; 5 attempt-2 diffs are the worked repair examples.
   - loose-ends: report the stored-`||`-in-loop Prop/Bool bug upstream (fixture ready).
+
+## 2026-10-29
+- **Session:** (unnamed, continuation)
+- **Theme:** Publish repo to GitHub; pin the MBPP dataset; sixth problem.
+- **Key outputs:**
+  - `journal/2026-10/2026-10-29-dataset-pinned-and-square-nums.md`
+  - `data/mbpp-rs.json` (354 rows, HF revision 28441b6) + `mbpp.py fetch`/`snapshot` reading/writing it; revision stamped into every `status.json`.
+  - `mbpp/mbpp_8_square_nums`: pass at attempt 2 (iterator `map`/`collect` → index loop).
+  - Remote: `origin/main` (merged GitHub's README initial commit; `master` removed).
+- **Critical corrections:** none from the user. User interrupted an unasked "fetch the next row" to ask about submoduling the dataset first; answer was "pin, don't submodule" and they took it.
+- **Status:** complete. Tally 0/6 first attempt, 5/6 at attempt 2, remove_Occ unresolved.
+- **Next-session pickup candidates:** unchanged from 2026-10-28 (skill split; part-3 allowlist experiment; `||`-in-loop upstream report). Next untried rows: offset 4 `mbpp_9_find_Rotations`, offset 7 `mbpp_14_find_Volume`.
