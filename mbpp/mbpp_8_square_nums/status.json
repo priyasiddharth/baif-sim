@@ -1,6 +1,15 @@
 {
   "name": "mbpp_8_square_nums",
-  "attempts": [],
+  "attempts": [
+    {
+      "attempt": 1,
+      "tests": {
+        "passed": true,
+        "stage": "run"
+      },
+      "outcome": "check:missing_context"
+    }
+  ],
   "done": false,
   "source": {
     "dataset": "nuprl/MultiPL-E",
@@ -8,5 +17,6 @@
     "split": "test",
     "revision": "28441b6024e71d4a1c1c0f6bf171c935cd5a43f2",
     "name": "mbpp_8_square_nums"
-  }
+  },
+  "first_attempt_pass": false
 }

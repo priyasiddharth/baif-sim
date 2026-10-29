@@ -1,0 +1,109 @@
+{
+  "input": "/home/siddharth/baif/sim/mbpp/mbpp_8_square_nums/attempt-1/mbpp_8_square_nums.rs",
+  "versions": {
+    "aeneas": "399081f2",
+    "charon": "2ec7e964e",
+    "charon_matches_pin": true,
+    "rustc": "nightly-2026-09-17",
+    "lean": "v4.35.0"
+  },
+  "stages": {
+    "charon": {
+      "status": "ok",
+      "rust_compiled": true,
+      "warnings": [],
+      "errors": []
+    },
+    "aeneas": {
+      "status": "ok",
+      "warnings": [
+        {
+          "message": "When retrieving the builtin information for trait decl 'core::iter::traits::iterator::Iterator', could not find the information for item 'map'. The model defined in the Lean library seems to be missing the corresponding field.",
+          "file": "/rustc/library/core/src/iter/traits/iterator.rs",
+          "line": 42,
+          "col": 0,
+          "end_line": 42,
+          "snippet": "pub const trait Iterator {"
+        },
+        {
+          "message": "When retrieving the builtin information for trait decl 'core::iter::traits::iterator::Iterator', could not find the information for item 'collect'. The model defined in the Lean library seems to be missing the corresponding field.",
+          "file": "/rustc/library/core/src/iter/traits/iterator.rs",
+          "line": 42,
+          "col": 0,
+          "end_line": 42,
+          "snippet": "pub const trait Iterator {"
+        },
+        {
+          "message": "The crate contains extracted external, unknown definitions: we advise using the option -split-files to allow manually providing these definitions in separate files."
+        }
+      ],
+      "errors": []
+    },
+    "lean": {
+      "status": "failed",
+      "errors": [
+        {
+          "message": "`map` is not a field of structure `core.iter.traits.iterator.Iterator`",
+          "line": 65,
+          "col": 2
+        },
+        {
+          "message": "`collect` is not a field of structure `core.iter.traits.iterator.Iterator` 'Mbpp8SquareNums.square_nums' depends on axioms: [propext, Classical.choice, Quot.sound, Mbpp8SquareNums.Shared1Isize.Insts.CoreOpsArithMulShared0IsizeIsize.mul, Mbpp8SquareNums.core.iter.traits.iterator.Iterator.map.default, Mbpp8SquareNums.core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator.next] 'Mbpp8SquareNums.square_nums.closure.Insts.CoreOpsFunctionFnOnceTupleShared0IsizeIsize.call_once' depends on axioms: [propext, Classical.choice, Quot.sound, Mbpp8SquareNums.Shared1Isize.Insts.CoreOpsArithMulShared",
+          "line": 71,
+          "col": 2
+        }
+      ]
+    }
+  },
+  "functions": [
+    {
+      "rust": "mbpp_8_square_nums::square_nums",
+      "lean": "Mbpp8SquareNums.square_nums",
+      "status": "translated",
+      "reason": null,
+      "error_ref": null
+    },
+    {
+      "rust": "mbpp_8_square_nums::square_nums::{impl core::ops::function::FnOnce<(&'_0 isize,), isize> for mbpp_8_square_nums::square_nums::{closure}<'_0>}::call_once",
+      "lean": "Mbpp8SquareNums.square_nums.closure.Insts.CoreOpsFunctionFnOnceTupleShared0IsizeIsize.call_once",
+      "status": "translated",
+      "reason": null,
+      "error_ref": null
+    }
+  ],
+  "axioms": [
+    {
+      "lean": "Mbpp8SquareNums.Shared1Isize.Insts.CoreOpsArithMulShared0IsizeIsize.mul",
+      "rust": "core::ops::arith::{impl core::ops::arith::Mul<&'_0 isize, isize> for &'_1 isize}::mul",
+      "origin": "stdlib",
+      "used_by": [
+        "Mbpp8SquareNums.square_nums",
+        "Mbpp8SquareNums.square_nums.closure.Insts.CoreOpsFunctionFnOnceTupleShared0IsizeIsize.call_once"
+      ]
+    },
+    {
+      "lean": "Mbpp8SquareNums.core.iter.traits.iterator.Iterator.map.default",
+      "rust": "core::iter::traits::iterator::Iterator::map",
+      "origin": "stdlib",
+      "used_by": [
+        "Mbpp8SquareNums.square_nums"
+      ]
+    },
+    {
+      "lean": "Mbpp8SquareNums.core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator.next",
+      "rust": "core::iter::adapters::map::{impl core::iter::traits::iterator::Iterator<B> for core::iter::adapters::map::Map<I, F>}::next",
+      "origin": "stdlib",
+      "used_by": [
+        "Mbpp8SquareNums.square_nums"
+      ]
+    }
+  ],
+  "verdict": "missing_context",
+  "reasons": [
+    "missing_context: Lean library lacks a model: `map` is not a field of structure `core.iter.traits.iterator.Iterator`",
+    "missing_context: Lean library lacks a model: `collect` is not a field of structure `core.iter.traits.iterator.Iterator` 'Mbpp8SquareNums.square_nums' depends on axioms: [propext, Classical.choice, Quot.sound, Mbpp8SquareNums.Shared1Isize.Insts.CoreOpsArithMulShared0IsizeIsize.mul, Mbpp8SquareNums.core.iter.traits.iterator.Iterator.map.default, Mbpp8SquareNums.core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator.next] 'Mbpp8SquareNums.square_nums.closure.Insts.CoreOpsFunctionFnOnceTupleShared0IsizeIsize.call_once' depends on axioms: [propext, Classical.choice, Quot.sound, Mbpp8SquareNums.Shared1Isize.Insts.CoreOpsArithMulShared",
+    "missing_context: no Lean model for standard-library item: core::ops::arith::{impl core::ops::arith::Mul<&'_0 isize, isize> for &'_1 isize}::mul",
+    "missing_context: no Lean model for standard-library item: core::iter::traits::iterator::Iterator::map",
+    "missing_context: no Lean model for standard-library item: core::iter::adapters::map::{impl core::iter::traits::iterator::Iterator<B> for core::iter::adapters::map::Map<I, F>}::next"
+  ]
+}
