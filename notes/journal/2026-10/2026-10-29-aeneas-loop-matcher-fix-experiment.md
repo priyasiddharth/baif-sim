@@ -50,9 +50,11 @@ same abstraction (the `last(self)` variant proved an abstraction holding
 projector with nothing left to give back has nothing to match, so
 keeping the left value is sound. Build 3 s. Same results as Patch A on
 all our cases; loop signature identical to the `last` variant's.
-[OPEN] full `make test` on Patch B running at time of writing; result
-to be appended here. Until it passes, the claim is "fixes our cases",
-not "safe".
+[OBS 2026-10-29, later] `make test` with Patch B: exit 0, all 116 test
+invocations done, and `git status` in the submodule shows only
+`InterpMatchCtxs.ml` modified — no expected `.lean`/`.fst`/`.v` output
+changed (Patch A had stopped at 106 with `static.rs` and had rewritten
+`Iterators.lean`). Verify: `cd aeneas && make test && git status --short`.
 
 [HYP] `SymbolicToPureAbs.ml:946/1028` raise "Not implemented yet" on
 `AEndedIgnoredMutBorrow` when an abstraction *is* a loop input/output.
