@@ -74,10 +74,12 @@ jobs:
 
       - name: Build Charon and Aeneas (pristine, mod)
         run: |
-          # Use the restored file cache as an unsigned substituter, if any.
+          # Use the restored file cache as a substituter, if any. Its paths are
+          # unsigned; `trusted=1` on the store URL lets the daemon take them
+          # (`--option require-sigs false` is not honoured for substitution).
           subst=""
           if [ -f /tmp/nix-cache/nix-cache-info ]; then
-            subst="--extra-substituters file:///tmp/nix-cache --option require-sigs false"
+            subst="--extra-substituters file:///tmp/nix-cache?trusted=1"
             echo "using restored binary cache ($(ls /tmp/nix-cache/*.narinfo 2>/dev/null | wc -l) narinfos)"
           fi
           # Charon at the pin comes from the Aeneas flake (its flake.lock pins

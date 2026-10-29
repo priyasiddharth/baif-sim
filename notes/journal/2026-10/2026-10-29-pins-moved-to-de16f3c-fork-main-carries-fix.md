@@ -75,4 +75,21 @@ closures (Charon + its Rust toolchain and sysroots, both Aeneas binaries);
 `--extra-substituters file:///tmp/nix-cache --option require-sigs false`.
 Only the build outputs are cached, nothing is GC'd, and a partial hit (one
 submodule moved) still substitutes the unchanged two.
-[OPEN] third-run timing and cache size — appended after the push.
+[OBS 2026-10-29] Run 3 (40857997961, no cache yet): success, 11.7 min; Nix
+step 6 min, export 38 s → 516 paths, 3.7 GB zstd, saved. Run 4
+(40859648632, exact key hit, restore 43 s): success, 10 min; Nix step 4.8
+min, nothing built except `ocaml5.5.1-aeneas` for the fork (1.5 min). The
+Charon closure (404 paths, 2.7 GiB compressed, 10 GiB unpacked) came from the
+file cache in 3 min — no faster than fetching it from hacl, so the cache only
+saves what hacl lacks (the fork, and Charon/toolchain/sysroots when upstream
+CI has not filled hacl yet, as in run 2). Both Aeneas outputs were refused:
+`warning: ignoring substitute for '…-ocaml5.5.1-aeneas-0.1.0' from
+'file:///tmp/nix-cache', as it's not signed by any of the keys in
+'trusted-public-keys'`, even though `--option require-sigs false` was passed
+by a trusted user. The other 514 paths were taken because `nix copy`
+preserves upstream signatures; only locally built outputs are unsigned.
+[HYP] The substitution check uses the daemon's `require-sigs`, not the
+client's; the per-store `trusted=1` URL parameter is the supported way to
+accept unsigned paths from one substituter. Changed to
+`--extra-substituters "file:///tmp/nix-cache?trusted=1"`.
+[OPEN] run 5 — does the fork's Aeneas substitute?
