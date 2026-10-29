@@ -30,8 +30,8 @@ upstream commits changed nothing we measure, and the stored-`||`
 Prop/Bool bug is still present upstream. Recorded `mbpp/*/check.json`
 were *not* regenerated; they still carry the old version stamps.
 
-[OPEN] `make test` in `aeneas_mod` at the new base running at note time;
-appended below when done.
+[OBS 2026-10-29] `make test` in `aeneas_mod` at the new base: exit 0, 116 test
+invocations, no expected-output changes (`git status` clean apart from nothing).
 
 ## See also
 
