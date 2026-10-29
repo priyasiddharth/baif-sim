@@ -1,4 +1,4 @@
-# Dataset pinned to a revision; mbpp_8_square_nums passes at attempt 2
+# Dataset pinned to a revision; mbpp_8_square_nums passes at attempt 2; loop-join failure traced
 
 [OBS 2026-10-29] Pushed the repo to `github.com/priyasiddharth/baif-sim`.
 GitHub had pre-created `main` with a one-line README; merged it with
@@ -31,6 +31,44 @@ the pattern of problems 3/4/6/12; predicted before running.
 `mbpp_11_remove_Occ` unresolved at 4. The non-string repair is now
 routine enough that attempt 1 is only measuring the generator's default
 style, which is the point of the part-3 allowlist experiment.
+
+[OBS 2026-10-29] "Could not match the contexts" (remove_Occ attempts 2–3)
+traced with Aeneas logging. Minimal repro `tests/unsupported/chars_next_before_loop.rs`
+(14 lines, verdict 1): `let c = match ch.chars().next() { Some(c) => c, None => return 0 }`
+then a `while` over an unrelated `Vec<char>`. The same function with
+`c` taken from `ch.chars().collect::<Vec<char>>()[0]` translates.
+Run: `aeneas/bin/aeneas -backend lean X.llbc -dest D -log InterpJoin -log-debug InterpMatchCtxs`.
+What the log shows:
+- `compute_loop_entry_fixed_point` (InterpLoopsFixedPoint.ml) finds a
+  fixed point; `match_ctx_with_target` (InterpJoin.ml:1348) then joins
+  the entry context with it and must match the result back onto the
+  fixed point. The two dumped contexts are textually identical apart
+  from one fresh symbolic id (`n -> s@19` vs `s@21`).
+- The loop-entry environment carries three abstractions from before the
+  loop: abs@0 = `Deref<str> for String` (`SL@1(s@3 : str)`), abs@1 =
+  `str::chars` (`⌊s@4 <: Chars<'1>⌋`), abs@3 = `Chars::next`
+  (continuation `FunCall(abs_id@3)[(Option<char>)]`) holding
+  `@ended_ignored_mut_borrow((s@4 <: Chars<'2>), ended_aproj_loans (_))`.
+- `pop_first_matching_abs` matches abs@0 and abs@1, then fails on abs@3
+  against its own copy: `MakeMatcher.match_tavalues` (InterpMatchCtxs.ml:570,
+  `ASymbolic` case) has arms for `AProjBorrows` and `AProjLoans` only;
+  the child here is `AEndedProjLoans` (printed `ended_aproj_loans`,
+  Values.ml:499) and falls to `| _ -> craise_recover "Unreachable"`,
+  which `pop_first_matching_abs` swallows as "no matching abs". The
+  `check_equiv:false` matcher's `match_aended_ignored_mut_borrow` itself
+  is fine (takes meta from the left).
+So the 2026-10-28 [HYP] was right about *which* value (the one through
+`Chars::next`) and slightly wrong about *why*: it is not that the borrow
+of `ch` is alive, it is that the `next` call's abstraction contains an
+ended loan projector the loop matcher cannot handle. abs@3 exists
+because `next` takes `&mut Chars` and returns an owned `Option<char>`;
+region `'2` ended right after the call, which turns its loan projector
+into `AEndedProjLoans`, and nothing ever removes the abstraction before
+the loop. The `Vec<char>` route works because `collect` consumes the
+iterator, so the abstractions end before the loop. [OPEN] whether
+Aeneas intends to collapse such ended abstractions before entering a loop
+or whether this is simply an unimplemented matcher arm — parked as an
+upstream question.
 
 ## See also
 

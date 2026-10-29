@@ -34,9 +34,11 @@
 
 [OBS 2026-10-28] Strings are worse than "missing model": `String::new`/`push`
       and `Deref<str> for String` are unmodelled (so any String-building
-      function keeps ≥2 axioms), and `Pattern`-bound methods, borrowing
-      `chars()` iterators across loop iterations, and stored `||` in loops
-      each fail for a different reason — see the remove_Occ journal entry.
+      function keeps ≥2 axioms), and `Pattern`-bound methods, a value
+      pulled through `Chars::next` before a loop (ended loan projector the
+      loop matcher lacks a case for; confirmed 2026-10-29), and stored `||`
+      in loops each fail for a different reason — see the remove_Occ
+      journal entry and tests/unsupported/chars_next_before_loop.rs.
 
 ## See also
 

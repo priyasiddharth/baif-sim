@@ -20,10 +20,14 @@ Attempt 3 (loops rewritten over a collected `Vec<char>`): same error, now at
 `chars[i] == c` inside a plain `while`. Scratch variant with `c` taken from a
 collected `Vec<char>` instead of `ch.chars().next()`: error gone. A minimal
 `count(s, c: char)` with the same `Vec<char>`/`while`/`==` loop translates.
-[HYP] The `Option<char>` returned by `Chars::next` keeps the borrow
+[HYP → confirmed 2026-10-29, see 2026-10-29-dataset-pinned-and-square-nums.md]
+The `Option<char>` returned by `Chars::next` keeps the borrow
 abstraction of `ch` alive in the symbolic environment, and the loop join
-cannot match it; the `Vec<char>` route owns its values. Not confirmed in
-Aeneas source.
+cannot match it; the `Vec<char>` route owns its values. Confirmed with
+`-log InterpJoin,InterpMatchCtxs`: it is the `Chars::next` call's
+abstraction, and the precise failure is a missing matcher case for an
+ended loan projector, not the borrow of `ch` as such (abs@0/abs@1, the
+`Deref` and `chars()` abstractions, match fine).
 
 [OBS 2026-10-28] With the join problem gone, Aeneas emits ill-typed Lean for
 `skip = seen == 1 || seen == total` inside the loop body:

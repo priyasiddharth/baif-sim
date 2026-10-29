@@ -43,3 +43,11 @@
 **To resume:** generate `docs/aeneas-rust-guide.md` from `ExtractBuiltinLean.ml` + the supported-core list; rerun `/mbpp-aeneas` on problems 7–16 with the guide in context; compare `report`.
 **Effort estimate:** ~half-day each
 **References:** idiomatic-rust-fails-on-missing-stdlib-models.md
+
+## Report the ended-loan-projector loop-match failure upstream (Aeneas)
+**Status:** parked 2026-10-29
+**Context:** A value taken through `Chars::next` before a loop leaves a region abstraction whose child is `AEndedProjLoans`; `MakeMatcher.match_tavalues` (`aeneas/src/interp/InterpMatchCtxs.ml`, `ASymbolic` case) has no arm for it, so `match_ctx_with_target` fails with "Could not match the contexts" even though the two contexts are identical. Minimal repro `tests/unsupported/chars_next_before_loop.rs`; trace command in 2026-10-29-dataset-pinned-and-square-nums.md. Aeneas 399081f.
+**Why parked:** Workaround known (collect to `Vec<char>` first); not blocking the loop.
+**To resume:** Check whether upstream HEAD already handles `AEndedProjLoans` in that match (grep the constructor in `InterpMatchCtxs.ml`), else file an issue with the fixture and the log excerpt. Ask whether ended abstractions are meant to be collapsed before `compute_loop_entry_fixed_point`.
+**Effort estimate:** ~30 min to file
+**References:** 2026-10-29-dataset-pinned-and-square-nums.md, 2026-10-28-remove-occ-strings-expose-three-aeneas-limits.md
