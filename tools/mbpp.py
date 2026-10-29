@@ -2,7 +2,10 @@
 """MBPP (Rust, via MultiPL-E) problems as test inputs for the Aeneas check loop.
 
 Subcommands:
-  fetch   N [--offset K] | fetch NAME...   download problems into mbpp/<name>/
+  fetch   N [--offset K] | fetch NAME...   copy problems from data/mbpp-rs.json into mbpp/<name>/
+                                           (--remote: query the Hugging Face rows API instead)
+  snapshot                                 refresh data/mbpp-rs.json from Hugging Face (records the
+                                           dataset revision; existing mbpp/ dirs are not touched)
   test    NAME SOLUTION.rs                 compile solution + supplied tests, run them
   attempt NAME SOLUTION.rs [--commit]      record an attempt: run tests (refuses to record a
                                            failing version), then check.py; writes
@@ -20,6 +23,7 @@ check.py report — the result record) and lean/ (check.py output).
 """
 
 import argparse
+import datetime
 import json
 import re
 import shutil
@@ -35,7 +39,9 @@ MBPP_DIR = ROOT / "mbpp"
 CHECK = ROOT / "tools" / "check.py"
 CHARON = ROOT / "charon" / "bin" / "charon"
 HF_ROWS = "https://datasets-server.huggingface.co/rows"
+HF_META = "https://huggingface.co/api/datasets/{dataset}"
 DATASET = {"dataset": "nuprl/MultiPL-E", "config": "mbpp-rs", "split": "test"}
+SNAPSHOT = ROOT / "data" / "mbpp-rs.json"   # pinned copy of the split, see `snapshot`
 
 
 def toolchain():
@@ -56,42 +62,85 @@ def hf_rows(offset, length):
     return data["num_rows_total"], [row["row"] for row in data["rows"]]
 
 
+def hf_all_rows():
+    rows, offset, total = [], 0, 1
+    while offset < total:
+        total, page = hf_rows(offset, 100)
+        rows += page
+        offset += 100
+    return rows
+
+
+def cmd_snapshot(args):
+    """Pin the split: all rows plus the dataset's current git revision."""
+    with urllib.request.urlopen(HF_META.format(**DATASET), timeout=60) as r:
+        meta = json.load(r)
+    rows = hf_all_rows()
+    names = [row["name"] for row in rows]
+    if len(set(names)) != len(names):
+        sys.exit("duplicate problem names in dataset")
+    snap = {**DATASET, "revision": meta["sha"], "last_modified": meta.get("lastModified"),
+            "snapshot_date": datetime.date.today().isoformat(), "num_rows": len(rows), "rows": rows}
+    SNAPSHOT.parent.mkdir(exist_ok=True)
+    SNAPSHOT.write_text(json.dumps(snap, indent=1, ensure_ascii=False) + "\n")
+    print(f"{SNAPSHOT.relative_to(ROOT)}: {len(rows)} rows, revision {meta['sha'][:7]}")
+
+
+def load_snapshot():
+    if not SNAPSHOT.exists():
+        sys.exit(f"{SNAPSHOT.relative_to(ROOT)} missing; run `tools/mbpp.py snapshot` (or fetch --remote)")
+    snap = json.loads(SNAPSHOT.read_text())
+    for k in ("dataset", "config", "split"):
+        if snap.get(k) != DATASET[k]:
+            sys.exit(f"{SNAPSHOT.relative_to(ROOT)} is for {snap.get(k)!r}, expected {DATASET[k]!r}")
+    return snap
+
+
 def split_tests(tests):
     # MultiPL-E tests start with the "}" that closes the prompt's function.
     return re.sub(r"^\s*}\s*\n", "", tests, count=1)
 
 
-def save_problem(row):
+def save_problem(row, source):
     d = MBPP_DIR / row["name"]
     d.mkdir(parents=True, exist_ok=True)
     (d / "prompt.rs").write_text(row["prompt"])
     (d / "tests.rs").write_text(split_tests(row["tests"]))
     # Provenance lives in status.json; prompt.rs/tests.rs are the only inputs used.
     status = load_status(d)
-    status["source"] = {**DATASET, "name": row["name"]}
+    status["source"] = {**source, "name": row["name"]}
     (d / "status.json").write_text(json.dumps(status, indent=2) + "\n")
     return d
 
 
 def cmd_fetch(args):
+    if args.remote:
+        # Unpinned: whatever revision the rows API serves right now.
+        source = {**DATASET, "revision": None}
+        all_rows = None
+    else:
+        snap = load_snapshot()
+        source = {**DATASET, "revision": snap["revision"]}
+        all_rows = snap["rows"]
     rows = []
     if args.what and not args.what[0].isdigit():
         wanted = set(args.what)
-        offset, total = 0, 1
-        while offset < total and wanted:
-            total, page = hf_rows(offset, 100)
-            for row in page:
-                if row["name"] in wanted:
-                    rows.append(row)
-                    wanted.discard(row["name"])
-            offset += 100
+        if all_rows is None:
+            all_rows = hf_all_rows()
+        for row in all_rows:
+            if row["name"] in wanted:
+                rows.append(row)
+                wanted.discard(row["name"])
         if wanted:
             sys.exit(f"not found: {', '.join(sorted(wanted))}")
     else:
         n = int(args.what[0]) if args.what else 3
-        _, rows = hf_rows(args.offset, n)
+        if all_rows is None:
+            _, rows = hf_rows(args.offset, n)
+        else:
+            rows = all_rows[args.offset:args.offset + n]
     for row in rows:
-        print(save_problem(row))
+        print(save_problem(row, source))
 
 
 # ---------------------------------------------------------------- test
@@ -293,6 +342,8 @@ def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
     f = sub.add_parser("fetch"); f.add_argument("what", nargs="*"); f.add_argument("--offset", type=int, default=0)
+    f.add_argument("--remote", action="store_true", help="query Hugging Face instead of data/mbpp-rs.json")
+    sub.add_parser("snapshot")
     t = sub.add_parser("test"); t.add_argument("name"); t.add_argument("solution")
     a = sub.add_parser("attempt"); a.add_argument("name"); a.add_argument("solution")
     a.add_argument("--commit", action="store_true"); a.add_argument("--force", action="store_true")
@@ -300,7 +351,7 @@ def main():
     lg = sub.add_parser("log"); lg.add_argument("name"); lg.add_argument("--commit", action="store_true")
     r = sub.add_parser("report"); r.add_argument("names", nargs="*")
     args = p.parse_args()
-    {"fetch": cmd_fetch, "test": cmd_test, "attempt": cmd_attempt, "recheck": cmd_recheck,
+    {"fetch": cmd_fetch, "snapshot": cmd_snapshot, "test": cmd_test, "attempt": cmd_attempt, "recheck": cmd_recheck,
      "log": cmd_log, "report": cmd_report}[args.cmd](args)
 
 

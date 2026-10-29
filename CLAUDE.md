@@ -10,5 +10,6 @@ Layout:
 - `lakefile.lean` / `lean-toolchain` (root) — shell Lake project so VS Code resolves `import Aeneas` in generated files anywhere in the repo; shares the Aeneas library's built packages.
 - `tools/check.py` — Charon → Aeneas → Lean type-check → `#print axioms`, JSON verdict.
 - `tools/mbpp.py` + `.claude/skills/mbpp-aeneas/` — generate / test / check / log loop.
+- `data/mbpp-rs.json` — pinned snapshot of the MultiPL-E `mbpp-rs` test split (HF revision inside); `fetch` reads it, `snapshot` refreshes it.
 - `tests/` — hand-written pass/fail cases. `mbpp/` — recorded attempts.
 - `notes.md` — the user's raw working notes (not the notebook).
