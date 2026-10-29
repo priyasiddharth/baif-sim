@@ -8,9 +8,17 @@
         "stage": "run"
       },
       "outcome": "check:missing_context"
+    },
+    {
+      "attempt": 2,
+      "tests": {
+        "passed": true,
+        "stage": "run"
+      },
+      "outcome": "pass"
     }
   ],
-  "done": false,
+  "done": true,
   "source": {
     "dataset": "nuprl/MultiPL-E",
     "config": "mbpp-rs",
