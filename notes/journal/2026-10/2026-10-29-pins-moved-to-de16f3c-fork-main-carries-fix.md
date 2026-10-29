@@ -37,3 +37,14 @@ invocations, no expected-output changes (`git status` in the submodule is clean)
 
 - 2026-10-29-aeneas-loop-matcher-fix-experiment.md
 - ../../durable/how-to-translate-a-rust-file-to-lean-and-check-it.md
+
+[OBS 2026-10-29] CI added: `.github/workflows/check.yml` runs
+`tests/run_expected.py` (34 verdicts = 17 inputs × pristine/mod, from
+`tests/expected.json`; 18 s locally). Binaries from Nix (`path:` flake refs
+into the submodules; Charon via the Aeneas flake, whose flake.lock pins
+the same Charon as `charon-pin`), upstream's hacl Cachix as substituter,
+Nix store cached with nix-community/cache-nix-action, `~/.elan` and
+`aeneas/backends/lean/.lake` cached with actions/cache keyed on the Aeneas
+commit + manifest. `aeneas_mod` URL in `.gitmodules` switched to HTTPS so
+the CI checkout works without a key (local remote stays SSH). [OPEN] first
+run result and cold/warm timings — appended when seen.

@@ -1,0 +1,119 @@
+name: check
+
+# Builds Charon, both Aeneas checkouts (pristine pin and the fork in
+# aeneas_mod) and the Aeneas Lean library, then runs tools/check.py on every
+# input in tests/expected.json and compares the verdicts.
+#
+# Caching:
+# - Charon and pristine Aeneas come from upstream's public Cachix cache (hacl),
+#   which upstream CI fills for its own commits.
+# - The Nix store is saved to the GitHub Actions cache, so the fork's Aeneas
+#   (not in hacl) is rebuilt only when aeneas_mod or a flake.lock changes.
+# - The Lean toolchain (~/.elan) and the built Aeneas Lean library + Mathlib
+#   (aeneas/backends/lean/.lake) are cached, keyed on the Aeneas commit.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Free disk space
+        # Mathlib's build cache plus the Rust and OCaml toolchains need more
+        # than the ~14 GB a hosted runner has free.
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force > /dev/null
+          df -h /
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Record pins
+        id: pins
+        run: |
+          echo "aeneas=$(git -C aeneas rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "aeneas_mod=$(git -C aeneas_mod rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "charon=$(git -C charon rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          test "$(grep -v '^#' aeneas/charon-pin | head -1)" = "$(git -C charon rev-parse HEAD)" \
+            || { echo "charon/ is not at aeneas/charon-pin"; exit 1; }
+
+      # ------------------------------------------------------------ Nix builds
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            extra-substituters = https://hacl.cachix.org
+            extra-trusted-public-keys = hacl.cachix.org-1:FzsZ2xsByOwKwIWNPII7yMOelJNDZ12mDAj3d1eGX0c=
+
+      - name: Restore Nix store
+        uses: nix-community/cache-nix-action@v6
+        with:
+          primary-key: nix-${{ runner.os }}-${{ steps.pins.outputs.aeneas }}-${{ steps.pins.outputs.aeneas_mod }}
+          restore-prefixes-first-match: nix-${{ runner.os }}-
+          gc-max-store-size-linux: 8G
+          purge: true
+          purge-prefixes: nix-${{ runner.os }}-
+          purge-created: 0
+          purge-primary-key: never
+
+      - name: Build Charon and Aeneas (pristine, mod)
+        run: |
+          # Charon at the pin comes from the Aeneas flake (its flake.lock pins
+          # the same commit as aeneas/charon-pin).
+          nix build -L "path:$PWD/aeneas#charon" -o result-charon
+          nix build -L "path:$PWD/aeneas#aeneas" -o result-aeneas
+          nix build -L "path:$PWD/aeneas_mod#aeneas" -o result-aeneas-mod
+          # tools/check.py looks for <checkout>/bin/{charon,aeneas}.
+          mkdir -p charon/bin aeneas/bin aeneas_mod/bin
+          ln -sf "$PWD"/result-charon/bin/* charon/bin/
+          ln -sf "$PWD"/result-aeneas/bin/aeneas aeneas/bin/aeneas
+          ln -sf "$PWD"/result-aeneas-mod/bin/aeneas aeneas_mod/bin/aeneas
+          charon/bin/charon version || true
+          charon/bin/charon toolchain-version
+          df -h /
+
+      # ------------------------------------------------------------ Lean library
+
+      - name: Restore Lean toolchain and Aeneas Lean library
+        id: lean-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.elan
+            aeneas/backends/lean/.lake
+          key: lean-${{ runner.os }}-${{ steps.pins.outputs.aeneas }}-${{ hashFiles('aeneas/backends/lean/lean-toolchain', 'aeneas/backends/lean/lake-manifest.json') }}
+          restore-keys: |
+            lean-${{ runner.os }}-
+
+      - name: Install elan
+        run: |
+          if [ ! -x "$HOME/.elan/bin/elan" ]; then
+            curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+              | sh -s -- -y --default-toolchain none
+          fi
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Build the Aeneas Lean library
+        if: steps.lean-cache.outputs.cache-hit != 'true'
+        working-directory: aeneas/backends/lean
+        run: |
+          lake exe cache get
+          lake build
+          df -h /
+
+      # ------------------------------------------------------------ Checks
+
+      - name: Expected verdicts (pristine and mod)
+        run: python3 tests/run_expected.py

@@ -6,5 +6,5 @@
 	url = https://github.com/AeneasVerif/charon.git
 [submodule "aeneas_mod"]
 	path = aeneas_mod
-	url = git@github.com:priyasiddharth/aeneas.git
+	url = https://github.com/priyasiddharth/aeneas.git
 	branch = main

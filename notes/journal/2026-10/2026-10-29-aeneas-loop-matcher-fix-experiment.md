@@ -107,3 +107,19 @@ change generated interfaces.
 - 2026-10-29-dataset-pinned-and-square-nums.md
 - 2026-10-28-remove-occ-strings-expose-three-aeneas-limits.md
 - ../../loose-ends/parked.md (ended-loan-projector entry)
+
+[OBS 2026-10-29, later] The first arm was incomplete. Writing an
+upstream-style regression test (user: "the aeneas fix should have a
+test") with a std slice iterator, `match w.iter().next() { Some(c) => *c, … }`
+failed on the fork too: `next` returns `Option<&u32>`, so the call's
+abstraction also holds `Some { _0 = @ended_shared_loan(s@10 : u32, _) }`,
+and the loan case of `match_tavalues` had no `AEndedSharedLoan` arm either.
+Added it (match shared value and child, rebuild the ended loan). Also
+learned: a *local* iterator struct with the same `fn next(&mut self)`
+signature does not reproduce at all (pristine translates it); the failure
+needs the library trait method. Test `tests/src/loop-ended-loans.rs` in the
+fork: `count_first` (slice, needs both arms) and `count_first_char`
+(`&str`/`chars`, first arm only); both fail on pristine, no axioms/sorry
+in the generated `tests/lean/LoopEndedLoans.lean`, which type-checks.
+`Option::copied` was avoided because it is an axiom. Fork `main` =
+de16f3c + 38531ab + ee1c669; `make test` 117/117.
