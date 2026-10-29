@@ -5,10 +5,14 @@ name: check
 # input in tests/expected.json and compares the verdicts.
 #
 # Caching:
-# - Charon and pristine Aeneas come from upstream's public Cachix cache (hacl),
-#   which upstream CI fills for its own commits.
-# - The Nix store is saved to the GitHub Actions cache, so the fork's Aeneas
-#   (not in hacl) is rebuilt only when aeneas_mod or a flake.lock changes.
+# - Most Nix dependencies come from cache.nixos.org and upstream's public
+#   Cachix cache (hacl). The expensive derivations (Charon, the Rust toolchain
+#   and MIR sysroots, both Aeneas binaries) are not in hacl as we build them,
+#   so after a build we export the closures of the three results to a local
+#   file binary cache and save that with actions/cache, keyed on the three
+#   submodule commits. A later run adds it as a substituter and only builds
+#   what changed. (A whole-/nix/store cache was tried first: 20 GB, GC'd to
+#   fit, and restored with errors, so everything was rebuilt anyway.)
 # - The Lean toolchain (~/.elan) and the built Aeneas Lean library + Mathlib
 #   (aeneas/backends/lean/.lake) are cached, keyed on the Aeneas commit.
 
@@ -57,24 +61,30 @@ jobs:
             extra-substituters = https://hacl.cachix.org
             extra-trusted-public-keys = hacl.cachix.org-1:FzsZ2xsByOwKwIWNPII7yMOelJNDZ12mDAj3d1eGX0c=
 
-      - name: Restore Nix store
-        uses: nix-community/cache-nix-action@v6
+      - name: Restore Nix binary cache of previous results
+        id: nix-cache
+        uses: actions/cache@v4
         with:
-          primary-key: nix-${{ runner.os }}-${{ steps.pins.outputs.aeneas }}-${{ steps.pins.outputs.aeneas_mod }}
-          restore-prefixes-first-match: nix-${{ runner.os }}-
-          gc-max-store-size-linux: 8G
-          purge: true
-          purge-prefixes: nix-${{ runner.os }}-
-          purge-created: 0
-          purge-primary-key: never
+          path: /tmp/nix-cache
+          key: nixcache-${{ runner.os }}-${{ steps.pins.outputs.charon }}-${{ steps.pins.outputs.aeneas }}-${{ steps.pins.outputs.aeneas_mod }}
+          restore-keys: |
+            nixcache-${{ runner.os }}-${{ steps.pins.outputs.charon }}-${{ steps.pins.outputs.aeneas }}-
+            nixcache-${{ runner.os }}-${{ steps.pins.outputs.charon }}-
+            nixcache-${{ runner.os }}-
 
       - name: Build Charon and Aeneas (pristine, mod)
         run: |
+          # Use the restored file cache as an unsigned substituter, if any.
+          subst=""
+          if [ -f /tmp/nix-cache/nix-cache-info ]; then
+            subst="--extra-substituters file:///tmp/nix-cache --option require-sigs false"
+            echo "using restored binary cache ($(ls /tmp/nix-cache/*.narinfo 2>/dev/null | wc -l) narinfos)"
+          fi
           # Charon at the pin comes from the Aeneas flake (its flake.lock pins
           # the same commit as aeneas/charon-pin).
-          nix build -L "path:$PWD/aeneas#charon" -o result-charon
-          nix build -L "path:$PWD/aeneas#aeneas" -o result-aeneas
-          nix build -L "path:$PWD/aeneas_mod#aeneas" -o result-aeneas-mod
+          nix build -L $subst "path:$PWD/aeneas#charon" -o result-charon
+          nix build -L $subst "path:$PWD/aeneas#aeneas" -o result-aeneas
+          nix build -L $subst "path:$PWD/aeneas_mod#aeneas" -o result-aeneas-mod
           # tools/check.py looks for <checkout>/bin/{charon,aeneas}.
           mkdir -p charon/bin aeneas/bin aeneas_mod/bin
           ln -sf "$PWD"/result-charon/bin/* charon/bin/
@@ -83,6 +93,15 @@ jobs:
           charon/bin/charon version || true
           charon/bin/charon toolchain-version
           df -h /
+
+      - name: Export result closures to the binary cache
+        if: steps.nix-cache.outputs.cache-hit != 'true'
+        run: |
+          rm -rf /tmp/nix-cache
+          nix copy --to "file:///tmp/nix-cache?compression=zstd" \
+            "$(readlink -f result-charon)" "$(readlink -f result-aeneas)" "$(readlink -f result-aeneas-mod)"
+          du -sh /tmp/nix-cache
+          ls /tmp/nix-cache/*.narinfo | wc -l
 
       # ------------------------------------------------------------ Lean library
 

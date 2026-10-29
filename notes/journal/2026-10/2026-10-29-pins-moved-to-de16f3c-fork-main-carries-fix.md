@@ -49,5 +49,30 @@ commit + manifest. `aeneas_mod` URL in `.gitmodules` switched to HTTPS so
 the CI checkout works without a key (local remote stays SSH). First (cold) run
 40850930973: success, 30 min wall: free disk 3 min, Nix builds 15 min
 (Charon + pristine from hacl, fork built), Lean lib 5.5 min (`cache get`
-+ build), 34 verdicts 46 s, saving caches 6 min. [OPEN] warm-run timing —
-appended after the next push.
++ build), 34 verdicts 46 s, saving caches 6 min.
+
+[OBS 2026-10-29] Second run 40855107668 (only notes changed): success, 14 min,
+but not a warm run. Lean cache hit (2.8 GB restored, build skipped: Lean lib
+step 0 s). Nix step still 8.7 min: it rebuilt `ocaml5.5.1-aeneas` (both
+checkouts), `charon`, `rust-default-1.100.0-nightly-2026-09-17` and
+`charon-full-mir-sysroots`, substituting 374 paths from hacl and 205 from
+cache.nixos.org. Two causes in the logs: (1) run 1's post step reported the
+store at 19.8 GB against the action's `gc-max-store-size-linux: 8G` and ran
+`nix store gc`, deleting 572 paths (5.1 GiB) including `charon-0.1.301` and
+`charon-deps-0.1.301`, so the saved 3.8 GB cache lacked exactly the expensive
+outputs; (2) run 2's restore of that cache ended with
+`tar ... failed with exit code 2` / "Failed to restore the cache" after ~460k
+"Cannot open: No such file or directory" lines, so even the surviving paths
+were not usable. Store-wide caching of /nix/store is the wrong granularity
+here: most of the store is substitutable anyway, and the GC limit removed
+what was not.
+
+Replaced `cache-nix-action` with a file binary cache: after the builds,
+`nix copy --to file:///tmp/nix-cache?compression=zstd` of the three result
+closures (Charon + its Rust toolchain and sysroots, both Aeneas binaries);
+`actions/cache` saves `/tmp/nix-cache` keyed `nixcache-<os>-<charon>-<aeneas>-
+<aeneas_mod>` with prefix fallbacks; the build step adds it as
+`--extra-substituters file:///tmp/nix-cache --option require-sigs false`.
+Only the build outputs are cached, nothing is GC'd, and a partial hit (one
+submodule moved) still substitutes the unchanged two.
+[OPEN] third-run timing and cache size — appended after the push.
