@@ -51,3 +51,11 @@
 **To resume:** `make test` is green with the matcher arm (116/116, no expected-output changes, 2026-10-29); upstream de16f3c (now the pin) still lacks the arm; open an upstream PR from the fork's `main` with `tests/unsupported/chars_next_before_loop.rs` as a `tests/src/` case; the pristine pin stays until upstream merges.
 **Effort estimate:** ~1 h to PR once the suite is green
 **References:** 2026-10-29-dataset-pinned-and-square-nums.md, 2026-10-28-remove-occ-strings-expose-three-aeneas-limits.md
+
+## Classify raw-pointer effects as unsupported_code in check.py
+**Status:** parked 2026-10-29
+**Context:** `mbpp_591_swap_List` attempt 1 (`as_mut_ptr` + `ptr::swap`) is `missing_context`, but the translation drops the write: no model of the three axioms can make it correct. Candidate rule: calls to pointer read/write functions → `unsupported_code` with a clear reason.
+**Why parked:** One data point; blanket type-based flagging is too blunt.
+**To resume:** Find a second case (hand-write fixtures with `ptr::write`/`read`/`copy`, and a pointer-only-as-value case that should stay `missing_context`/`translates`); if the pattern holds, add the rule to `classify_aeneas` and rows to `tests/expected.json`.
+**Effort estimate:** ~1 h
+**References:** 2026-10-29-swap-list-raw-pointers-become-opaque-values.md

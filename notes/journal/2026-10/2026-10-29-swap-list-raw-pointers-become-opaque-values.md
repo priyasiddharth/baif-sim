@@ -20,8 +20,20 @@ The generated `swap_List` returns the `Vec` that came out of
 pointer to the vector's contents. So even with models for the three
 axioms the function's behaviour is unprovable — the pointer write is
 lost by construction, not just unmodelled. Verdict `missing_context`
-understates this; [OPEN] should `check.py` flag any `MutRawPtr`/`ConstRawPtr`
-in a signature as `unsupported_code`?
+understates this.
+
+[OBS 2026-10-29] Discussed with the user why it might be re-classified.
+`missing_context` promises "supply models and it works"; here no model can
+work, because the `Vec` is not an input or output of `ptr::swap`, so the
+next repair step would be sent to write impossible models. The repair
+that works is a rewrite, i.e. what `unsupported_code` says. But flagging
+every `MutRawPtr`/`ConstRawPtr` type is too blunt (pointer values only
+compared/cast/passed through may translate meaningfully). Narrower
+candidate rule: calls to pointer read/write functions (`ptr::swap`,
+`ptr::write`, `ptr::read`, `ptr::copy*`, …) → `unsupported_code`, reason
+"effect through raw pointer is not modelled"; still a name list, misses
+user `unsafe` code. [OPEN] decided: leave `check.py` unchanged until a
+second case appears — one data point does not justify a rule.
 
 [OBS 2026-10-29] Attempt 2: temporary + two index assignments →
 `translates`, no axioms, pristine and mod. (`Vec::swap` avoided: no

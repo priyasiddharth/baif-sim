@@ -42,6 +42,12 @@
       in loops each fail for a different reason — see the remove_Occ
       journal entry and tests/unsupported/chars_next_before_loop.rs.
 
+[OBS 2026-10-29] Not every `missing_context` is repairable by adding
+      models: raw-pointer writes via library calls (`ptr::swap`) translate
+      to axioms whose types cannot carry the effect — see
+      ../journal/2026-10/2026-10-29-swap-list-raw-pointers-become-opaque-values.md.
+      Tally including the pointer probe: 7 problems, 6 pass at attempt 2.
+
 ## See also
 
 - ../durable/opaque-functions-become-axioms-or-lean-lib-models.md

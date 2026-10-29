@@ -36,5 +36,8 @@
   - `tests/unsupported/chars_next_before_loop.rs` (14-line repro of "Could not match the contexts"); the 2026-10-28 [HYP] on remove_Occ attempts 2–3 confirmed and sharpened: missing `AEndedProjLoans` arm in the loop-context matcher.
 - **Critical corrections:** none from the user. User interrupted an unasked "fetch the next row" to ask about submoduling the dataset first; answer was "pin, don't submodule" and they took it.
   - `journal/2026-10/2026-10-29-pins-moved-to-de16f3c-fork-main-carries-fix.md` — pins moved to aeneas de16f3c / charon 373d840, fork `main` = pin + fix, all verdicts unchanged.
-- **Status:** complete. Tally 0/6 first attempt, 5/6 at attempt 2, remove_Occ unresolved.
+  - `journal/2026-10/2026-10-29-swap-list-raw-pointers-become-opaque-values.md` — raw-pointer probe: `missing_context` but the write is lost; reclassification parked.
+  - Aeneas fork: second matcher arm (ended shared loans) + upstream-style regression test `tests/src/loop-ended-loans.rs` (fork `main` ee1c669, `make test` 117/117).
+  - CI: `.github/workflows/check.yml` + `tests/expected.json`/`tests/run_expected.py` (38 verdicts locally); first GitHub run in progress at note time.
+- **Status:** complete. Tally 0/6 first attempt (+1 deliberate pointer probe), 6/7 at attempt 2, remove_Occ unresolved.
 - **Next-session pickup candidates:** unchanged from 2026-10-28 (skill split; part-3 allowlist experiment; `||`-in-loop upstream report) plus the new ended-loan-projector upstream report. Next untried rows: offset 4 `mbpp_9_find_Rotations`, offset 7 `mbpp_14_find_Volume`.
