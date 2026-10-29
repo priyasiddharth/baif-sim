@@ -54,7 +54,8 @@ for f in fails passes; do
 done
 
 echo
-echo "================================================================ the fix (aeneas_mod vs pinned 399081f)"
-git -C "$root/aeneas_mod" --no-pager diff 399081f -- src/interp/InterpMatchCtxs.ml
+pin=$(git -C "$root/aeneas" rev-parse --short HEAD)
+echo "================================================================ the fix (aeneas_mod vs pinned $pin)"
+git -C "$root/aeneas_mod" --no-pager diff "$pin" -- src/interp/InterpMatchCtxs.ml
 echo
 echo "logs and generated Lean: $out/"

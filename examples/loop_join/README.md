@@ -1,8 +1,8 @@
 # Loop-join failure: `&mut self` iterator call before a loop
 
-A 14-line Rust function that pristine Aeneas (commit 399081f) rejects with
+A 14-line Rust function that pristine Aeneas (the pinned commit in `aeneas/`, 399081f when found, still at de16f3c) rejects with
 `Could not match the contexts`, a one-line change that makes it pass, and
-the four-line Aeneas fix in `aeneas_mod/`.
+the two matcher arms that fix it in `aeneas_mod/`.
 
 ```
 examples/loop_join/run.sh            # verdicts + loop signatures + the patch
