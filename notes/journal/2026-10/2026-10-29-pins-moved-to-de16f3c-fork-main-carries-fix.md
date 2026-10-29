@@ -31,7 +31,7 @@ Prop/Bool bug is still present upstream. Recorded `mbpp/*/check.json`
 were *not* regenerated; they still carry the old version stamps.
 
 [OBS 2026-10-29] `make test` in `aeneas_mod` at the new base: exit 0, 116 test
-invocations, no expected-output changes (`git status` clean apart from nothing).
+invocations, no expected-output changes (`git status` in the submodule is clean).
 
 ## See also
 
