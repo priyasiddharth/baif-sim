@@ -1,0 +1,42 @@
+{
+  "input": "/home/siddharth/baif/sim/mbpp/mbpp_591_swap_List/attempt-2/mbpp_591_swap_List.rs",
+  "versions": {
+    "aeneas": "de16f3cf",
+    "aeneas_checkout": "pristine",
+    "aeneas_dir": "aeneas",
+    "lean_lib": "aeneas/backends/lean",
+    "charon": "373d84044",
+    "charon_matches_pin": true,
+    "rustc": "nightly-2026-09-17",
+    "lean": "v4.35.0"
+  },
+  "stages": {
+    "charon": {
+      "status": "ok",
+      "rust_compiled": true,
+      "warnings": [],
+      "errors": []
+    },
+    "aeneas": {
+      "status": "ok",
+      "warnings": [],
+      "errors": []
+    },
+    "lean": {
+      "status": "ok",
+      "errors": []
+    }
+  },
+  "functions": [
+    {
+      "rust": "mbpp_591_swap_List::swap_List",
+      "lean": "Mbpp591SwapList.swap_List",
+      "status": "translated",
+      "reason": null,
+      "error_ref": null
+    }
+  ],
+  "axioms": [],
+  "verdict": "translates",
+  "reasons": []
+}

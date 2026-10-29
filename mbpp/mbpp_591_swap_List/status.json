@@ -9,9 +9,18 @@
       },
       "outcome": "check:missing_context",
       "aeneas": "pristine"
+    },
+    {
+      "attempt": 2,
+      "tests": {
+        "passed": true,
+        "stage": "run"
+      },
+      "outcome": "pass",
+      "aeneas": "pristine"
     }
   ],
-  "done": false,
+  "done": true,
   "source": {
     "dataset": "nuprl/MultiPL-E",
     "config": "mbpp-rs",
