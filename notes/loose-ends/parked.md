@@ -59,3 +59,11 @@
 **To resume:** Find a second case (hand-write fixtures with `ptr::write`/`read`/`copy`, and a pointer-only-as-value case that should stay `missing_context`/`translates`); if the pattern holds, add the rule to `classify_aeneas` and rows to `tests/expected.json`.
 **Effort estimate:** ~1 h
 **References:** 2026-10-29-swap-list-raw-pointers-become-opaque-values.md
+
+## Memory model for raw pointers in Aeneas (design question)
+**Status:** parked 2026-10-29
+**Context:** Pointer writes through library calls are lost in translation (`swap_List` attempt 1). Options discussed: global heap (rejected: taxes safe code), local heap + ownership handoff (needs region-end info raw pointers don't have), per-pointer points-to tokens (Verus-style; needs annotations/inference). See 2026-10-29-swap-list-raw-pointers-become-opaque-values.md.
+**Why parked:** Aeneas feature work, out of scope for the brief; only needed if unsafe code must be verified.
+**To resume:** Check upstream Aeneas issues/PRs and the paper for raw-pointer plans; see how Charon represents `*mut T` deref/offset in LLBC; prototype the token typing of `ptr::swap` by hand in Lean against the generated `swap_List` to see what the Lean side would need.
+**Effort estimate:** unknown (research)
+**References:** 2026-10-29-swap-list-raw-pointers-become-opaque-values.md

@@ -43,3 +43,29 @@ model.) Both attempts added to `tests/expected.json` (36 verdicts).
 
 - 2026-10-29-dataset-pinned-and-square-nums.md
 - ../../empirical/idiomatic-rust-fails-on-missing-stdlib-models.md
+
+[OBS 2026-10-29] User asked whether pointer reads/writes could be given
+meaning by threading a memory ("pass a global memory or all operations
+on the global memory"). Design discussion, no source checked; all [HYP]
+beyond the first point:
+- An explicit heap does fix the shape: `as_mut_ptr : Vec T → Heap →
+  Result (MutRawPtr T × Heap)`, `swap : … → Heap → Result (Unit × Heap)`,
+  so the write has somewhere to go.
+- A *global* heap on every function undoes Aeneas's point — safe code
+  would become heap proofs with aliasing/framing everywhere. Wrong end.
+- Middle option: a *local* heap for the unsafe region with an ownership
+  handoff at the boundary, like borrows: `as_mut_ptr` moves the `Vec`
+  into the heap and returns a backward function `Heap → Vec T` that
+  reads it back when the region ends. Catch: raw pointers erase
+  lifetimes, so nothing in the types says when the region ends (the
+  pointer may be stored/copied/outlive the `Vec`).
+- Usual answer: per-pointer linear permission tokens (points-to), e.g.
+  `swap : Ptr T → Ptr T → PointsTo p a → PointsTo q b → (PointsTo p b ×
+  PointsTo q a)`; functional, pays only for touched cells, disjointness
+  built in — Verus `PPtr`/`PointsTo` style. Cost: plain Rust carries no
+  tokens; annotations or inference needed; inference is the research
+  problem.
+Conclusion for this project: not a `check.py` change, would be an
+Aeneas feature; upstream status unchecked [OPEN]. For *generating*
+translatable Rust the rule stands: write the safe version (attempt 2).
+Matters only if the brief needs real unsafe code verified.
