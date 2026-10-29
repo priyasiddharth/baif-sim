@@ -26,12 +26,13 @@
 
 ## 2026-10-29
 - **Session:** (unnamed, continuation)
-- **Theme:** Publish repo to GitHub; pin the MBPP dataset; sixth problem; trace the loop-join failure with Aeneas logging.
+- **Theme:** Publish repo to GitHub; pin the MBPP dataset; sixth problem; trace the loop-join failure with Aeneas logging; try fixing it in Aeneas.
 - **Key outputs:**
   - `journal/2026-10/2026-10-29-dataset-pinned-and-square-nums.md`
   - `data/mbpp-rs.json` (354 rows, HF revision 28441b6) + `mbpp.py fetch`/`snapshot` reading/writing it; revision stamped into every `status.json`.
   - `mbpp/mbpp_8_square_nums`: pass at attempt 2 (iterator `map`/`collect` → index loop).
   - Remote: `origin/main` (merged GitHub's README initial commit; `master` removed).
+  - `journal/2026-10/2026-10-29-aeneas-loop-matcher-fix-experiment.md` — guard patch regresses upstream tests; one matcher arm fixes all our cases (suite result pending at note time). Submodule scratch branch `experiment/end-dead-abs-before-loop`, uncommitted.
   - `tests/unsupported/chars_next_before_loop.rs` (14-line repro of "Could not match the contexts"); the 2026-10-28 [HYP] on remove_Occ attempts 2–3 confirmed and sharpened: missing `AEndedProjLoans` arm in the loop-context matcher.
 - **Critical corrections:** none from the user. User interrupted an unasked "fetch the next row" to ask about submoduling the dataset first; answer was "pin, don't submodule" and they took it.
 - **Status:** complete. Tally 0/6 first attempt, 5/6 at attempt 2, remove_Occ unresolved.
