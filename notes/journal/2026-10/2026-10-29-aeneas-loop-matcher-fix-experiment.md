@@ -82,6 +82,12 @@ an `aeneas` field. Same inputs, both checkouts:
 | tests/unsupported/chars_next_before_loop.rs | unsupported_code | missing_context (Deref axiom only) |
 | mbpp_11_remove_Occ attempt 2 | unsupported_code | toolchain_problem (stored-`||` bug) |
 
+Self-contained walkthrough for explaining this to others:
+`examples/loop_join/` (`run.sh [--trace]`, README) — runs `fails.rs` /
+`passes.rs` through both checkouts and prints verdicts, loop signatures,
+the matcher trace at the failure and the patch diff. Written by a side
+agent on the user's request; verified 2026-10-29.
+
 Rationale for a flag on `check.py` rather than only on `mbpp.py`:
 `check.py` is the only thing that execs Aeneas, so every caller (skill,
 hand runs, future datasets) gets the switch and the provenance for free.

@@ -13,4 +13,5 @@ Layout:
 - `tools/mbpp.py` + `.claude/skills/mbpp-aeneas/` — generate / test / check / log loop.
 - `data/mbpp-rs.json` — pinned snapshot of the MultiPL-E `mbpp-rs` test split (HF revision inside); `fetch` reads it, `snapshot` refreshes it.
 - `tests/` — hand-written pass/fail cases. `mbpp/` — recorded attempts.
+- `examples/` — self-contained walkthroughs (`loop_join/run.sh`: the `&mut self`-before-loop failure, pristine vs mod, with the patch and trace).
 - `notes.md` — the user's raw working notes (not the notebook).
