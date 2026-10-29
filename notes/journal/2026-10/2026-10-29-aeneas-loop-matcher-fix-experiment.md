@@ -61,6 +61,8 @@ changed (Patch A had stopped at 106 with `static.rs` and had rewritten
 Patch B never reaches that because such an abstraction stays fixed. A
 program where the loop body touches the iterator after `next` would.
 
+[SUPERSEDED → 2026-10-29-pins-moved-to-de16f3c-fork-main-carries-fix.md: branch is now
+`main`, commit 38531ab on top of de16f3c; details below describe the first placement]
 [OBS 2026-10-29, later] Where the patch lives now, on the user's call:
 `aeneas/` restored to the pristine pin (source and binary; scratch branch
 deleted). New submodule `aeneas_mod/` = fork `priyasiddharth/aeneas`,

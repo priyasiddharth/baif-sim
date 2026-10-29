@@ -7,7 +7,7 @@ Research notebook in `notes/`, managed with the **better-than-fish** skill
 
 Layout:
 - `aeneas/`, `charon/` — submodules, pinned (see `aeneas/charon-pin`). Never patch `aeneas/`.
-- `aeneas_mod/` — submodule of our fork (priyasiddharth/aeneas), same base commit plus local patches, branch `loop-matcher-ended-proj-loans`. Select with `--aeneas mod` on `check.py` / `mbpp.py attempt|recheck`, or `AENEAS=mod` in the environment; default is pristine.
+- `aeneas_mod/` — submodule of our fork (priyasiddharth/aeneas), branch `main` = the `aeneas/` pin plus our local patches (rebase them when the pin moves; move `aeneas/` and `charon/` together, per `aeneas/charon-pin`). Select with `--aeneas mod` on `check.py` / `mbpp.py attempt|recheck`, or `AENEAS=mod` in the environment; default is pristine.
 - `lakefile.lean` / `lean-toolchain` (root) — shell Lake project so VS Code resolves `import Aeneas` in generated files anywhere in the repo; shares the Aeneas library's built packages.
 - `tools/check.py` — Charon → Aeneas → Lean type-check → `#print axioms`, JSON verdict.
 - `tools/mbpp.py` + `.claude/skills/mbpp-aeneas/` — generate / test / check / log loop.

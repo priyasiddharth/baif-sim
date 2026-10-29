@@ -55,8 +55,10 @@
 
 [FACT] Two Aeneas checkouts exist (since 2026-10-29): `aeneas/` is the pristine
        upstream pin and is never patched; `aeneas_mod/` is our fork
-       (priyasiddharth/aeneas, branch `loop-matcher-ended-proj-loans`) at the same
-       base commit plus local fixes. `tools/check.py --aeneas pristine|mod|PATH`
+       (priyasiddharth/aeneas, branch `main`) at the same base commit plus local
+       fixes. Moving the pin = check out the new upstream commit in `aeneas/`,
+       `charon/` at its `charon-pin`, rebase the fork's commits onto it, rebuild
+       all three (and `lake build` the Lean lib if `backends/lean` changed). `tools/check.py --aeneas pristine|mod|PATH`
        picks the binary (default `$AENEAS` or pristine); `mbpp.py attempt|recheck`
        pass `--aeneas` through. Every `check.json` says which ran under
        `versions.aeneas_checkout`. Rebuild the fork after pulling with

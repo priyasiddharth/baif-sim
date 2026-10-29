@@ -1,6 +1,6 @@
 # Idiomatic Rust fails translation on missing stdlib models, not unsupported syntax
 
-**Verified against:** aeneas 399081f, charon 2ec7e96, rustc nightly-2026-09-17, Lean v4.35.0 (Aeneas Lean lib at the same aeneas commit)
+**Verified against:** aeneas 399081f, charon 2ec7e96, rustc nightly-2026-09-17, Lean v4.35.0 (Aeneas Lean lib at the same aeneas commit). Pins moved to aeneas de16f3c / charon 373d840 on 2026-10-29 (same rustc and Lean); all `tests/` verdicts and the attempt-2/4 remove_Occ and square_nums verdicts unchanged under both checkouts, MBPP attempts not re-run.
 **Last verified:** 2026-10-29
 **Status:** single-benchmark (6 MBPP problems, 1 generator; dataset pinned at HF revision 28441b6)
 
