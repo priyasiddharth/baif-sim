@@ -12,6 +12,7 @@ Exit codes mirror the verdict:
 
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
@@ -20,8 +21,27 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CHARON = ROOT / "charon" / "bin" / "charon"
-AENEAS = ROOT / "aeneas" / "bin" / "aeneas"
-LEAN_LIB = ROOT / "aeneas" / "backends" / "lean"
+# Which Aeneas checkout to run: "pristine" (aeneas/, the upstream pin), "mod"
+# (aeneas_mod/, our fork with local patches) or a path. Default from $AENEAS,
+# overridden by --aeneas. The Lean library comes from the same checkout when it
+# is built there, otherwise from the pristine one (same library at the same
+# base commit; the patches so far only touch the OCaml side).
+AENEAS_CHECKOUTS = {"pristine": ROOT / "aeneas", "mod": ROOT / "aeneas_mod"}
+AENEAS_DIR = None   # set by select_aeneas()
+AENEAS = None
+LEAN_LIB = None
+
+
+def select_aeneas(which):
+    global AENEAS_DIR, AENEAS, LEAN_LIB
+    AENEAS_DIR = AENEAS_CHECKOUTS.get(which) or Path(which).expanduser().resolve()
+    AENEAS = AENEAS_DIR / "bin" / "aeneas"
+    own_lib = AENEAS_DIR / "backends" / "lean"
+    LEAN_LIB = own_lib if (own_lib / ".lake" / "build").exists() else AENEAS_CHECKOUTS["pristine"] / "backends" / "lean"
+    return AENEAS_DIR
+
+
+select_aeneas(os.environ.get("AENEAS", "pristine"))
 
 EXIT_CODES = {
     "translates": 0,
@@ -63,8 +83,12 @@ def versions():
     code, full_charon, _ = run(["git", "-C", str(ROOT / "charon"), "rev-parse", "HEAD"])
     lean_toolchain = LEAN_LIB / "lean-toolchain"
     lean = lean_toolchain.read_text().strip().split(":")[-1] if lean_toolchain.exists() else None
+    which = next((k for k, v in AENEAS_CHECKOUTS.items() if v == AENEAS_DIR), str(AENEAS_DIR))
     return {
-        "aeneas": git_rev(ROOT / "aeneas"),
+        "aeneas": git_rev(AENEAS_DIR),
+        "aeneas_checkout": which,
+        "aeneas_dir": str(AENEAS_DIR.relative_to(ROOT)) if AENEAS_DIR.is_relative_to(ROOT) else str(AENEAS_DIR),
+        "lean_lib": str(LEAN_LIB.relative_to(ROOT)) if LEAN_LIB.is_relative_to(ROOT) else str(LEAN_LIB),
         "charon": git_rev(ROOT / "charon"),
         "charon_matches_pin": pin is not None and full_charon.strip() == pin,
         "rustc": rustc,
@@ -530,17 +554,23 @@ def main():
     parser.add_argument("--charon-arg", action="append", default=[],
                         help="extra argument for charon, e.g. --charon-arg=--include=foo (repeatable)")
     parser.add_argument("--human", action="store_true", help="print a readable summary instead of JSON")
+    parser.add_argument("--aeneas", default=os.environ.get("AENEAS", "pristine"),
+                        help="Aeneas checkout to run: pristine (aeneas/), mod (aeneas_mod/) or a path "
+                             "(default: $AENEAS or pristine)")
     args = parser.parse_args()
+    select_aeneas(args.aeneas)
 
     src = args.file.resolve()
     if not src.is_file() or src.suffix != ".rs":
         parser.error(f"not a .rs file: {args.file}")
-    missing = [str(t) for t in (CHARON, AENEAS) if not t.exists()]
-    if missing:
+    problems = [f"not built: {t}" for t in (CHARON, AENEAS) if not t.exists()]
+    if not AENEAS_DIR.is_dir():
+        problems = [f"no such Aeneas checkout {args.aeneas!r} (known: {', '.join(AENEAS_CHECKOUTS)}, or a path)"]
+    if problems:
         # Still a JSON report, so a caller always gets a structured verdict.
         report = {"input": str(src), "versions": versions(), "stages": {}, "functions": [], "axioms": [],
                   "verdict": "toolchain_problem",
-                  "reasons": [f"toolchain_problem: not built: {m}" for m in missing], "output_dir": None}
+                  "reasons": [f"toolchain_problem: {m}" for m in problems], "output_dir": None}
         print(human(report) if args.human else json.dumps(report, indent=2))
         sys.exit(EXIT_CODES["toolchain_problem"])
 

@@ -61,6 +61,31 @@ changed (Patch A had stopped at 106 with `static.rs` and had rewritten
 Patch B never reaches that because such an abstraction stays fixed. A
 program where the loop body touches the iterator after `next` would.
 
+[OBS 2026-10-29, later] Where the patch lives now, on the user's call:
+`aeneas/` restored to the pristine pin (source and binary; scratch branch
+deleted). New submodule `aeneas_mod/` = fork `priyasiddharth/aeneas`,
+branch `loop-matcher-ended-proj-loans` = 399081f + one commit (4f8b688,
+pushed), `charon` symlinked to `../charon` like the pristine one; built
+with `cd src && dune build` + copy to `bin/aeneas` (full build, a few
+minutes). The Lean library is *not* built in `aeneas_mod`; `check.py`
+falls back to `aeneas/backends/lean` (same library at the same base
+commit — the patch is OCaml-only) and records `versions.lean_lib`.
+Selection: `check.py --aeneas pristine|mod|PATH` (default `$AENEAS` or
+pristine), passed through by `mbpp.py attempt|recheck --aeneas`;
+`check.json` records `versions.aeneas_checkout`/`aeneas_dir`, the
+attempt commit message gets `(aeneas: mod)`, `status.json` entries get
+an `aeneas` field. Same inputs, both checkouts:
+
+| input | pristine | mod |
+|---|---|---|
+| tests/compile_ok1.rs | translates | translates |
+| tests/unsupported/chars_next_before_loop.rs | unsupported_code | missing_context (Deref axiom only) |
+| mbpp_11_remove_Occ attempt 2 | unsupported_code | toolchain_problem (stored-`||` bug) |
+
+Rationale for a flag on `check.py` rather than only on `mbpp.py`:
+`check.py` is the only thing that execs Aeneas, so every caller (skill,
+hand runs, future datasets) gets the switch and the provenance for free.
+
 ## Why this matters
 
 The brief's "unsupported" category is softer than it looks: this one was

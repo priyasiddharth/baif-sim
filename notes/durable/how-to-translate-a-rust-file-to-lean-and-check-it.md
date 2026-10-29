@@ -53,6 +53,16 @@
        external definitions you must model by hand (aeneas/src/Translate.ml:1870ff;
        README.md:155-165). Incompatible with `-borrow-check` (Main.ml:490).
 
+[FACT] Two Aeneas checkouts exist (since 2026-10-29): `aeneas/` is the pristine
+       upstream pin and is never patched; `aeneas_mod/` is our fork
+       (priyasiddharth/aeneas, branch `loop-matcher-ended-proj-loans`) at the same
+       base commit plus local fixes. `tools/check.py --aeneas pristine|mod|PATH`
+       picks the binary (default `$AENEAS` or pristine); `mbpp.py attempt|recheck`
+       pass `--aeneas` through. Every `check.json` says which ran under
+       `versions.aeneas_checkout`. Rebuild the fork after pulling with
+       `cd aeneas_mod/src && dune build && cp -f _build/default/main.exe ../bin/aeneas`
+       (needs the `aeneas_mod/charon -> ../charon` symlink, gitignored).
+
 ## Why this matters
 
 "It translated" is three independent checks (Charon, Aeneas, Lean). The

@@ -8,6 +8,13 @@ description: Generate Rust for MBPP problems, run the supplied unit tests, check
 Argument: a count (`3` = the first 3 problems, `--offset K` to start later) or
 problem names. All commands run from the repo root.
 
+Aeneas checkout: by default `check.py` runs the pristine upstream pin
+(`aeneas/`). If the argument includes `--aeneas mod` (or `AENEAS=mod` is set),
+pass `--aeneas mod` to every `attempt` / `recheck` call so the patched fork
+(`aeneas_mod/`) is used; `check.json` records which one ran under
+`versions.aeneas_checkout`, and the attempt commit message carries
+`(aeneas: mod)`. Say which checkout was used in the final summary.
+
 ## Steps per problem
 
 1. **Fetch** (skip if `mbpp/<name>/prompt.rs` exists):

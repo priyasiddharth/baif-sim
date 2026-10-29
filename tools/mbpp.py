@@ -25,6 +25,7 @@ check.py report — the result record) and lean/ (check.py output).
 import argparse
 import datetime
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -213,8 +214,9 @@ def cmd_attempt(args):
     (adir / "tests.txt").write_text(f"PASS ({tests['stage']})\n{tests['output']}")
 
     # check.py's report (check.json) is the result record; status.json only indexes attempts.
-    check = run_check(sol, adir)
-    result = {"attempt": n, "tests": {"passed": True, "stage": tests["stage"]}, "outcome": outcome_of(check)}
+    check = run_check(sol, adir, args.aeneas)
+    result = {"attempt": n, "tests": {"passed": True, "stage": tests["stage"]}, "outcome": outcome_of(check),
+              "aeneas": check.get("versions", {}).get("aeneas_checkout", args.aeneas)}
     status["attempts"].append(result)
     status["done"] = result["outcome"] == "pass"
     status["first_attempt_pass"] = status["done"] and n == 1
@@ -223,7 +225,8 @@ def cmd_attempt(args):
 
     shown = {**result, "check": summarize(check)}
     if args.commit:
-        shown["committed"] = commit(d, f"mbpp {d.name}: attempt {n} {result['outcome']}")
+        tag = "" if result["aeneas"] == "pristine" else f" (aeneas: {result['aeneas']})"
+        shown["committed"] = commit(d, f"mbpp {d.name}: attempt {n} {result['outcome']}{tag}")
     print(json.dumps(shown, indent=2))
     sys.exit(0 if status["done"] else 1)
 
@@ -264,9 +267,10 @@ def write_failure_log(d, status):
     (d / "failures.md").write_text("\n".join(lines))
 
 
-def run_check(sol, adir):
-    """Run check.py on a solution; its JSON report is saved as attempt-N/check.json."""
-    proc = subprocess.run([sys.executable, str(CHECK), str(sol), "-o", str(adir / "lean")],
+def run_check(sol, adir, aeneas="pristine"):
+    """Run check.py on a solution; its JSON report is saved as attempt-N/check.json.
+    `aeneas` selects the checkout (pristine | mod | path); check.json records it under versions."""
+    proc = subprocess.run([sys.executable, str(CHECK), str(sol), "-o", str(adir / "lean"), "--aeneas", aeneas],
                           capture_output=True, text=True)
     try:
         check = json.loads(proc.stdout)
@@ -299,14 +303,17 @@ def cmd_recheck(args):
     for result in status["attempts"]:
         adir = d / f"attempt-{result['attempt']}"
         if result["tests"] and result["tests"]["passed"]:
-            result["outcome"] = outcome_of(run_check(adir / f"{d.name}.rs", adir))
+            check = run_check(adir / f"{d.name}.rs", adir, args.aeneas)
+            result["outcome"] = outcome_of(check)
+            result["aeneas"] = check.get("versions", {}).get("aeneas_checkout", args.aeneas)
             result.pop("check", None)
     status["done"] = bool(status["attempts"]) and status["attempts"][-1]["outcome"] == "pass"
     status["first_attempt_pass"] = bool(status["attempts"]) and status["attempts"][0]["outcome"] == "pass"
     (d / "status.json").write_text(json.dumps(status, indent=2) + "\n")
     write_failure_log(d, status)
     if args.commit:
-        commit(d, f"mbpp {d.name}: recheck after check.py change")
+        tag = "" if args.aeneas == "pristine" else f" (aeneas: {args.aeneas})"
+        commit(d, f"mbpp {d.name}: recheck{tag}")
     print(json.dumps([(a["attempt"], a["outcome"]) for a in status["attempts"]]))
 
 
@@ -348,6 +355,10 @@ def main():
     a = sub.add_parser("attempt"); a.add_argument("name"); a.add_argument("solution")
     a.add_argument("--commit", action="store_true"); a.add_argument("--force", action="store_true")
     rc = sub.add_parser("recheck"); rc.add_argument("name"); rc.add_argument("--commit", action="store_true")
+    for sp in (a, rc):
+        sp.add_argument("--aeneas", default=os.environ.get("AENEAS", "pristine"),
+                        help="Aeneas checkout for check.py: pristine (aeneas/), mod (aeneas_mod/) or a path "
+                             "(default: $AENEAS or pristine)")
     lg = sub.add_parser("log"); lg.add_argument("name"); lg.add_argument("--commit", action="store_true")
     r = sub.add_parser("report"); r.add_argument("names", nargs="*")
     args = p.parse_args()
