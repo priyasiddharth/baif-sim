@@ -28,7 +28,7 @@ Policy and configuration we work under:
 
 Part 1 of the assignment: a skill that calls a deterministic script to check whether Rust translates through Charon and Aeneas to Lean. The script is [tools/check.py](tools/check.py). The skill is [mbpp-aeneas](.claude/skills/mbpp-aeneas/SKILL.md): it generates a solution, runs the problem's unit tests, calls the script, and revises on its report. The generator is the Claude Code session itself; the revise loop around the script is what stage 2 starts from.
 
-<img src="check_flow.png" alt="Check flow" width="100%" style="display:block; margin:0 0 0 0;" />
+<img src="check_flow.png" alt="Check flow" width="378" style="display:block; margin:0 0 0 0;" />
 
 ### Usage
 
