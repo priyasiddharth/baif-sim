@@ -48,9 +48,18 @@
       ../journal/2026-10/2026-10-29-swap-list-raw-pointers-become-opaque-values.md.
       Tally including the pointer probe: 7 problems, 6 pass at attempt 2.
 
+[OBS 2026-10-30] The 22 `missing_context` reasons across the 7 problems
+      split 17 route-1 axioms (a model would fix) / 5 route-2 "not a field
+      of structure `Iterator`" (library encoding gap; `map`, `collect`,
+      `take_while`, `any`, `sum`) — plus the swap_List pointer axiom whose
+      type cannot carry the effect. `--extract-opaque-bodies` is not a way
+      out: every program, including passing ones, then fails inside `core`.
+      See ../journal/2026-10/2026-10-30-missing-context-is-four-things.md.
+
 ## See also
 
 - ../durable/opaque-functions-become-axioms-or-lean-lib-models.md
 - ../journal/2026-10/2026-10-28-mbpp-loop-first-three-problems.md
 - ../journal/2026-10/2026-10-28-remove-occ-strings-expose-three-aeneas-limits.md
 - ../journal/2026-10/2026-10-29-dataset-pinned-and-square-nums.md
+- ../journal/2026-10/2026-10-30-missing-context-is-four-things.md

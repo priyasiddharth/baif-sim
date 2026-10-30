@@ -52,11 +52,11 @@
 **Effort estimate:** ~1 h to PR once the suite is green
 **References:** 2026-10-29-dataset-pinned-and-square-nums.md, 2026-10-28-remove-occ-strings-expose-three-aeneas-limits.md
 
-## Classify raw-pointer effects as unsupported_code in check.py
-**Status:** parked 2026-10-29
-**Context:** `mbpp_591_swap_List` attempt 1 (`as_mut_ptr` + `ptr::swap`) is `missing_context`, but the translation drops the write: no model of the three axioms can make it correct. Candidate rule: calls to pointer read/write functions → `unsupported_code` with a clear reason.
-**Why parked:** One data point; blanket type-based flagging is too blunt.
-**To resume:** Find a second case (hand-write fixtures with `ptr::write`/`read`/`copy`, and a pointer-only-as-value case that should stay `missing_context`/`translates`); if the pattern holds, add the rule to `classify_aeneas` and rows to `tests/expected.json`.
+## Split `missing_context` into its four causes in check.py
+**Status:** parked 2026-10-29, widened 2026-10-30
+**Context:** Exit 2 covers (1) rustc/Charon missing context, (2) missing Lean model (axiom whose type carries the effect), (3) encoding gap (builtin trait structure lacks the method: "`map` is not a field of structure …"), (4) unmodellable axiom (`ptr::swap : MutRawPtr T → MutRawPtr T → Result Unit`, effect on state absent from the type). Different fixes and owners; see 2026-10-30-missing-context-is-four-things.md.
+**Why parked:** Moves six expected verdicts; (4) needs a signature rule (raw-pointer/interior-mutability argument, no output carrying the pointee) with one fixture per class before it is trusted.
+**To resume:** keep `missing_context` for (1); add `missing_model` for (2); (3) → `unsupported_code` naming the library structure (pattern "is not a field of structure" + `core.`/`alloc.`); (4) → `missing_model` with an "effect lost" note or `unsupported_code`. Fixtures: `tests/unsupported/{ptr_write,cell_set,user_trait_any}.rs` plus a pointer-only-as-value case that must stay (2). Update `tests/expected.json` and the skill's verdict table.
 **Effort estimate:** ~1 h
 **References:** 2026-10-29-swap-list-raw-pointers-become-opaque-values.md
 
