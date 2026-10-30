@@ -71,7 +71,7 @@
 **References:** 2026-10-29-swap-list-raw-pointers-become-opaque-values.md
 
 ## String models for the fork's Lean library (remove_Occ)
-**Status:** parked 2026-10-30
+**Status:** parked 2026-10-30; tracked as https://github.com/priyasiddharth/baif-sim/issues/1
 **Context:** remove_Occ attempt 4 needs `String::new`, `String::push`, `Deref<str> for String`; the library maps `String` to Lean's `String` but models no method. Three one-liners would make it translate. Alternative policy (undecided): isolate the unmodelled type behind a thin wrapper so only the conversions carry axioms. See 2026-10-30-unmodelled-type-in-signature-cannot-be-shimmed.md.
 **Why parked:** User's call between Lean models, boundary isolation in the skill, or leaving it as the recorded "cannot handle" case; discussion stopped before a choice.
 **To resume:** (a) add the three models to `aeneas_mod/backends/lean/Aeneas/Std/Alloc/String.lean` with `rust_fun` attributes, rebuild the fork's Lean lib, `mbpp.py recheck mbpp_11_remove_Occ --aeneas mod`; or (b) add the wrapper rule to the skill's `missing_model` section and run attempt 5.

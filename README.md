@@ -1,5 +1,10 @@
 # baif-sim
 
+- [Goal](#goal)
+- [Setup](#setup)
+- [Stage 1](#stage-1): [Usage](#usage) · [What is checked](#what-is-checked) · [Check script](#check-script) · [Input forms](#input-forms) · [Test corpus: MBPP](#test-corpus-mbpp) · [Results and limits](#results-and-limits) · [Adapting to Aeneas changes](#adapting-to-aeneas-changes)
+- [Stage 2](#stage-2): [1. Widening what Aeneas accepts](#1-widening-what-aeneas-accepts-the-fork-aeneas_mod) · [1.1 Enhancing the source language](#11-enhancing-the-source-language) · [2. Skills that generate good patterns](#2-skills-that-generate-good-patterns)
+
 ## Goal
 
 This repo is a workflow for experimenting with boundaries of Rust to Lean translation with Charon+Aeneas. We study simple programs to understand problems quickly and use it to inform our strategy for multi-shot AI codegen (Stage 1) and one-shot AI codegen (Stage 2).
