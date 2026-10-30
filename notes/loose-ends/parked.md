@@ -66,6 +66,7 @@
 **Update 2026-10-30:** upstream branch `origin/cezar/loops` (68 commits past de16f3c, last 2026-10-18) carries raw-pointer work: "Lean: heap cells with byte layouts; pointer casts, transmutes" (e315dd39), "Extraction: pointer casts between pointee types, transmutes, raw borrows of places" (d2cc241e), "Pre-pass: reuse the reads of values behind raw pointers" (94be8cea), experimental raw-pointer tests (8b4c7806). Unmerged; watch it before prototyping anything here.
 **Context:** Pointer writes through library calls are lost in translation (`swap_List` attempt 1). Options discussed: global heap (rejected: taxes safe code), local heap + ownership handoff (needs region-end info raw pointers don't have), per-pointer points-to tokens (Verus-style; needs annotations/inference). See 2026-10-29-swap-list-raw-pointers-become-opaque-values.md.
 **Why parked:** Aeneas feature work, out of scope for the brief; only needed if unsafe code must be verified.
+**Alternative (2026-10-30):** keep Aeneas as is and put the tokens in the source language — a `PPtr`/`PointsTo` crate with hand-written Lean models; see 2026-10-30-pptr-crate-and-index-arena-rule.md and README Stage 2 §1.1.
 **To resume:** Check upstream Aeneas issues/PRs and the paper for raw-pointer plans; see how Charon represents `*mut T` deref/offset in LLBC; prototype the token typing of `ptr::swap` by hand in Lean against the generated `swap_List` to see what the Lean side would need.
 **Effort estimate:** unknown (research)
 **References:** 2026-10-29-swap-list-raw-pointers-become-opaque-values.md
