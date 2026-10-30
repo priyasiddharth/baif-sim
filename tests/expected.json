@@ -1,39 +1,135 @@
 {
-  "_comment": "Expected tools/check.py verdict per input and Aeneas checkout. Run: tests/run_expected.py",
+  "_comment": "Expected tools/check.py result per input and Aeneas checkout: a verdict, or {verdict, reasons (substrings), noted_axioms, axioms (count)}. Run: tests/run_expected.py",
   "tests/compile_ok1.rs": {
-    "pristine": "translates",
-    "mod": "translates"
+    "pristine": {
+      "verdict": "translates",
+      "axioms": 0
+    },
+    "mod": {
+      "verdict": "translates",
+      "axioms": 0
+    }
   },
   "tests/unsupported/raw_ptr.rs": {
-    "pristine": "unsupported_code",
-    "mod": "unsupported_code"
+    "pristine": {
+      "verdict": "unsupported_code",
+      "reasons": [
+        "Aeneas does not yet support dereferencing raw pointers"
+      ],
+      "noted_axioms": [
+        "core::ptr::const_ptr::{*const T}::add",
+        "core::slice::{[T]}::as_ptr"
+      ],
+      "axioms": 2
+    },
+    "mod": {
+      "verdict": "unsupported_code",
+      "reasons": [
+        "Aeneas does not yet support dereferencing raw pointers"
+      ],
+      "noted_axioms": [
+        "core::ptr::const_ptr::{*const T}::add",
+        "core::slice::{[T]}::as_ptr"
+      ],
+      "axioms": 2
+    }
   },
   "tests/unsupported/async_fn.rs": {
-    "pristine": "unsupported_code",
-    "mod": "unsupported_code"
+    "pristine": {
+      "verdict": "unsupported_code",
+      "reasons": [
+        "Charon: Coroutine"
+      ]
+    },
+    "mod": {
+      "verdict": "unsupported_code",
+      "reasons": [
+        "Charon: Coroutine"
+      ]
+    }
   },
   "tests/unsupported/ref_mul.rs": {
-    "pristine": "missing_model",
-    "mod": "missing_model"
+    "pristine": {
+      "verdict": "missing_model",
+      "reasons": [
+        "no Lean model for standard-library item: core::ops::arith"
+      ],
+      "axioms": 1
+    },
+    "mod": {
+      "verdict": "missing_model",
+      "reasons": [
+        "no Lean model for standard-library item: core::ops::arith"
+      ],
+      "axioms": 1
+    }
   },
   "tests/unsupported/missing_dep.rs": {
-    "pristine": "missing_context",
-    "mod": "missing_context"
+    "pristine": {
+      "verdict": "missing_context",
+      "reasons": [
+        "rustc cannot resolve names"
+      ]
+    },
+    "mod": {
+      "verdict": "missing_context",
+      "reasons": [
+        "rustc cannot resolve names"
+      ]
+    }
   },
   "tests/unsupported/invalid.rs": {
-    "pristine": "invalid_rust",
-    "mod": "invalid_rust"
+    "pristine": {
+      "verdict": "invalid_rust",
+      "reasons": [
+        "rustc rejected the code"
+      ]
+    },
+    "mod": {
+      "verdict": "invalid_rust",
+      "reasons": [
+        "rustc rejected the code"
+      ]
+    }
   },
   "tests/unsupported/or_in_loop_bool.rs": {
-    "pristine": "toolchain_problem",
-    "mod": "toolchain_problem"
+    "pristine": {
+      "verdict": "toolchain_problem",
+      "reasons": [
+        "generated Lean does not type-check",
+        "has type Prop but is expected to have type"
+      ]
+    },
+    "mod": {
+      "verdict": "toolchain_problem",
+      "reasons": [
+        "generated Lean does not type-check",
+        "has type Prop but is expected to have type"
+      ]
+    }
   },
   "tests/unsupported/chars_next_before_loop.rs": {
-    "pristine": "unsupported_code",
-    "mod": "missing_model"
+    "pristine": {
+      "verdict": "unsupported_code",
+      "reasons": [
+        "Could not match the contexts",
+        "no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref"
+      ]
+    },
+    "mod": {
+      "verdict": "missing_model",
+      "reasons": [
+        "no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref"
+      ]
+    }
   },
   "examples/loop_join/fails.rs": {
-    "pristine": "unsupported_code",
+    "pristine": {
+      "verdict": "unsupported_code",
+      "reasons": [
+        "Could not match the contexts"
+      ]
+    },
     "mod": "missing_model"
   },
   "examples/loop_join/passes.rs": {
@@ -69,23 +165,77 @@
     "mod": "missing_model"
   },
   "mbpp/aeneas_pristine/mbpp_591_swap_List/attempt-1/mbpp_591_swap_List.rs": {
-    "pristine": "missing_model",
-    "mod": "missing_model"
+    "pristine": {
+      "verdict": "missing_model",
+      "noted_axioms": [
+        "core::ptr::swap",
+        "alloc::vec::{alloc::vec::Vec<T>}::as_mut_ptr",
+        "core::ptr::mut_ptr::{*mut T}::add"
+      ],
+      "axioms": 3
+    },
+    "mod": {
+      "verdict": "missing_model",
+      "noted_axioms": [
+        "core::ptr::swap",
+        "alloc::vec::{alloc::vec::Vec<T>}::as_mut_ptr",
+        "core::ptr::mut_ptr::{*mut T}::add"
+      ],
+      "axioms": 3
+    }
   },
   "mbpp/aeneas_pristine/mbpp_591_swap_List/attempt-2/mbpp_591_swap_List.rs": {
-    "pristine": "translates",
-    "mod": "translates"
+    "pristine": {
+      "verdict": "translates",
+      "axioms": 0
+    },
+    "mod": {
+      "verdict": "translates",
+      "axioms": 0
+    }
   },
   "tests/user_trait_next.rs": {
-    "pristine": "translates",
-    "mod": "translates"
+    "pristine": {
+      "verdict": "translates",
+      "axioms": 0
+    },
+    "mod": {
+      "verdict": "translates",
+      "axioms": 0
+    }
   },
   "tests/unsupported/user_trait_any.rs": {
-    "pristine": "unsupported_code",
-    "mod": "unsupported_code"
+    "pristine": {
+      "verdict": "unsupported_code",
+      "reasons": [
+        "library trait structure lacks the method",
+        "`any` is not a field of structure `core.iter.traits.iterator.Iterator`"
+      ]
+    },
+    "mod": {
+      "verdict": "unsupported_code",
+      "reasons": [
+        "library trait structure lacks the method",
+        "`any` is not a field of structure `core.iter.traits.iterator.Iterator`"
+      ]
+    }
   },
   "tests/unsupported/raw_ptr_value.rs": {
-    "pristine": "missing_model",
-    "mod": "missing_model"
+    "pristine": {
+      "verdict": "missing_model",
+      "noted_axioms": [
+        "alloc::vec::{alloc::vec::Vec<T>}::as_mut_ptr",
+        "core::ptr::mut_ptr::{*mut T}::add"
+      ],
+      "axioms": 2
+    },
+    "mod": {
+      "verdict": "missing_model",
+      "noted_axioms": [
+        "alloc::vec::{alloc::vec::Vec<T>}::as_mut_ptr",
+        "core::ptr::mut_ptr::{*mut T}::add"
+      ],
+      "axioms": 2
+    }
   }
 }

@@ -191,5 +191,8 @@ jobs:
 
       # ------------------------------------------------------------ Checks
 
+      - name: Unit tests for check.py classification
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v 2>&1 | tail -5
+
       - name: Expected verdicts (pristine and mod)
         run: python3 tests/run_expected.py

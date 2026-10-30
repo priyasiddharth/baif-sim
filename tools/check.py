@@ -321,7 +321,10 @@ def aeneas_stage(llbc, out_dir, namespace):
 
 
 DOC_HEADER = re.compile(
-    r"/-- \[(?P<rust>[^\n]+?)\]:?(?P<extra>[^\n]*)\n\s*Source: '[^']*', lines (?P<line>\d+):(?P<col>\d+)"
+    # The Rust name may itself contain `]` (`core::slice::{[T]}::as_ptr`), so the
+    # closing bracket is the one followed by an optional ": loop body N:" tail
+    # with no further `]` on the line.
+    r"/-- \[(?P<rust>[^\n]+?)\](?P<extra>(?::[^\n\]]*)?)\n\s*Source: '[^']*', lines (?P<line>\d+):(?P<col>\d+)"
     r"(?:(?!-/).)*?-/\n(?P<attrs>(?:@\[.*?\]\s*)*)(?P<kind>noncomputable def|def|axiom|opaque|structure|inductive|abbrev|class|instance)\s+(?P<name>[^\s:({\[]+)",
     re.S,
 )
@@ -337,7 +340,8 @@ def lean_decls(lean_file):
         body = text[m.end(): body_end if body_end != -1 else len(text)]
         decls.append({
             "rust": m.group("rust"),
-            "is_loop": bool(m.group("extra").strip()),
+            # extra is ": loop body 0:" for loop pieces, ":" or "" otherwise.
+            "is_loop": bool(m.group("extra").strip(": \t")),
             "start": (int(m.group("line")), int(m.group("col"))),
             "kind": m.group("kind").split()[-1],
             "lean": m.group("name"),
@@ -437,6 +441,61 @@ def axiom_origin(rust_name, crate):
     return "dependency"
 
 
+def classify_lean_error(msg):
+    """Verdict for one Lean error on the generated file."""
+    if re.search(r"is not a field of structure `(core|alloc|std)\.", msg):
+        # Aeneas filled the instance of a hand-modelled library trait with a
+        # method the library's structure has no field for: not a missing
+        # model (none can be added from outside), the code must change.
+        return ("unsupported_code",
+                f"library trait structure lacks the method (no model can be added from outside): {msg}")
+    if re.search(r"is not a field of structure|unknown (constant|identifier)", msg):
+        # Aeneas emitted a reference the Lean library does not define.
+        return ("missing_model", f"Lean library lacks a model: {msg}")
+    return ("toolchain_problem", f"generated Lean does not type-check: {msg}")
+
+
+def axiom_entry(ax, decl, crate):
+    """Report entry for one axiom; `decl` is its lean_decls() record, or None
+    when the axiom is not declared in the generated file (library axiom)."""
+    rust = decl["rust"] if decl else None
+    entry = {"lean": ax, "rust": rust, "origin": axiom_origin(rust, crate), "used_by": []}
+    if decl and RAW_PTR_TYPES.search(decl.get("text", "")):
+        entry["note"] = RAW_PTR_NOTE
+    return entry
+
+
+def collect_axioms(axioms_by_fn, axiom_decls, crate):
+    """Non-standard axioms the checked functions depend on, plus axioms declared
+    in the file but used by nothing checked (e.g. only from a sorry body)."""
+    axioms = {}
+    for fn, used in axioms_by_fn.items():
+        for ax in used:
+            if ax in STANDARD_AXIOMS or ax == "sorryAx":
+                continue
+            axioms.setdefault(ax, axiom_entry(ax, axiom_decls.get(ax), crate))["used_by"].append(fn)
+    for ax, decl in axiom_decls.items():
+        axioms.setdefault(ax, axiom_entry(ax, decl, crate))
+    return list(axioms.values())
+
+
+AXIOM_WHAT = {"stdlib": "no Lean model for standard-library item",
+              "dependency": "dependency not translated (try --include)",
+              "local": "local item left opaque",
+              "library": "axiom from the Aeneas Lean library"}
+
+
+def axiom_reason(a):
+    note = f" ({a['note']})" if a.get("note") else ""
+    return ("missing_model", f"{AXIOM_WHAT[a['origin']]}: {a['rust'] or a['lean']}{note}")
+
+
+def verdict_of(reasons):
+    """The most severe verdict among (verdict, message) pairs; translates if none."""
+    found = {v for v, _ in reasons}
+    return next((v for v in SEVERITY if v in found), "translates")
+
+
 def check(src, out_dir, charon_args):
     crate = src.stem
     namespace = "".join(p[:1].upper() + p[1:] for p in re.split(r"[_\-]", crate) if p) or "Crate"
@@ -504,52 +563,13 @@ def check(src, out_dir, charon_args):
                 # No type-check and no #print axioms: the verdict cannot be "translates".
                 reasons.append(("toolchain_problem", f"Lean check skipped: {lean['reason']}"))
             for e in lean["errors"]:
-                msg = e["message"]
-                # Aeneas emitted a call to a method the Lean library's model
-                # does not define: a missing model, not a broken toolchain.
-                if re.search(r"is not a field of structure `(core|alloc|std)\.", msg):
-                    # Aeneas filled the instance of a hand-modelled library
-                    # trait with a method the library's structure has no
-                    # field for: not a missing model, the code must change.
-                    reasons.append(("unsupported_code",
-                                    f"library trait structure lacks the method (no model can be added from outside): {msg}"))
-                elif re.search(r"is not a field of structure|unknown (constant|identifier)", msg):
-                    reasons.append(("missing_model", f"Lean library lacks a model: {msg}"))
-                else:
-                    reasons.append(("toolchain_problem", f"generated Lean does not type-check: {msg}"))
+                reasons.append(classify_lean_error(e["message"]))
 
             axiom_decls = {f"{namespace}.{d['lean']}": d for d in decls if d["kind"] == "axiom"}
-            rust_of_axiom = {ax: d["rust"] for ax, d in axiom_decls.items()}
+            report["axioms"] = collect_axioms(axioms_by_fn, axiom_decls, crate)
+            reasons += [axiom_reason(a) for a in report["axioms"]]
 
-            def axiom_entry(ax):
-                d = axiom_decls.get(ax)
-                rust = d["rust"] if d else None
-                entry = {"lean": ax, "rust": rust, "origin": axiom_origin(rust, crate), "used_by": []}
-                if d and RAW_PTR_TYPES.search(d["text"]):
-                    entry["note"] = RAW_PTR_NOTE
-                return entry
-
-            axioms = {}
-            for fn, used in axioms_by_fn.items():
-                for ax in used:
-                    if ax in STANDARD_AXIOMS or ax == "sorryAx":
-                        continue
-                    axioms.setdefault(ax, axiom_entry(ax))["used_by"].append(fn)
-            # Axioms declared in the file but used by nothing checked (e.g. only
-            # called from a body that became sorry) are still holes.
-            for ax in rust_of_axiom:
-                axioms.setdefault(ax, axiom_entry(ax))
-            report["axioms"] = list(axioms.values())
-            for a in report["axioms"]:
-                what = {"stdlib": "no Lean model for standard-library item",
-                        "dependency": "dependency not translated (try --include)",
-                        "local": "local item left opaque",
-                        "library": "axiom from the Aeneas Lean library"}[a["origin"]]
-                note = f" ({a['note']})" if a.get("note") else ""
-                reasons.append(("missing_model", f"{what}: {a['rust'] or a['lean']}{note}"))
-
-    found = {v for v, _ in reasons}
-    report["verdict"] = next((v for v in SEVERITY if v in found), "translates")
+    report["verdict"] = verdict_of(reasons)
     report["reasons"] += list(dict.fromkeys(f"{v}: {msg}" for v, msg in reasons))
     return report
 
