@@ -1,8 +1,10 @@
 name: check
 
 # Builds Charon, both Aeneas checkouts (pristine pin and the fork in
-# aeneas_mod) and the Aeneas Lean library, then runs tools/check.py on every
-# input in tests/expected.json and compares the verdicts.
+# aeneas_mod) and the Aeneas Lean library, runs the fork's own test suite
+# (`make test` as the flake's `aeneas-tests` check, plus the Lean type-check of
+# its generated tests/lean), then runs tools/check.py on every input in
+# tests/expected.json and compares the verdicts.
 #
 # Caching:
 # - Most Nix dependencies come from cache.nixos.org and upstream's public
@@ -15,6 +17,12 @@ name: check
 #   fit, and restored with errors, so everything was rebuilt anyway.)
 # - The Lean toolchain (~/.elan) and the built Aeneas Lean library + Mathlib
 #   (aeneas/backends/lean/.lake) are cached, keyed on the Aeneas commit.
+# - The fork's `aeneas-tests` derivation is one more Nix result: when
+#   aeneas_mod has not changed it comes out of the same binary cache for free.
+#   Its Lean side shares the pristine .lake (same Lean sources at the same base
+#   commit, so Lake sees the library as built) and the Mathlib packages; only
+#   aeneas_mod/tests/lean/.lake/build is cached separately, keyed on the fork
+#   commit with a prefix fallback so Lake rebuilds incrementally.
 
 on:
   push:
@@ -66,8 +74,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/nix-cache
-          key: nixcache-${{ runner.os }}-${{ steps.pins.outputs.charon }}-${{ steps.pins.outputs.aeneas }}-${{ steps.pins.outputs.aeneas_mod }}
+          # The workflow hash is in the key so that adding a result (as with
+          # aeneas-tests) re-exports; the prefix fallbacks still substitute
+          # whatever the previous cache had.
+          key: nixcache-${{ runner.os }}-${{ steps.pins.outputs.charon }}-${{ steps.pins.outputs.aeneas }}-${{ steps.pins.outputs.aeneas_mod }}-${{ hashFiles('.github/workflows/check.yml') }}
           restore-keys: |
+            nixcache-${{ runner.os }}-${{ steps.pins.outputs.charon }}-${{ steps.pins.outputs.aeneas }}-${{ steps.pins.outputs.aeneas_mod }}-
             nixcache-${{ runner.os }}-${{ steps.pins.outputs.charon }}-${{ steps.pins.outputs.aeneas }}-
             nixcache-${{ runner.os }}-${{ steps.pins.outputs.charon }}-
             nixcache-${{ runner.os }}-
@@ -96,12 +108,25 @@ jobs:
           charon/bin/charon toolchain-version
           df -h /
 
+      - name: Fork test suite (make test via the flake's aeneas-tests check)
+        # Builds the fork in dev mode, translates tests/src/* with Charon +
+        # Aeneas (-checks), runs the Rust unit tests and fails on any diff
+        # against the committed tests/<backend>/ outputs. Pure Nix, so an
+        # unchanged aeneas_mod is a cache hit and this step takes seconds.
+        run: |
+          subst=""
+          if [ -f /tmp/nix-cache/nix-cache-info ]; then
+            subst="--extra-substituters file:///tmp/nix-cache?trusted=1"
+          fi
+          nix build -L $subst "path:$PWD/aeneas_mod#checks.x86_64-linux.aeneas-tests" -o result-aeneas-tests
+
       - name: Export result closures to the binary cache
         if: steps.nix-cache.outputs.cache-hit != 'true'
         run: |
           rm -rf /tmp/nix-cache
           nix copy --to "file:///tmp/nix-cache?compression=zstd" \
-            "$(readlink -f result-charon)" "$(readlink -f result-aeneas)" "$(readlink -f result-aeneas-mod)"
+            "$(readlink -f result-charon)" "$(readlink -f result-aeneas)" "$(readlink -f result-aeneas-mod)" \
+            "$(readlink -f result-aeneas-tests)"
           du -sh /tmp/nix-cache
           ls /tmp/nix-cache/*.narinfo | wc -l
 
@@ -133,6 +158,36 @@ jobs:
           lake exe cache get
           lake build
           df -h /
+
+      # ------------------------------------------------------------ Fork Lean tests
+
+      - name: Share the Lean build with the fork
+        # aeneas_mod/backends/lean has the same Lean sources as the pin, so the
+        # pristine .lake (Mathlib packages + built Aeneas library) serves both;
+        # Lake checks content hashes and finds everything up to date.
+        run: |
+          ln -sfn ../../../aeneas/backends/lean/.lake aeneas_mod/backends/lean/.lake
+          mkdir -p aeneas_mod/tests/lean/.lake
+          ln -sfn ../../../backends/lean/.lake/packages aeneas_mod/tests/lean/.lake/packages
+          (cd aeneas_mod/backends/lean && lake build Aeneas AeneasMeta)
+
+      - name: Restore the fork's Lean test build
+        uses: actions/cache@v4
+        with:
+          path: aeneas_mod/tests/lean/.lake/build
+          key: lean-tests-${{ runner.os }}-${{ steps.pins.outputs.aeneas_mod }}-${{ hashFiles('aeneas/backends/lean/lean-toolchain', 'aeneas/backends/lean/lake-manifest.json') }}
+          restore-keys: |
+            lean-tests-${{ runner.os }}-
+
+      - name: Fork Lean tests (type-check tests/lean)
+        # The generated Lean of every test in aeneas_mod/tests/lean must
+        # type-check against the library; this is what `cd tests/lean && make`
+        # does, minus `lake exe cache get` (Mathlib is already there).
+        working-directory: aeneas_mod/tests/lean
+        run: |
+          test "$(cat lean-toolchain)" = "$(cat ../../backends/lean/lean-toolchain)"
+          lake build
+          du -sh .lake/build
 
       # ------------------------------------------------------------ Checks
 
