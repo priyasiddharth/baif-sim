@@ -8,7 +8,11 @@
       model would normally write them; 5/6 after one revision driven by the
       check report (11, the `String` one, is unreachable — see below). Every
       non-string attempt-1 verdict was `missing_context`; none was
-      unsupported Rust. Items with no model in `aeneas/backends/lean`:
+      unsupported Rust. [Since the 2026-10-30 verdict split these read:
+      square_nums and is_not_prime attempt 1 `unsupported_code` (library
+      `Iterator` structure lacks `map`/`collect`/`any`/`take_while`), the
+      other four `missing_model`; still no Charon/Aeneas rejection of the
+      user's own constructs.] Items with no model in `aeneas/backends/lean`:
       - `Iterator::map`, `Map::next`, `collect` (square_nums).
       - `Iterator::sum`, `Sum<&isize> for isize`, `slice::sort_by_key`
         (sort_matrix).

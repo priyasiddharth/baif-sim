@@ -7,6 +7,9 @@
 `axioms` (lean name, rust name, origin stdlib/dependency/local/library,
 used_by), `reasons`, `verdict`. Exit code = verdict: 0 translates,
 1 unsupported_code, 2 missing_context, 3 invalid_rust, 4 toolchain_problem.
+[SUPERSEDED → 2026-10-30-missing-context-is-four-things.md] Since 2026-10-30
+axioms give 5 missing_model, and a missing field of a hand-modelled library
+trait structure gives unsupported_code; missing_context is rustc/Charon only.
 `invalid_rust` was added because rustc rejections fit none of the brief's
 three categories. Verdict = most severe reason found.
 

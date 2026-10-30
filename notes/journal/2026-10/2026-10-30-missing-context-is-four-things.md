@@ -121,6 +121,32 @@ swap_List human judgement ("no model can be correct") look like something
 the tool could compute. Moves five `tests/expected.json` verdicts (the
 attempt-1 iterator cases) when implemented; see loose-ends.
 
+## Implemented (same day)
+
+[OBS 2026-10-30] check.py now emits `missing_model` (exit 5, least severe)
+for axioms, keeps `missing_context` (2) for rustc/Charon visibility, and
+reports "is not a field of structure `core.`/`alloc.`/`std.`…" as
+`unsupported_code` ("library trait structure lacks the method (no model can
+be added from outside)"). Axioms whose declaration text mentions
+`MutRawPtr`/`ConstRawPtr` carry `note: "type may not carry the effect…"`,
+verdict unchanged. Fixtures: `tests/unsupported/user_trait_any.rs`
+(unsupported_code, both checkouts), `tests/user_trait_next.rs`
+(translates), `tests/unsupported/raw_ptr_value.rs` (missing_model, note on
+both axioms). `tests/expected.json`: 44 rows, 44/44; moved exactly the
+predicted six (ref_mul both; chars_next_before_loop mod; loop_join/fails
+mod; loop_join/passes both; remove_Occ attempt-4 both; swap_List attempt-1
+both → missing_model). Rechecked all seven problems under both trees:
+square_nums and is_not_prime attempt 1 become `unsupported_code` (route 2
+outranks the axioms), the other attempt-1 verdicts `missing_model`; attempt
+2 verdicts unchanged. Skill: "What the verdicts mean, and what to do" per
+verdict and sub-cause; for a modellable stdlib axiom the generator writes a
+local safe shim with the same behaviour (user's choice), falling back to an
+inline rewrite; raw-pointer note → must-rewrite.
+[OBS 2026-10-30] Pre-existing wart seen while testing: a Lean error message
+in `reasons` can have the following `#print axioms` lines glued on ("…
+'UserTraitAny.past_three' depends on axioms: […]"); the verdict is right,
+the text is noisy. Not fixed.
+
 ## See also
 
 - 2026-10-29-swap-list-raw-pointers-become-opaque-values.md (the probe and

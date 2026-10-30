@@ -53,7 +53,7 @@
 **References:** 2026-10-29-dataset-pinned-and-square-nums.md, 2026-10-28-remove-occ-strings-expose-three-aeneas-limits.md
 
 ## Split `missing_context` into its three causes in check.py
-**Status:** parked 2026-10-29, scoped 2026-10-30
+**Status:** resolved 2026-10-30 — implemented as planned (`missing_model` exit 5, encoding gap → `unsupported_code`, raw-pointer note; fixtures user_trait_any / user_trait_next / raw_ptr_value; 44/44). See 2026-10-30-missing-context-is-four-things.md "Implemented". Left over: the glued `#print axioms` text in Lean error reasons.
 **Context:** Exit 2 covers (1) rustc/Charon missing context, (2) missing Lean model (an axiom for an opaque item), (3) encoding gap (builtin trait structure lacks the method: "`map` is not a field of structure …"). The unmodellable-axiom case (`ptr::swap : MutRawPtr T → MutRawPtr T → Result Unit`) stays inside (2) by decision: the tool cannot tell it from (2), only a human can. See 2026-10-30-missing-context-is-four-things.md.
 **Why parked:** Moves five expected verdicts and the skill's verdict table; not blocking the loop.
 **To resume:** keep `missing_context` for (1); add `missing_model` for (2), with a per-axiom note when the signature mentions `MutRawPtr`/`ConstRawPtr` ("type may not carry the effect", verdict unchanged); (3) → `unsupported_code` naming the library structure (pattern "is not a field of structure" + `core.`/`alloc.`). Fixtures: `tests/unsupported/user_trait_any.rs` (route 2 on a user type, 6 lines in the journal) and a pointer-only-as-value case that must be plain (2). Update `tests/expected.json` and the skill.
