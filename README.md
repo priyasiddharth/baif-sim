@@ -2,8 +2,7 @@
 
 - [Goal](#goal)
 - [Setup](#setup)
-- [Stage 1](#stage-1): [Usage](#usage) · [What is checked](#what-is-checked) · [Check script](#check-script) · [Input forms](#input-forms) · [Test corpus: MBPP](#test-corpus-mbpp) · [Results and limits](#results-and-limits) · [Adapting to Aeneas changes](#adapting-to-aeneas-changes)
-- [Repair](#repair)
+- [Stage 1](#stage-1): [Usage](#usage) · [What is checked](#what-is-checked) · [Check script](#check-script) · [Input forms](#input-forms) · [Test corpus: MBPP](#test-corpus-mbpp) · [Results and limits](#results-and-limits) · [Adapting to Aeneas changes](#adapting-to-aeneas-changes) · [Repair](#repair)
 - [Stage 2](#stage-2): [1. Widening what Aeneas accepts](#1-widening-what-aeneas-accepts-the-fork-aeneas_mod) · [1.1 Enhancing the source language](#11-enhancing-the-source-language) · [2. Skills that generate good patterns](#2-skills-that-generate-good-patterns)
 
 ## Goal
@@ -128,7 +127,7 @@ Cases it cannot handle:
 * **Encoding gaps are upstream's.** The `Iterator` structure in the Lean library is what turns `map`/`collect`/`any` into `unsupported_code`; [tests/unsupported/user_trait_any.rs](tests/unsupported/user_trait_any.rs) flips the day it changes.
 
 
-## Repair
+### Repair
 
 Part 2 of the assignment, done by the same skill: when check.py fails, the generator revises the program and the loop records what changed.
 
