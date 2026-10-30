@@ -101,15 +101,25 @@ drop_in_place`, `*p = x`), interior mutability (`Cell::set`,
 does not track. Fix: Aeneas pointer semantics (parked memory-model
 question), not a model.
 
-[HYP] Proposed check.py split: keep `missing_context` for (1); new
-`missing_model` for (2); report (3) as `unsupported_code` with the library
-structure named (pattern "is not a field of structure" + `core.`/`alloc.`
-structure); flag (4) by signature rule "stdlib axiom taking
-`MutRawPtr`/`ConstRawPtr` (or a known interior-mutability type) and
-returning nothing that carries the pointee" as `missing_model` with an
-"effect lost" note or `unsupported_code`. Would move six
-`tests/expected.json` verdicts (five attempt-1 iterator cases, swap_List
-attempt 1). Not implemented; see loose-ends.
+[SUPERSEDED → next paragraph] Proposed check.py split: keep `missing_context`
+for (1); new `missing_model` for (2); report (3) as `unsupported_code` with
+the library structure named; flag (4) by a signature rule ("stdlib axiom
+taking `MutRawPtr`/`ConstRawPtr` … returning nothing that carries the
+pointee") as a separate outcome.
+
+[FACT 2026-10-30] Decision (user): merge (4) into (2). The tool can tell
+(1), (2), (3) apart from evidence it has — rustc error codes, an axiom in
+`#print axioms`, a "not a field of structure" error — but (4) differs from
+(2) only in whether a correct model *could* exist, a fact about Rust
+semantics that no pipeline output states. The pointer-signature rule is a
+guess at it, misses interior mutability and `static mut`, and would claim a
+distinction that was not checked (the brief: say what was actually checked).
+So: three verdict causes. (4) survives only as a per-axiom *note* on the
+report entry when the signature mentions `MutRawPtr`/`ConstRawPtr` ("type
+may not carry the effect"), verdict unchanged. Why I was misled: I let the
+swap_List human judgement ("no model can be correct") look like something
+the tool could compute. Moves five `tests/expected.json` verdicts (the
+attempt-1 iterator cases) when implemented; see loose-ends.
 
 ## See also
 
