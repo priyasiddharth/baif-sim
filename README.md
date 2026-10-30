@@ -27,7 +27,13 @@ Part 1 of the assignment: a skill that calls a deterministic script to check whe
 tools/check.py FILE.rs [-o DIR] [--charon-arg=ARG]... [--aeneas pristine|mod|PATH] [--human]
 ```
 
-One JSON report on stdout, the generated Lean in `DIR` (default: a temp dir), exit code = verdict (table below). `--charon-arg` passes options through to Charon (`--charon-arg=--include=core::ptr::swap`). In Claude Code: `/mbpp-aeneas 3` runs the first three MBPP problems, `/mbpp-aeneas mbpp_3_is_not_prime` one by name. The skill drives [tools/mbpp.py](tools/mbpp.py) (`fetch`, `test`, `attempt`, `recheck`, `report`); `tools/mbpp.py report` prints the per-problem outcome under each checkout.
+* A JSON report is output on stdout; `--human` prints a readable summary instead.
+* The generated Lean goes to `DIR` (default: a new temp dir).
+* The exit code is the verdict (table below).
+* `--charon-arg` passes an option through to Charon, e.g. `--charon-arg=--include=core::ptr::swap`.
+* `--aeneas` selects the checkout: the upstream pin (default), the fork, or a path.
+* In Claude Code, `/mbpp-aeneas 3` runs the first three MBPP problems and `/mbpp-aeneas mbpp_3_is_not_prime` runs one by name.
+* The skill drives [tools/mbpp.py](tools/mbpp.py) (`fetch`, `test`, `attempt`, `recheck`, `report`); `tools/mbpp.py report` prints the per-problem outcome under each checkout.
 
 ### What is checked
 
