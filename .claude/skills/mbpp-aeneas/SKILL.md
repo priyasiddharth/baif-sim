@@ -8,19 +8,22 @@ description: Generate Rust for MBPP problems, run the supplied unit tests, check
 Argument: a count (`3` = the first 3 problems, `--offset K` to start later) or
 problem names. All commands run from the repo root.
 
-Aeneas checkout: by default `check.py` runs the pristine upstream pin
-(`aeneas/`). If the argument includes `--aeneas mod` (or `AENEAS=mod` is set),
-pass `--aeneas mod` to every `attempt` / `recheck` call so the patched fork
-(`aeneas_mod/`) is used; `check.json` records which one ran under
-`versions.aeneas_checkout`, and the attempt commit message carries
-`(aeneas: mod)`. Say which checkout was used in the final summary.
+Aeneas checkouts: every `attempt` is checked under both the pristine upstream
+pin (`aeneas/`) and the patched fork (`aeneas_mod/`), and recorded as the
+same attempt number in two trees, `mbpp/aeneas_pristine/<name>/` and
+`mbpp/aeneas_mod/<name>/` (each has its own `status.json`, `failures.md`,
+`attempt-N/check.json`). `--aeneas pristine` or `--aeneas mod` (or `AENEAS=`)
+restricts a command to one tree. The attempt output and commit message give
+the outcome per checkout; a problem **passes** when the pristine tree passes
+(the fork only shows what a candidate Aeneas fix would buy). Report both
+outcomes in the final summary and point out any attempt where they differ.
 
 ## Steps per problem
 
-1. **Fetch** (skip if `mbpp/<name>/prompt.rs` exists):
+1. **Fetch** (skip if `mbpp/aeneas_pristine/<name>/prompt.rs` exists):
    `tools/mbpp.py fetch 3` or `tools/mbpp.py fetch <name>`.
-   Read `mbpp/<name>/prompt.rs` (doc comment + signature) and `tests.rs`.
-   If `mbpp/<name>/failures.md` exists, read it too: it is the history of
+   Read `mbpp/aeneas_pristine/<name>/prompt.rs` (doc comment + signature) and
+   `tests.rs`. If `failures.md` exists there, read it too: it is the history of
    earlier attempts and their failures.
 
 2. **Generate.** Write the complete function to a scratch file, keeping the
@@ -35,15 +38,17 @@ pass `--aeneas mod` to every `attempt` / `recheck` call so the patched fork
 
 4. **Record + check.** `tools/mbpp.py attempt <name> <file.rs> --commit`.
    This reruns the tests, runs `tools/check.py` (Charon → Aeneas → Lean
-   type-check → `#print axioms`), stores the program and reports under
-   `mbpp/<name>/attempt-N/`, appends a section to `mbpp/<name>/failures.md`
-   (check reasons, the delta from the previous attempt — resolved / still
-   failing / new — and the code diff), and commits the new program together
-   with the updated failure log.
-   - Exit 0 / `"outcome": "pass"`: report **passed on attempt N** (attempt 1 =
-     first-attempt pass) and move to the next problem.
-   - Otherwise read the printed `check` block (`verdict`, `reasons`,
-     `functions`, `axioms`) and `mbpp/<name>/failures.md`. Revise the code to
+   type-check → `#print axioms`) under each checkout, stores the program and
+   reports under `mbpp/aeneas_<checkout>/<name>/attempt-N/`, appends a section
+   to that tree's `failures.md` (check reasons, the delta from the previous
+   attempt — resolved / still failing / new — and the code diff), and commits
+   the new program together with the updated failure logs.
+   - `"outcome": "pass"` under `pristine` (exit 0 means both trees passed):
+     report **passed on attempt N** (attempt 1 = first-attempt pass) and move
+     to the next problem. If only `mod` passed, say so and keep going.
+   - Otherwise read the printed `pristine` `check` block (`verdict`,
+     `reasons`, `functions`, `axioms`) and
+     `mbpp/aeneas_pristine/<name>/failures.md`. Revise the code to
      circumvent those failures, then go back to step 3. Keep the same
      signature and behaviour. Do not hide code behind stubs, `unsafe`, or by
      deleting functionality.
@@ -64,6 +69,7 @@ pass `--aeneas mod` to every `attempt` / `recheck` call so the patched fork
 
 ## Finish
 
-`tools/mbpp.py report` prints, per problem, whether it passed, the number of
-attempts, and whether attempt 1 passed. Summarize that table to the user and
-note which constructs caused failures.
+`tools/mbpp.py report` prints, per problem and per checkout (`pristine`,
+`mod`), whether it passed, the number of attempts, and whether attempt 1
+passed. Summarize that table to the user, note which constructs caused
+failures, and name any problem where the two checkouts disagree.

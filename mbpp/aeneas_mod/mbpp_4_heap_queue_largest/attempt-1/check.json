@@ -1,0 +1,73 @@
+{
+  "input": "/home/siddharth/baif/sim/mbpp/aeneas_mod/mbpp_4_heap_queue_largest/attempt-1/mbpp_4_heap_queue_largest.rs",
+  "versions": {
+    "aeneas": "ee1c669a",
+    "aeneas_checkout": "mod",
+    "aeneas_dir": "aeneas_mod",
+    "lean_lib": "aeneas/backends/lean",
+    "charon": "373d84044",
+    "charon_matches_pin": true,
+    "rustc": "nightly-2026-09-17",
+    "lean": "v4.35.0"
+  },
+  "stages": {
+    "charon": {
+      "status": "ok",
+      "rust_compiled": true,
+      "warnings": [],
+      "errors": []
+    },
+    "aeneas": {
+      "status": "ok",
+      "warnings": [
+        {
+          "message": "The crate contains extracted external, unknown definitions: we advise using the option -split-files to allow manually providing these definitions in separate files."
+        }
+      ],
+      "errors": []
+    },
+    "lean": {
+      "status": "ok",
+      "errors": []
+    }
+  },
+  "functions": [
+    {
+      "rust": "mbpp_4_heap_queue_largest::heap_queue_largest",
+      "lean": "Mbpp4HeapQueueLargest.heap_queue_largest",
+      "status": "translated",
+      "reason": null,
+      "error_ref": null
+    },
+    {
+      "rust": "mbpp_4_heap_queue_largest::heap_queue_largest::{impl core::ops::function::FnOnce<(&'_0 isize, &'_1 isize), core::cmp::Ordering> for mbpp_4_heap_queue_largest::heap_queue_largest::{closure}}::call_once",
+      "lean": "Mbpp4HeapQueueLargest.heap_queue_largest.closure.Insts.CoreOpsFunctionFnOncePairShared0IsizeShared1IsizeOrdering.call_once",
+      "status": "translated",
+      "reason": null,
+      "error_ref": null
+    }
+  ],
+  "axioms": [
+    {
+      "lean": "Mbpp4HeapQueueLargest.alloc.vec.Vec.truncate",
+      "rust": "alloc::vec::{alloc::vec::Vec<T>}::truncate",
+      "origin": "stdlib",
+      "used_by": [
+        "Mbpp4HeapQueueLargest.heap_queue_largest"
+      ]
+    },
+    {
+      "lean": "Mbpp4HeapQueueLargest.core.slice.Slice.sort_unstable_by",
+      "rust": "core::slice::{[T",
+      "origin": "stdlib",
+      "used_by": [
+        "Mbpp4HeapQueueLargest.heap_queue_largest"
+      ]
+    }
+  ],
+  "verdict": "missing_context",
+  "reasons": [
+    "missing_context: no Lean model for standard-library item: alloc::vec::{alloc::vec::Vec<T>}::truncate",
+    "missing_context: no Lean model for standard-library item: core::slice::{[T"
+  ]
+}

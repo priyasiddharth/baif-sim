@@ -1,0 +1,42 @@
+{
+  "input": "/home/siddharth/baif/sim/mbpp/aeneas_pristine/mbpp_4_heap_queue_largest/attempt-2/mbpp_4_heap_queue_largest.rs",
+  "versions": {
+    "aeneas": "de16f3cf",
+    "aeneas_checkout": "pristine",
+    "aeneas_dir": "aeneas",
+    "lean_lib": "aeneas/backends/lean",
+    "charon": "373d84044",
+    "charon_matches_pin": true,
+    "rustc": "nightly-2026-09-17",
+    "lean": "v4.35.0"
+  },
+  "stages": {
+    "charon": {
+      "status": "ok",
+      "rust_compiled": true,
+      "warnings": [],
+      "errors": []
+    },
+    "aeneas": {
+      "status": "ok",
+      "warnings": [],
+      "errors": []
+    },
+    "lean": {
+      "status": "ok",
+      "errors": []
+    }
+  },
+  "functions": [
+    {
+      "rust": "mbpp_4_heap_queue_largest::heap_queue_largest",
+      "lean": "Mbpp4HeapQueueLargest.heap_queue_largest",
+      "status": "translated",
+      "reason": null,
+      "error_ref": null
+    }
+  ],
+  "axioms": [],
+  "verdict": "translates",
+  "reasons": []
+}

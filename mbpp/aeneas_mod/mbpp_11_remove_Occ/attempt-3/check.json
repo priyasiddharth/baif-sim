@@ -1,0 +1,90 @@
+{
+  "input": "/home/siddharth/baif/sim/mbpp/aeneas_mod/mbpp_11_remove_Occ/attempt-3/mbpp_11_remove_Occ.rs",
+  "versions": {
+    "aeneas": "ee1c669a",
+    "aeneas_checkout": "mod",
+    "aeneas_dir": "aeneas_mod",
+    "lean_lib": "aeneas/backends/lean",
+    "charon": "373d84044",
+    "charon_matches_pin": true,
+    "rustc": "nightly-2026-09-17",
+    "lean": "v4.35.0"
+  },
+  "stages": {
+    "charon": {
+      "status": "ok",
+      "rust_compiled": true,
+      "warnings": [],
+      "errors": []
+    },
+    "aeneas": {
+      "status": "ok",
+      "warnings": [
+        {
+          "message": "When retrieving the builtin information for trait decl 'core::iter::traits::iterator::Iterator', could not find the information for item 'collect'. The model defined in the Lean library seems to be missing the corresponding field.",
+          "file": "/rustc/library/core/src/iter/traits/iterator.rs",
+          "line": 42,
+          "col": 0,
+          "end_line": 42,
+          "snippet": "pub const trait Iterator {"
+        },
+        {
+          "message": "The crate contains extracted external, unknown definitions: we advise using the option -split-files to allow manually providing these definitions in separate files."
+        }
+      ],
+      "errors": []
+    },
+    "lean": {
+      "status": "failed",
+      "errors": [
+        {
+          "message": "Application type mismatch: The argument b has type Prop but is expected to have type Bool in the application (seen2, b)",
+          "line": 100,
+          "col": 19
+        }
+      ]
+    }
+  },
+  "functions": [
+    {
+      "rust": "mbpp_11_remove_Occ::remove_Occ",
+      "lean": "Mbpp11RemoveOcc.remove_Occ",
+      "status": "translated",
+      "reason": null,
+      "error_ref": null
+    }
+  ],
+  "axioms": [
+    {
+      "lean": "Mbpp11RemoveOcc.alloc.string.String.new",
+      "rust": "alloc::string::{alloc::string::String}::new",
+      "origin": "stdlib",
+      "used_by": [
+        "Mbpp11RemoveOcc.remove_Occ"
+      ]
+    },
+    {
+      "lean": "Mbpp11RemoveOcc.alloc.string.String.push",
+      "rust": "alloc::string::{alloc::string::String}::push",
+      "origin": "stdlib",
+      "used_by": [
+        "Mbpp11RemoveOcc.remove_Occ"
+      ]
+    },
+    {
+      "lean": "Mbpp11RemoveOcc.alloc.string.String.Insts.CoreOpsDerefDerefStr.deref",
+      "rust": "alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref",
+      "origin": "stdlib",
+      "used_by": [
+        "Mbpp11RemoveOcc.remove_Occ"
+      ]
+    }
+  ],
+  "verdict": "toolchain_problem",
+  "reasons": [
+    "toolchain_problem: generated Lean does not type-check: Application type mismatch: The argument b has type Prop but is expected to have type Bool in the application (seen2, b)",
+    "missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new",
+    "missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push",
+    "missing_context: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref"
+  ]
+}

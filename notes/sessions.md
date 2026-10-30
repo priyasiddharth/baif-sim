@@ -41,3 +41,6 @@
   - CI: `.github/workflows/check.yml` + `tests/expected.json`/`tests/run_expected.py` (38 verdicts locally). Five runs: cold 30 min; whole-store caching failed (GC + broken tar restore); replaced by a file binary cache of the result closures with `trusted=1`; warm run 5.5 min (Nix step 70 s).
 - **Status:** complete. Tally 0/6 first attempt (+1 deliberate pointer probe), 6/7 at attempt 2, remove_Occ unresolved.
 - **Next-session pickup candidates:** unchanged from 2026-10-28 (skill split; part-3 allowlist experiment; `||`-in-loop upstream report) plus the new ended-loan-projector upstream report. Next untried rows: offset 4 `mbpp_9_find_Rotations`, offset 7 `mbpp_14_find_Volume`.
+
+## 2026-10-30 — mbpp/ split into one tree per Aeneas checkout
+- `mbpp/<name>/` → `mbpp/aeneas_pristine/<name>/` (git mv) plus `mbpp/aeneas_mod/<name>/`; `mbpp.py attempt` now checks under both checkouts by default (`--aeneas` is a comma list) and records the same solution as attempt N in each tree; `recheck` seeds a missing tree from the fullest one. Rechecked all 7 problems under both: pristine verdicts unchanged; mod differs only on remove_Occ attempts 2–3 (toolchain_problem, the `||` Prop/Bool bug reached once the loop join passes). 38/38 expected verdicts.

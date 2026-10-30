@@ -12,7 +12,7 @@ Layout:
 - `tools/check.py` — Charon → Aeneas → Lean type-check → `#print axioms`, JSON verdict.
 - `tools/mbpp.py` + `.claude/skills/mbpp-aeneas/` — generate / test / check / log loop.
 - `data/mbpp-rs.json` — pinned snapshot of the MultiPL-E `mbpp-rs` test split (HF revision inside); `fetch` reads it, `snapshot` refreshes it.
-- `tests/` — hand-written pass/fail cases. `mbpp/` — recorded attempts.
+- `tests/` — hand-written pass/fail cases. `mbpp/aeneas_pristine/`, `mbpp/aeneas_mod/` — recorded MBPP attempts, one tree per Aeneas checkout (same attempt numbers; `mbpp.py attempt` writes both).
 - `tests/expected.json` + `tests/run_expected.py` — expected `check.py` verdict per input and checkout (pristine, mod); the runner exits 1 on any mismatch. Add a row when adding a fixture; `--update` rewrites it from a run.
 - `.github/workflows/check.yml` — CI: Charon + both Aeneas via Nix (hacl Cachix + a file binary cache of the three result closures, saved with actions/cache keyed on the submodule commits), Lean lib via elan/lake (cached `.lake`), then `tests/run_expected.py`. Warm run ~5.5 min, cold ~30.
 - `examples/` — self-contained walkthroughs (`loop_join/run.sh`: the `&mut self`-before-loop failure, pristine vs mod, with the patch and trace).

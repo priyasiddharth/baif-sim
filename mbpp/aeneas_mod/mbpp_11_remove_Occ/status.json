@@ -1,0 +1,50 @@
+{
+  "name": "mbpp_11_remove_Occ",
+  "attempts": [
+    {
+      "attempt": 1,
+      "tests": {
+        "passed": true,
+        "stage": "run"
+      },
+      "outcome": "check:unsupported_code",
+      "aeneas": "mod"
+    },
+    {
+      "attempt": 2,
+      "tests": {
+        "passed": true,
+        "stage": "run"
+      },
+      "outcome": "check:toolchain_problem",
+      "aeneas": "mod"
+    },
+    {
+      "attempt": 3,
+      "tests": {
+        "passed": true,
+        "stage": "run"
+      },
+      "outcome": "check:toolchain_problem",
+      "aeneas": "mod"
+    },
+    {
+      "attempt": 4,
+      "tests": {
+        "passed": true,
+        "stage": "run"
+      },
+      "outcome": "check:missing_context",
+      "aeneas": "mod"
+    }
+  ],
+  "done": false,
+  "source": {
+    "dataset": "nuprl/MultiPL-E",
+    "config": "mbpp-rs",
+    "split": "test",
+    "revision": "28441b6024e71d4a1c1c0f6bf171c935cd5a43f2",
+    "name": "mbpp_11_remove_Occ"
+  },
+  "first_attempt_pass": false
+}

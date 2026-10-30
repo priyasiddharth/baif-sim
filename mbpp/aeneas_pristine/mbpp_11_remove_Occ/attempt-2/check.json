@@ -1,0 +1,97 @@
+{
+  "input": "/home/siddharth/baif/sim/mbpp/aeneas_pristine/mbpp_11_remove_Occ/attempt-2/mbpp_11_remove_Occ.rs",
+  "versions": {
+    "aeneas": "de16f3cf",
+    "aeneas_checkout": "pristine",
+    "aeneas_dir": "aeneas",
+    "lean_lib": "aeneas/backends/lean",
+    "charon": "373d84044",
+    "charon_matches_pin": true,
+    "rustc": "nightly-2026-09-17",
+    "lean": "v4.35.0"
+  },
+  "stages": {
+    "charon": {
+      "status": "ok",
+      "rust_compiled": true,
+      "warnings": [],
+      "errors": []
+    },
+    "aeneas": {
+      "status": "partial",
+      "warnings": [
+        {
+          "message": "Could not translate the body of function 'mbpp_11_remove_Occ::remove_Occ because of previous error",
+          "item": "mbpp_11_remove_Occ::remove_Occ",
+          "file": "mbpp_11_remove_Occ.rs",
+          "line": 9,
+          "col": 4,
+          "end_line": 13,
+          "used_at": [
+            "mbpp_11_remove_Occ.rs:9:4"
+          ]
+        },
+        {
+          "message": "The crate contains extracted external, unknown definitions: we advise using the option -split-files to allow manually providing these definitions in separate files."
+        }
+      ],
+      "errors": [
+        {
+          "message": "Could not match the contexts",
+          "file": "mbpp_11_remove_Occ.rs",
+          "line": 9,
+          "col": 4,
+          "end_line": 13,
+          "used_at": [
+            "mbpp_11_remove_Occ.rs:9:4"
+          ],
+          "item": "mbpp_11_remove_Occ::remove_Occ"
+        }
+      ]
+    },
+    "lean": {
+      "status": "ok",
+      "errors": []
+    }
+  },
+  "functions": [
+    {
+      "rust": "mbpp_11_remove_Occ::remove_Occ",
+      "lean": "Mbpp11RemoveOcc.remove_Occ",
+      "status": "sorry",
+      "reason": "aeneas_error",
+      "error_ref": {
+        "stage": "aeneas",
+        "list": "errors",
+        "index": 0
+      }
+    }
+  ],
+  "axioms": [
+    {
+      "lean": "Mbpp11RemoveOcc.alloc.string.String.new",
+      "rust": "alloc::string::{alloc::string::String}::new",
+      "origin": "stdlib",
+      "used_by": []
+    },
+    {
+      "lean": "Mbpp11RemoveOcc.alloc.string.String.push",
+      "rust": "alloc::string::{alloc::string::String}::push",
+      "origin": "stdlib",
+      "used_by": []
+    },
+    {
+      "lean": "Mbpp11RemoveOcc.alloc.string.String.Insts.CoreOpsDerefDerefStr.deref",
+      "rust": "alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref",
+      "origin": "stdlib",
+      "used_by": []
+    }
+  ],
+  "verdict": "unsupported_code",
+  "reasons": [
+    "unsupported_code: Aeneas: Could not match the contexts \u2014 in `mbpp_11_remove_Occ::remove_Occ` at mbpp_11_remove_Occ.rs:9, used from mbpp_11_remove_Occ.rs:9:4",
+    "missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new",
+    "missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push",
+    "missing_context: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref"
+  ]
+}

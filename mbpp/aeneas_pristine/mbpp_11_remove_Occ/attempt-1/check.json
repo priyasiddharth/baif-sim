@@ -1,0 +1,123 @@
+{
+  "input": "/home/siddharth/baif/sim/mbpp/aeneas_pristine/mbpp_11_remove_Occ/attempt-1/mbpp_11_remove_Occ.rs",
+  "versions": {
+    "aeneas": "de16f3cf",
+    "aeneas_checkout": "pristine",
+    "aeneas_dir": "aeneas",
+    "lean_lib": "aeneas/backends/lean",
+    "charon": "373d84044",
+    "charon_matches_pin": true,
+    "rustc": "nightly-2026-09-17",
+    "lean": "v4.35.0"
+  },
+  "stages": {
+    "charon": {
+      "status": "ok",
+      "rust_compiled": true,
+      "warnings": [],
+      "errors": []
+    },
+    "aeneas": {
+      "status": "failed",
+      "warnings": [
+        {
+          "message": "Could not translate the function signature of 'core::str::{str}::rfind because of previous error",
+          "item": "core::str::{str}::rfind",
+          "file": "mbpp_11_remove_Occ.rs",
+          "line": 8,
+          "col": 15,
+          "end_line": 8,
+          "used_at": [
+            "mbpp_11_remove_Occ.rs:8:15"
+          ]
+        }
+      ],
+      "errors": [
+        {
+          "message": "Unimplemented",
+          "file": "/rustc/library/core/src/str/mod.rs",
+          "line": 1542,
+          "col": 4,
+          "end_line": 1544,
+          "snippet": "pub fn rfind<P: Pattern>(&self, pat: P) -> Option<usize>",
+          "item": "core::str::{str}::rfind",
+          "used_at": [
+            "mbpp_11_remove_Occ.rs:8:15"
+          ]
+        },
+        {
+          "message": "Unimplemented",
+          "file": "/rustc/library/core/src/str/pattern.rs",
+          "line": 99,
+          "col": 0,
+          "end_line": 99,
+          "snippet": "pub trait Pattern: Sized {"
+        },
+        {
+          "message": "Aeneas aborted with exception Aeneas.Errors.CFailure(_) in Aeneas__SymbolicToPureTypes.translate_fwd_ty (symbolic/SymbolicToPureTypes.ml:392); no functions were translated",
+          "crash": true
+        }
+      ]
+    },
+    "lean": {
+      "status": "skipped",
+      "errors": []
+    }
+  },
+  "functions": [
+    {
+      "rust": "mbpp_11_remove_Occ::remove_Occ",
+      "lean": null,
+      "status": "missing",
+      "reason": "aeneas_error",
+      "error_ref": {
+        "stage": "aeneas",
+        "list": "warnings",
+        "index": 0
+      }
+    },
+    {
+      "rust": "mbpp_11_remove_Occ::remove_Occ::{impl}::call_mut",
+      "lean": null,
+      "status": "missing",
+      "reason": "aeneas_error",
+      "error_ref": null
+    },
+    {
+      "rust": "mbpp_11_remove_Occ::remove_Occ::{impl}::call_mut",
+      "lean": null,
+      "status": "missing",
+      "reason": "aeneas_error",
+      "error_ref": {
+        "stage": "aeneas",
+        "list": "errors",
+        "index": 0
+      }
+    },
+    {
+      "rust": "mbpp_11_remove_Occ::remove_Occ::{impl}::call_once",
+      "lean": null,
+      "status": "missing",
+      "reason": "aeneas_error",
+      "error_ref": null
+    },
+    {
+      "rust": "mbpp_11_remove_Occ::remove_Occ::{impl}::call_once",
+      "lean": null,
+      "status": "missing",
+      "reason": "aeneas_error",
+      "error_ref": {
+        "stage": "aeneas",
+        "list": "errors",
+        "index": 0
+      }
+    }
+  ],
+  "axioms": [],
+  "verdict": "unsupported_code",
+  "reasons": [
+    "unsupported_code: Aeneas: Unimplemented \u2014 in `core::str::{str}::rfind` at /rustc/library/core/src/str/mod.rs:1542 (`pub fn rfind<P: Pattern>(&self, pat: P) -> Option<usize>`), used from mbpp_11_remove_Occ.rs:8:15",
+    "unsupported_code: Aeneas: Unimplemented at /rustc/library/core/src/str/pattern.rs:99 (`pub trait Pattern: Sized {`)",
+    "unsupported_code: Aeneas: Aeneas aborted with exception Aeneas.Errors.CFailure(_) in Aeneas__SymbolicToPureTypes.translate_fwd_ty (symbolic/SymbolicToPureTypes.ml:392); no functions were translated"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "input": "/home/siddharth/baif/sim/mbpp/aeneas_mod/mbpp_8_square_nums/attempt-2/mbpp_8_square_nums.rs",
+  "versions": {
+    "aeneas": "ee1c669a",
+    "aeneas_checkout": "mod",
+    "aeneas_dir": "aeneas_mod",
+    "lean_lib": "aeneas/backends/lean",
+    "charon": "373d84044",
+    "charon_matches_pin": true,
+    "rustc": "nightly-2026-09-17",
+    "lean": "v4.35.0"
+  },
+  "stages": {
+    "charon": {
+      "status": "ok",
+      "rust_compiled": true,
+      "warnings": [],
+      "errors": []
+    },
+    "aeneas": {
+      "status": "ok",
+      "warnings": [],
+      "errors": []
+    },
+    "lean": {
+      "status": "ok",
+      "errors": []
+    }
+  },
+  "functions": [
+    {
+      "rust": "mbpp_8_square_nums::square_nums",
+      "lean": "Mbpp8SquareNums.square_nums",
+      "status": "translated",
+      "reason": null,
+      "error_ref": null
+    }
+  ],
+  "axioms": [],
+  "verdict": "translates",
+  "reasons": []
+}

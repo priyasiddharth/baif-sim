@@ -1,0 +1,57 @@
+{
+  "input": "/home/siddharth/baif/sim/mbpp/aeneas_pristine/mbpp_6_differ_At_One_Bit_Pos/attempt-1/mbpp_6_differ_At_One_Bit_Pos.rs",
+  "versions": {
+    "aeneas": "de16f3cf",
+    "aeneas_checkout": "pristine",
+    "aeneas_dir": "aeneas",
+    "lean_lib": "aeneas/backends/lean",
+    "charon": "373d84044",
+    "charon_matches_pin": true,
+    "rustc": "nightly-2026-09-17",
+    "lean": "v4.35.0"
+  },
+  "stages": {
+    "charon": {
+      "status": "ok",
+      "rust_compiled": true,
+      "warnings": [],
+      "errors": []
+    },
+    "aeneas": {
+      "status": "ok",
+      "warnings": [
+        {
+          "message": "The crate contains extracted external, unknown definitions: we advise using the option -split-files to allow manually providing these definitions in separate files."
+        }
+      ],
+      "errors": []
+    },
+    "lean": {
+      "status": "ok",
+      "errors": []
+    }
+  },
+  "functions": [
+    {
+      "rust": "mbpp_6_differ_At_One_Bit_Pos::differ_At_One_Bit_Pos",
+      "lean": "Mbpp6DifferAtOneBitPos.differ_At_One_Bit_Pos",
+      "status": "translated",
+      "reason": null,
+      "error_ref": null
+    }
+  ],
+  "axioms": [
+    {
+      "lean": "Mbpp6DifferAtOneBitPos.core.num.Isize.count_ones",
+      "rust": "core::num::{isize}::count_ones",
+      "origin": "stdlib",
+      "used_by": [
+        "Mbpp6DifferAtOneBitPos.differ_At_One_Bit_Pos"
+      ]
+    }
+  ],
+  "verdict": "missing_context",
+  "reasons": [
+    "missing_context: no Lean model for standard-library item: core::num::{isize}::count_ones"
+  ]
+}

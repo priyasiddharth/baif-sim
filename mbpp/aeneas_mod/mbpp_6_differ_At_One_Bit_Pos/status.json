@@ -1,0 +1,32 @@
+{
+  "name": "mbpp_6_differ_At_One_Bit_Pos",
+  "attempts": [
+    {
+      "attempt": 1,
+      "tests": {
+        "passed": true,
+        "stage": "run"
+      },
+      "outcome": "check:missing_context",
+      "aeneas": "mod"
+    },
+    {
+      "attempt": 2,
+      "tests": {
+        "passed": true,
+        "stage": "run"
+      },
+      "outcome": "pass",
+      "aeneas": "mod"
+    }
+  ],
+  "done": true,
+  "source": {
+    "dataset": "nuprl/MultiPL-E",
+    "config": "mbpp-rs",
+    "split": "test",
+    "revision": "28441b6024e71d4a1c1c0f6bf171c935cd5a43f2",
+    "name": "mbpp_6_differ_At_One_Bit_Pos"
+  },
+  "first_attempt_pass": false
+}

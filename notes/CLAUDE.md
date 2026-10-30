@@ -38,7 +38,7 @@ which were actually checked. An `axiom` in the output is a hole, not a pass.
 - Aeneas: `aeneas/` (submodule; `src/` OCaml, `backends/lean/` the Lean lib, `tests/src/`). Pristine pin, never patched.
 - Aeneas fork: `aeneas_mod/` (submodule of priyasiddharth/aeneas; same base commit + our patches). Say which checkout a result came from (`check.json` → `versions.aeneas_checkout`).
 - Charon: `charon/` (submodule; `charon/src/` Rust, `charon-ml/`, `charon/tests/ui/`).
-- Ours: `tools/check.py`, `tools/mbpp.py`, `tests/`, `mbpp/`.
+- Ours: `tools/check.py`, `tools/mbpp.py`, `tests/`, `mbpp/aeneas_pristine/` and `mbpp/aeneas_mod/` (one MBPP attempt tree per Aeneas checkout, same attempt numbers).
 - Version stamps: aeneas commit, charon commit (must equal `aeneas/charon-pin`),
   rustc nightly (`charon toolchain-version`), Lean toolchain (`aeneas/backends/lean/lean-toolchain`).
 
