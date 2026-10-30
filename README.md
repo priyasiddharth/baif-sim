@@ -3,6 +3,7 @@
 - [Goal](#goal)
 - [Setup](#setup)
 - [Stage 1](#stage-1): [Usage](#usage) · [What is checked](#what-is-checked) · [Check script](#check-script) · [Input forms](#input-forms) · [Test corpus: MBPP](#test-corpus-mbpp) · [Results and limits](#results-and-limits) · [Adapting to Aeneas changes](#adapting-to-aeneas-changes)
+- [Repair](#repair)
 - [Stage 2](#stage-2): [1. Widening what Aeneas accepts](#1-widening-what-aeneas-accepts-the-fork-aeneas_mod) · [1.1 Enhancing the source language](#11-enhancing-the-source-language) · [2. Skills that generate good patterns](#2-skills-that-generate-good-patterns)
 
 ## Goal
@@ -127,6 +128,15 @@ Cases it cannot handle:
 * **Encoding gaps are upstream's.** The `Iterator` structure in the Lean library is what turns `map`/`collect`/`any` into `unsupported_code`; [tests/unsupported/user_trait_any.rs](tests/unsupported/user_trait_any.rs) flips the day it changes.
 
 
+## Repair
+
+Part 2 of the assignment, done by the same skill: when check.py fails, the generator revises the program and the loop records what changed.
+
+* **Behaviour is preserved by the harness.** `mbpp.py attempt` reruns the problem's unit tests and refuses to record a version that fails them, so every recorded attempt has the same observable behaviour on the tests.
+* **The diff is shown.** Each `failures.md` holds, per attempt, the check reasons, which reasons were resolved, still failing or new, and the code diff from the previous attempt. Example: [mbpp/aeneas_pristine/mbpp_4_heap_queue_largest/failures.md](mbpp/aeneas_pristine/mbpp_4_heap_queue_largest/failures.md).
+* **Stubs do not count.** The skill forbids stubbing, `unsafe` and deleted functionality ([SKILL.md](.claude/skills/mbpp-aeneas/SKILL.md)), and check.py counts a `sorry` body or an axiom as a hole, so a stub cannot reach `translates`.
+* **Translation is not a correctness proof.** `translates` means no holes in the model. [swap_List attempt 1](mbpp/aeneas_pristine/mbpp_591_swap_List/attempt-1/check.json) shows the gap: under any model of `ptr::swap` the Lean type-checks and computes the identity; only the unit tests catch it. Hence tests before check, always.
+
 ## Stage 2
 
 The harder question of the assignment: compatible Rust on the first attempt, without a generate/check/patch loop. Plan in two parts; what has been tried under each is listed below.
@@ -155,4 +165,8 @@ Instead of teaching Aeneas pointer semantics, give the generator a Rust library 
 * **Evidence.** Seven MBPP problems: 0/7 first attempt, 6/7 by attempt 2, 1 unresolved. Every attempt-1 failure was a missing stdlib model or the `Iterator` encoding gap, never unsupported syntax ([notes/empirical/idiomatic-rust-fails-on-missing-stdlib-models.md](notes/empirical/idiomatic-rust-fails-on-missing-stdlib-models.md)). The core that always translated: `while` with indexing, `Vec::new/push/len`, index assignment, integer and bit ops, `as` casts.
 * **Repair rules already in the skill** ([SKILL.md](.claude/skills/mbpp-aeneas/SKILL.md)): a modellable missing item gets a local safe shim in the solution file, else an inline rewrite; a raw-pointer note means rewrite without `unsafe`; an encoding gap means replace the adapter chain with a `while` loop. Worked diffs are the attempt-2 files under [mbpp/aeneas_pristine/](mbpp/aeneas_pristine).
 * **Sharing and cycles: index arenas.** Graphs, doubly linked lists and trees with parent links cannot be built from `Box` ownership alone, because `Box` expresses a tree. Safe Rust has two other encodings: `Rc<RefCell<T>>`/`Weak` (shared ownership with interior mutability) and index arenas (`Vec<Node>` with `usize` handles). Only the arena translates: Aeneas models neither `Rc` nor `RefCell`/`Cell`, and interior mutability is the same effect-outside-the-type problem as raw pointers, while a `Vec` with indexing is in the supported core above. So the rule for the generator is "a handle is an index into a `Vec` you own": the Lean model is a functional vector, a dangling handle is an out-of-bounds `Result` failure the proof has to rule out, and invariants become statements about indices below `len`. Deletion needs a free list or tombstones, written in the same safe core. Smallest example: [tests/arena_cycle.rs](tests/arena_cycle.rs), a two-node cycle through `usize` handles, verdict `translates`; the Lean `Arena` is a structure over a functional `Vec` and `add` returns the new handle together with the updated arena. The `PPtr` crate (section 1.1) is the alternative when real pointers are required.
+* **Plan ownership before writing Rust.** The generate step should fix, before any code, who owns each value and which handles are indices: `Vec` plus `usize` for sharing (above), tokens for pointers (§1.1), `while` over indices for traversal. These decisions are what attempt 2 changes today; making them first is the first-attempt lever.
+* **Subscriptions, no custom weights, no per-token API.** Everything here runs inside a Claude Code subscription: a skill, a script, and git. The same shape ports to any agent that can run a shell command and read a file; a hook on file edits can run check.py unasked. Claude Code plans allow skills, hooks and MCP servers and no fine-tuning, which is why the approach is a guide plus a checker rather than a model.
+* **Fine-tuning and local models.** The loop is the data generator: each attempt-1 failure paired with its passing revision is a training example of exactly the right kind, with the check report as the label. Seven problems is far too few; after a few hundred, a small open model fine-tuned on those pairs, run locally, is the natural next experiment. Until then the guide carries the same knowledge in text.
+* **How to compare.** Run the loop on problems beyond the first seven, and on at least one non-MBPP source, with and without the guide and ownership plan; the harness already records both numbers per attempt: first-attempt `translates` rate (translation) and first-attempt unit-test pass rate (behaviour), via `tools/mbpp.py report`.
 * **First-attempt strategy (parked).** Generate a short guide from `ExtractBuiltinLean.ml` plus the supported-core list, run the loop on held-out problems with and without it, compare first-attempt pass rates with `tools/mbpp.py report` ([notes/loose-ends/parked.md](notes/loose-ends/parked.md), "Brief parts 2 and 3").
