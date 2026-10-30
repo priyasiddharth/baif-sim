@@ -111,11 +111,25 @@ Cases it cannot handle:
 
 
 ## Stage 2
-One-short codegen
 
-This is done in two stages
+The harder question of the assignment: compatible Rust on the first attempt, without a generate/check/patch loop. Plan in two parts; what has been tried under each is listed below.
 
 1. Improve Charon+Aeneas tooling to accept a larger subset of Rust.
-1.1 Also enhance source language to make translation/proofs easier
-2. Add skills that allow generating good patterns/enhanced language
+1.1 Also enhance the source language to make translation/proofs easier.
+2. Add skills that generate good patterns / the enhanced language.
 
+### 1. Widening what Aeneas accepts (the fork `aeneas_mod`)
+
+* **Loop-matcher fix (done).** A value taken via `Chars::next` before a loop leaves an ended-loan projector in a region abstraction; the matcher in `InterpMatchCtxs.ml` had no arm for it, so Aeneas failed with "Could not match the contexts" on identical contexts. The fork adds arms for ended projected loans and ended shared loans plus a regression test (`aeneas_mod` commits 38531ab, ee1c669; upstream `make test` stays green with no expected-output changes). Effect: [tests/unsupported/chars_next_before_loop.rs](tests/unsupported/chars_next_before_loop.rs) moves from `unsupported_code` to `missing_model`; walkthrough in [examples/loop_join/run.sh](examples/loop_join/run.sh). Upstream PR still to open.
+* **Stored `||` in a loop becomes a Lean `Prop` (investigated, fix identified).** Fixture: [tests/unsupported/or_in_loop_bool.rs](tests/unsupported/or_in_loop_bool.rs). Upstream PR [#1374](https://github.com/AeneasVerif/aeneas/pull/1374) (open, absent from our pin) prints comparisons as `(a = b : Bool)` and Bool negation as `!`; its source diff applies cleanly to the fork and the resulting output type-checks on our fixture. The maintainer asked for the annotation to come from the type-annotation micro-pass (`PureMicroPassesAnnots.ml`) and only where the comparison is not an `if` condition. To apply: cherry-pick the two source hunks or implement the micro-pass variant, regenerate `tests/lean` with `make test`, commit the regenerated outputs.
+* **Raw pointers (design question, parked).** `ptr::swap` becomes an axiom `MutRawPtr T → MutRawPtr T → Result Unit`: the swapped `Vec` is neither input nor output, so any model makes `swap_List` the identity ([attempt-1 report](mbpp/aeneas_pristine/mbpp_591_swap_List/attempt-1/check.json)). Options weighed in [notes/journal/2026-10/2026-10-29-swap-list-raw-pointers-become-opaque-values.md](notes/journal/2026-10/2026-10-29-swap-list-raw-pointers-become-opaque-values.md): a global heap (rejected: taxes safe code); a local heap with ownership handoff (needs region-end information raw pointers do not carry); per-cell linear permission tokens in the Verus `PPtr`/`PointsTo` style, where the pointer stays a plain value and `swap : Ptr T → Ptr T → PointsTo p a → PointsTo q b → (PointsTo p b × PointsTo q a)` makes the effect visible in the type. Its cost: plain Rust carries no tokens, so annotations or inference are needed. Upstream's unmerged `cezar/loops` branch carries heap-model and separation-logic commits for raw pointers and is the thing to watch.
+
+### 1.1 Enhancing the source language
+
+Untried so far.
+
+### 2. Skills that generate good patterns
+
+* **Evidence.** Seven MBPP problems: 0/7 first attempt, 6/7 by attempt 2, 1 unresolved. Every attempt-1 failure was a missing stdlib model or the `Iterator` encoding gap, never unsupported syntax ([notes/empirical/idiomatic-rust-fails-on-missing-stdlib-models.md](notes/empirical/idiomatic-rust-fails-on-missing-stdlib-models.md)). The core that always translated: `while` with indexing, `Vec::new/push/len`, index assignment, integer and bit ops, `as` casts.
+* **Repair rules already in the skill** ([SKILL.md](.claude/skills/mbpp-aeneas/SKILL.md)): a modellable missing item gets a local safe shim in the solution file, else an inline rewrite; a raw-pointer note means rewrite without `unsafe`; an encoding gap means replace the adapter chain with a `while` loop. Worked diffs are the attempt-2 files under [mbpp/aeneas_pristine/](mbpp/aeneas_pristine).
+* **First-attempt strategy (parked).** Generate a short guide from `ExtractBuiltinLean.ml` plus the supported-core list, run the loop on held-out problems with and without it, compare first-attempt pass rates with `tools/mbpp.py report` ([notes/loose-ends/parked.md](notes/loose-ends/parked.md), "Brief parts 2 and 3").
