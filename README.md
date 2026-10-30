@@ -1,5 +1,9 @@
 # baif-sim
 
+## Goal
+
+This repo is a workflow for experimenting with boundaries of Rust to Lean translation with Charon+Aeneas. We study simple programs to understand problems quickly and use it to inform our strategy for multi-shot AI codegen (Stage 1) and one-shot AI codegen (Stage 2).
+
 ## Setup
 
 Build and tool setup (clone with submodules, pins, Nix or source builds, Lean library, verification) is in [CLAUDE.md § Setup](CLAUDE.md#setup). CI is the executable usage of `check.py`: [.github/workflows/check.yml](.github/workflows/check.yml) builds Charon, both Aeneas checkouts and the Lean library, then runs [tests/run_expected.py](tests/run_expected.py) over [tests/expected.json](tests/expected.json) under both checkouts.
@@ -82,6 +86,14 @@ Implemented: one file, as above. The other two the assignment names, parked in [
 
 * **A crate.** Run `charon cargo --preset=aeneas` in the crate directory instead of `charon rustc` on one file; it emits one LLBC for the whole crate and the Aeneas and Lean stages are unchanged. Dependencies are translated opaquely, as the standard library is today, and their items surface as `missing_model` axioms unless pulled in with `--charon-arg=--include=<path>`.
 * **A few selected lines.** Wrap them in a stub lib crate and run the same pipeline. Names rustc cannot resolve come back as `missing_context` with the error codes, which is the list of surrounding items the user has to paste in; repeat until the verdict is about the lines themselves.
+
+### Test corpus: MBPP
+
+* **What.** MBPP (Mostly Basic Python Problems) is a set of short functions, each with three assertion tests. We use its Rust translation from the MultiPL-E dataset (`nuprl/MultiPL-E`, config `mbpp-rs`, test split, 354 problems), pinned at revision `28441b6` in [data/mbpp-rs.json](data/mbpp-rs.json).
+* **Why.** Single-file functions with runnable tests check behaviour for free, fix the signature so a repair cannot change the interface, exercise the `Vec`/`String`/iterator surface whose Lean models decide translation, and need no external crates.
+* **Problem shape.** `prompt.rs` holds the doc comment and signature, `tests.rs` a `main` of `assert_eq!`s ([example](mbpp/aeneas_pristine/mbpp_3_is_not_prime/prompt.rs)). `fetch N` takes the first N problems in dataset order.
+* **Loop.** [tools/mbpp.py](tools/mbpp.py) (its docstring is the reference): `fetch` → the generator writes a solution → `test` must pass → `attempt` runs check.py under each checkout and writes `attempt-N/`, `status.json` and `failures.md` in each tree → `report`. Attempt 1 carries no Aeneas workarounds, so it measures first-attempt translation; a problem passes when the pristine tree passes.
+* **Limits.** Three asserts per problem; "first N" selection rather than a sample; dataset quirks (non-snake-case, non-`pub` names, a leading `}` in the test split) are absorbed by `-Awarnings` and `split_tests`.
 
 ### Results and limits
 
