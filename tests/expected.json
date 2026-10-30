@@ -13,8 +13,8 @@
     "mod": "unsupported_code"
   },
   "tests/unsupported/ref_mul.rs": {
-    "pristine": "missing_context",
-    "mod": "missing_context"
+    "pristine": "missing_model",
+    "mod": "missing_model"
   },
   "tests/unsupported/missing_dep.rs": {
     "pristine": "missing_context",
@@ -30,15 +30,15 @@
   },
   "tests/unsupported/chars_next_before_loop.rs": {
     "pristine": "unsupported_code",
-    "mod": "missing_context"
+    "mod": "missing_model"
   },
   "examples/loop_join/fails.rs": {
     "pristine": "unsupported_code",
-    "mod": "missing_context"
+    "mod": "missing_model"
   },
   "examples/loop_join/passes.rs": {
-    "pristine": "missing_context",
-    "mod": "missing_context"
+    "pristine": "missing_model",
+    "mod": "missing_model"
   },
   "mbpp/aeneas_pristine/mbpp_3_is_not_prime/attempt-2/mbpp_3_is_not_prime.rs": {
     "pristine": "translates",
@@ -65,15 +65,27 @@
     "mod": "toolchain_problem"
   },
   "mbpp/aeneas_pristine/mbpp_11_remove_Occ/attempt-4/mbpp_11_remove_Occ.rs": {
-    "pristine": "missing_context",
-    "mod": "missing_context"
+    "pristine": "missing_model",
+    "mod": "missing_model"
   },
   "mbpp/aeneas_pristine/mbpp_591_swap_List/attempt-1/mbpp_591_swap_List.rs": {
-    "pristine": "missing_context",
-    "mod": "missing_context"
+    "pristine": "missing_model",
+    "mod": "missing_model"
   },
   "mbpp/aeneas_pristine/mbpp_591_swap_List/attempt-2/mbpp_591_swap_List.rs": {
     "pristine": "translates",
     "mod": "translates"
+  },
+  "tests/user_trait_next.rs": {
+    "pristine": "translates",
+    "mod": "translates"
+  },
+  "tests/unsupported/user_trait_any.rs": {
+    "pristine": "unsupported_code",
+    "mod": "unsupported_code"
+  },
+  "tests/unsupported/raw_ptr_value.rs": {
+    "pristine": "missing_model",
+    "mod": "missing_model"
   }
 }

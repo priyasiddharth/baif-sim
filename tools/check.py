@@ -7,7 +7,15 @@ axioms each translated function depends on. Prints one JSON report on stdout
 
 Exit codes mirror the verdict:
   0 translates, 1 unsupported_code, 2 missing_context, 3 invalid_rust,
-  4 toolchain_problem, 64 usage error.
+  4 toolchain_problem, 5 missing_model, 64 usage error.
+
+missing_context: rustc/Charon could not see a definition (supply code or
+--include). missing_model: everything translated but the Lean depends on an
+axiom for an opaque item (write a Lean model, or avoid the item); an axiom
+whose signature mentions a raw pointer gets a note, since its type may not
+carry the effect. unsupported_code also covers a method of a hand-modelled
+library trait whose Lean structure lacks the field ("is not a field of
+structure core.…"): no model can be added from outside.
 """
 
 import argparse
@@ -49,9 +57,14 @@ EXIT_CODES = {
     "missing_context": 2,
     "invalid_rust": 3,
     "toolchain_problem": 4,
+    "missing_model": 5,
 }
 # Most severe first: the overall verdict is the most severe problem found.
-SEVERITY = ["toolchain_problem", "invalid_rust", "unsupported_code", "missing_context"]
+SEVERITY = ["toolchain_problem", "invalid_rust", "unsupported_code", "missing_context", "missing_model"]
+# An axiom whose signature mentions one of these cannot return the memory it
+# acts on: a model could not carry the effect. Reported as a note, not a verdict.
+RAW_PTR_TYPES = re.compile(r"\b(?:Mut|Const)RawPtr\b")
+RAW_PTR_NOTE = "type may not carry the effect: raw-pointer argument, no output for the pointee"
 
 # Axioms every Lean proof may use; not holes in the translation.
 STANDARD_AXIOMS = {"propext", "Classical.choice", "Quot.sound"}
@@ -329,6 +342,8 @@ def lean_decls(lean_file):
             "kind": m.group("kind").split()[-1],
             "lean": m.group("name"),
             "sorry": bool(re.search(r"\bsorry\b", body)),
+            # The declaration text after the name (the signature, for axioms).
+            "text": body.split("\n\n", 1)[0],
         })
     return decls
 
@@ -492,32 +507,46 @@ def check(src, out_dir, charon_args):
                 msg = e["message"]
                 # Aeneas emitted a call to a method the Lean library's model
                 # does not define: a missing model, not a broken toolchain.
-                if re.search(r"is not a field of structure|unknown (constant|identifier)", msg):
-                    reasons.append(("missing_context", f"Lean library lacks a model: {msg}"))
+                if re.search(r"is not a field of structure `(core|alloc|std)\.", msg):
+                    # Aeneas filled the instance of a hand-modelled library
+                    # trait with a method the library's structure has no
+                    # field for: not a missing model, the code must change.
+                    reasons.append(("unsupported_code",
+                                    f"library trait structure lacks the method (no model can be added from outside): {msg}"))
+                elif re.search(r"is not a field of structure|unknown (constant|identifier)", msg):
+                    reasons.append(("missing_model", f"Lean library lacks a model: {msg}"))
                 else:
                     reasons.append(("toolchain_problem", f"generated Lean does not type-check: {msg}"))
 
-            rust_of_axiom = {f"{namespace}.{d['lean']}": d["rust"] for d in decls if d["kind"] == "axiom"}
+            axiom_decls = {f"{namespace}.{d['lean']}": d for d in decls if d["kind"] == "axiom"}
+            rust_of_axiom = {ax: d["rust"] for ax, d in axiom_decls.items()}
+
+            def axiom_entry(ax):
+                d = axiom_decls.get(ax)
+                rust = d["rust"] if d else None
+                entry = {"lean": ax, "rust": rust, "origin": axiom_origin(rust, crate), "used_by": []}
+                if d and RAW_PTR_TYPES.search(d["text"]):
+                    entry["note"] = RAW_PTR_NOTE
+                return entry
+
             axioms = {}
             for fn, used in axioms_by_fn.items():
                 for ax in used:
                     if ax in STANDARD_AXIOMS or ax == "sorryAx":
                         continue
-                    a = axioms.setdefault(ax, {"lean": ax, "rust": rust_of_axiom.get(ax),
-                                               "origin": axiom_origin(rust_of_axiom.get(ax), crate),
-                                               "used_by": []})
-                    a["used_by"].append(fn)
+                    axioms.setdefault(ax, axiom_entry(ax))["used_by"].append(fn)
             # Axioms declared in the file but used by nothing checked (e.g. only
             # called from a body that became sorry) are still holes.
-            for ax, rust in rust_of_axiom.items():
-                axioms.setdefault(ax, {"lean": ax, "rust": rust, "origin": axiom_origin(rust, crate), "used_by": []})
+            for ax in rust_of_axiom:
+                axioms.setdefault(ax, axiom_entry(ax))
             report["axioms"] = list(axioms.values())
             for a in report["axioms"]:
                 what = {"stdlib": "no Lean model for standard-library item",
                         "dependency": "dependency not translated (try --include)",
                         "local": "local item left opaque",
                         "library": "axiom from the Aeneas Lean library"}[a["origin"]]
-                reasons.append(("missing_context", f"{what}: {a['rust'] or a['lean']}"))
+                note = f" ({a['note']})" if a.get("note") else ""
+                reasons.append(("missing_model", f"{what}: {a['rust'] or a['lean']}{note}"))
 
     found = {v for v, _ in reasons}
     report["verdict"] = next((v for v in SEVERITY if v in found), "translates")
@@ -538,7 +567,8 @@ def human(report):
         lines.append(f"  fn {f['rust']}: {f['status']}" + (f" ({f['reason']})" if f["reason"] else ""))
     for a in report["axioms"]:
         used = ", ".join(a["used_by"]) or "nothing checked"
-        lines.append(f"  axiom {a['lean']} [{a['origin']}] ← {a['rust']}  used by {used}")
+        note = f"  — {a['note']}" if a.get("note") else ""
+        lines.append(f"  axiom {a['lean']} [{a['origin']}] ← {a['rust']}  used by {used}{note}")
     lines.append(f"verdict:   {report['verdict']}")
     for r in report["reasons"]:
         lines.append(f"  - {r}")

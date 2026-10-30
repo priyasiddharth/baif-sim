@@ -9,7 +9,7 @@ Layout:
 - `aeneas/`, `charon/` — submodules, pinned (see `aeneas/charon-pin`). Never patch `aeneas/`.
 - `aeneas_mod/` — submodule of our fork (priyasiddharth/aeneas), branch `main` = the `aeneas/` pin plus our local patches (rebase them when the pin moves; move `aeneas/` and `charon/` together, per `aeneas/charon-pin`). Select with `--aeneas mod` on `check.py` / `mbpp.py attempt|recheck`, or `AENEAS=mod` in the environment; default is pristine.
 - `lakefile.lean` / `lean-toolchain` (root) — shell Lake project so VS Code resolves `import Aeneas` in generated files anywhere in the repo; shares the Aeneas library's built packages.
-- `tools/check.py` — Charon → Aeneas → Lean type-check → `#print axioms`, JSON verdict.
+- `tools/check.py` — Charon → Aeneas → Lean type-check → `#print axioms`, JSON verdict: translates / unsupported_code / missing_context (rustc or Charon could not see a definition) / missing_model (an axiom for an opaque item; raw-pointer signatures get a note) / invalid_rust / toolchain_problem.
 - `tools/mbpp.py` + `.claude/skills/mbpp-aeneas/` — generate / test / check / log loop.
 - `data/mbpp-rs.json` — pinned snapshot of the MultiPL-E `mbpp-rs` test split (HF revision inside); `fetch` reads it, `snapshot` refreshes it.
 - `tests/` — hand-written pass/fail cases. `mbpp/aeneas_pristine/`, `mbpp/aeneas_mod/` — recorded MBPP attempts, one tree per Aeneas checkout (same attempt numbers; `mbpp.py attempt` writes both).

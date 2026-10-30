@@ -1,7 +1,7 @@
 // Expected verdict: unsupported_code (exit 1) with the pristine Aeneas pin.
 // With `--aeneas mod` (aeneas_mod/, the fork carrying the matcher fix) it
 // translates and only the `Deref<str> for String` axiom remains:
-// missing_context (exit 2).
+// missing_model (exit 5).
 //
 // Aeneas: "Could not match the contexts" at the `while`. The value `c` is
 // obtained through `Chars::next(&mut ch.chars())` before the loop. At loop
