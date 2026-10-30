@@ -31,7 +31,7 @@ One JSON report on stdout, the generated Lean in `DIR` (default: a temp dir), ex
 
 ### What is checked
 
-Neither Charon's nor Aeneas's exit code says whether the code translated ([notes/empirical/exit-codes-do-not-reflect-translation-status.md](notes/empirical/exit-codes-do-not-reflect-translation-status.md)), so `translates` is three independent checks, and the report says which ones ran (`stages`):
+`translates` is three independent checks, and the report says which ones ran (`stages`). The exit codes of Charon and Aeneas alone are not enough: each stage can exit 0 on code that did not translate ([notes/empirical/exit-codes-do-not-reflect-translation-status.md](notes/empirical/exit-codes-do-not-reflect-translation-status.md)):
 
 1. **Charon** exits 0 *and* its LLBC and warnings carry no `type_error` / "not supported". [tests/unsupported/async_fn.rs](tests/unsupported/async_fn.rs): Charon exits 0 with a `type_error` in the LLBC.
 2. **Aeneas** exits 0 *and* every function is `translated`: no `sorry` body, no `axiom`. [tests/unsupported/raw_ptr.rs](tests/unsupported/raw_ptr.rs): Aeneas exits 1 but still writes the file, with the body as `sorry`; [tests/unsupported/or_in_loop_bool.rs](tests/unsupported/or_in_loop_bool.rs): Aeneas exits 0 and the Lean does not type-check.
