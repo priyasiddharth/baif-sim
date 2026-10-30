@@ -1,11 +1,11 @@
 # mbpp_4_heap_queue_largest — failure log (aeneas: mod)
 
-## Attempt 1 — check:missing_context
+## Attempt 1 — check:missing_model
 
 Initial version.
 Reasons:
-- missing_context: no Lean model for standard-library item: alloc::vec::{alloc::vec::Vec<T>}::truncate
-- missing_context: no Lean model for standard-library item: core::slice::{[T
+- missing_model: no Lean model for standard-library item: alloc::vec::{alloc::vec::Vec<T>}::truncate
+- missing_model: no Lean model for standard-library item: core::slice::{[T
 
 Functions: heap_queue_largest translated, {closure} translated
 Axioms: alloc::vec::{alloc::vec::Vec<T>}::truncate, core::slice::{[T
@@ -25,8 +25,8 @@ fn heap_queue_largest(nums: Vec<isize>, n: isize) -> Vec<isize> {
 
 Delta from attempt 1:
 - resolved: 2
-  - missing_context: no Lean model for standard-library item: alloc::vec::{alloc::vec::Vec<T>}::truncate
-  - missing_context: no Lean model for standard-library item: core::slice::{[T
+  - missing_model: no Lean model for standard-library item: alloc::vec::{alloc::vec::Vec<T>}::truncate
+  - missing_model: no Lean model for standard-library item: core::slice::{[T
 - still failing: 0
 - new: 0
 

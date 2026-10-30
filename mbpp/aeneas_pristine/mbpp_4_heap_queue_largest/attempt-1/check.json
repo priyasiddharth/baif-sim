@@ -65,9 +65,9 @@
       ]
     }
   ],
-  "verdict": "missing_context",
+  "verdict": "missing_model",
   "reasons": [
-    "missing_context: no Lean model for standard-library item: alloc::vec::{alloc::vec::Vec<T>}::truncate",
-    "missing_context: no Lean model for standard-library item: core::slice::{[T"
+    "missing_model: no Lean model for standard-library item: alloc::vec::{alloc::vec::Vec<T>}::truncate",
+    "missing_model: no Lean model for standard-library item: core::slice::{[T"
   ]
 }

@@ -4,7 +4,7 @@
     "aeneas": "ee1c669a",
     "aeneas_checkout": "mod",
     "aeneas_dir": "aeneas_mod",
-    "lean_lib": "aeneas/backends/lean",
+    "lean_lib": "aeneas_mod/backends/lean",
     "charon": "373d84044",
     "charon_matches_pin": true,
     "rustc": "nightly-2026-09-17",
@@ -83,8 +83,8 @@
   "verdict": "toolchain_problem",
   "reasons": [
     "toolchain_problem: generated Lean does not type-check: Application type mismatch: The argument b has type Prop but is expected to have type Bool in the application (seen2, b)",
-    "missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new",
-    "missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push",
-    "missing_context: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref"
+    "missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new",
+    "missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push",
+    "missing_model: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref"
   ]
 }

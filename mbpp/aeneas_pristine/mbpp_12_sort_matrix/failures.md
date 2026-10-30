@@ -1,12 +1,12 @@
 # mbpp_12_sort_matrix — failure log (aeneas: pristine)
 
-## Attempt 1 — check:missing_context
+## Attempt 1 — check:missing_model
 
 Initial version.
 Reasons:
-- missing_context: no Lean model for standard-library item: core::iter::traits::accum::{impl core::iter::traits::accum::Sum<&'a isize> for isize}::sum
-- missing_context: no Lean model for standard-library item: alloc::slice::{[T
-- missing_context: no Lean model for standard-library item: core::iter::traits::iterator::Iterator::sum
+- missing_model: no Lean model for standard-library item: core::iter::traits::accum::{impl core::iter::traits::accum::Sum<&'a isize> for isize}::sum
+- missing_model: no Lean model for standard-library item: alloc::slice::{[T
+- missing_model: no Lean model for standard-library item: core::iter::traits::iterator::Iterator::sum
 
 Functions: sort_matrix translated, {closure} translated
 Axioms: core::iter::traits::accum::{impl core::iter::traits::accum::Sum<&'a isize> for isize}::sum, alloc::slice::{[T, core::iter::traits::iterator::Iterator::sum
@@ -25,9 +25,9 @@ fn sort_matrix(M: Vec<Vec<isize>>) -> Vec<Vec<isize>> {
 
 Delta from attempt 1:
 - resolved: 3
-  - missing_context: no Lean model for standard-library item: core::iter::traits::accum::{impl core::iter::traits::accum::Sum<&'a isize> for isize}::sum
-  - missing_context: no Lean model for standard-library item: alloc::slice::{[T
-  - missing_context: no Lean model for standard-library item: core::iter::traits::iterator::Iterator::sum
+  - missing_model: no Lean model for standard-library item: core::iter::traits::accum::{impl core::iter::traits::accum::Sum<&'a isize> for isize}::sum
+  - missing_model: no Lean model for standard-library item: alloc::slice::{[T
+  - missing_model: no Lean model for standard-library item: core::iter::traits::iterator::Iterator::sum
 - still failing: 0
 - new: 0
 

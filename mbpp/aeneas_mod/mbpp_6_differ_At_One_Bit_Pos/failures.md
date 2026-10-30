@@ -1,10 +1,10 @@
 # mbpp_6_differ_At_One_Bit_Pos — failure log (aeneas: mod)
 
-## Attempt 1 — check:missing_context
+## Attempt 1 — check:missing_model
 
 Initial version.
 Reasons:
-- missing_context: no Lean model for standard-library item: core::num::{isize}::count_ones
+- missing_model: no Lean model for standard-library item: core::num::{isize}::count_ones
 
 Functions: differ_At_One_Bit_Pos translated
 Axioms: core::num::{isize}::count_ones
@@ -21,7 +21,7 @@ fn differ_At_One_Bit_Pos(a: isize, b: isize) -> bool {
 
 Delta from attempt 1:
 - resolved: 1
-  - missing_context: no Lean model for standard-library item: core::num::{isize}::count_ones
+  - missing_model: no Lean model for standard-library item: core::num::{isize}::count_ones
 - still failing: 0
 - new: 0
 

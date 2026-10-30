@@ -1,14 +1,14 @@
 # mbpp_8_square_nums — failure log (aeneas: pristine)
 
-## Attempt 1 — check:missing_context
+## Attempt 1 — check:unsupported_code
 
 Initial version.
 Reasons:
-- missing_context: Lean library lacks a model: `map` is not a field of structure `core.iter.traits.iterator.Iterator`
-- missing_context: Lean library lacks a model: `collect` is not a field of structure `core.iter.traits.iterator.Iterator` 'Mbpp8SquareNums.square_nums' depends on axioms: [propext, Classical.choice, Quot.sound, Mbpp8SquareNums.Shared1Isize.Insts.CoreOpsArithMulShared0IsizeIsize.mul, Mbpp8SquareNums.core.iter.traits.iterator.Iterator.map.default, Mbpp8SquareNums.core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator.next] 'Mbpp8SquareNums.square_nums.closure.Insts.CoreOpsFunctionFnOnceTupleShared0IsizeIsize.call_once' depends on axioms: [propext, Classical.choice, Quot.sound, Mbpp8SquareNums.Shared1Isize.Insts.CoreOpsArithMulShared
-- missing_context: no Lean model for standard-library item: core::ops::arith::{impl core::ops::arith::Mul<&'_0 isize, isize> for &'_1 isize}::mul
-- missing_context: no Lean model for standard-library item: core::iter::traits::iterator::Iterator::map
-- missing_context: no Lean model for standard-library item: core::iter::adapters::map::{impl core::iter::traits::iterator::Iterator<B> for core::iter::adapters::map::Map<I, F>}::next
+- unsupported_code: library trait structure lacks the method (no model can be added from outside): `map` is not a field of structure `core.iter.traits.iterator.Iterator`
+- unsupported_code: library trait structure lacks the method (no model can be added from outside): `collect` is not a field of structure `core.iter.traits.iterator.Iterator` 'Mbpp8SquareNums.square_nums' depends on axioms: [propext, Classical.choice, Quot.sound, Mbpp8SquareNums.Shared1Isize.Insts.CoreOpsArithMulShared0IsizeIsize.mul, Mbpp8SquareNums.core.iter.traits.iterator.Iterator.map.default, Mbpp8SquareNums.core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator.next] 'Mbpp8SquareNums.square_nums.closure.Insts.CoreOpsFunctionFnOnceTupleShared0IsizeIsize.call_once' depends on axioms: [propext, Classical.choice, Quot.sound, Mbpp8SquareNums.Shared1Isize.Insts.CoreOpsArithMulShared
+- missing_model: no Lean model for standard-library item: core::ops::arith::{impl core::ops::arith::Mul<&'_0 isize, isize> for &'_1 isize}::mul
+- missing_model: no Lean model for standard-library item: core::iter::traits::iterator::Iterator::map
+- missing_model: no Lean model for standard-library item: core::iter::adapters::map::{impl core::iter::traits::iterator::Iterator<B> for core::iter::adapters::map::Map<I, F>}::next
 
 Functions: square_nums translated, {closure} translated
 Axioms: core::ops::arith::{impl core::ops::arith::Mul<&'_0 isize, isize> for &'_1 isize}::mul, core::iter::traits::iterator::Iterator::map, core::iter::adapters::map::{impl core::iter::traits::iterator::Iterator<B> for core::iter::adapters::map::Map<I, F>}::next
@@ -25,11 +25,11 @@ fn square_nums(nums: Vec<isize>) -> Vec<isize> {
 
 Delta from attempt 1:
 - resolved: 5
-  - missing_context: Lean library lacks a model: `map` is not a field of structure `core.iter.traits.iterator.Iterator`
-  - missing_context: Lean library lacks a model: `collect` is not a field of structure `core.iter.traits.iterator.Iterator` 'Mbpp8SquareNums.square_nums' depends on axioms: [propext, Classical.choice, Quot.sound, Mbpp8SquareNums.Shared1Isize.Insts.CoreOpsArithMulShared0IsizeIsize.mul, Mbpp8SquareNums.core.iter.traits.iterator.Iterator.map.default, Mbpp8SquareNums.core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator.next] 'Mbpp8SquareNums.square_nums.closure.Insts.CoreOpsFunctionFnOnceTupleShared0IsizeIsize.call_once' depends on axioms: [propext, Classical.choice, Quot.sound, Mbpp8SquareNums.Shared1Isize.Insts.CoreOpsArithMulShared
-  - missing_context: no Lean model for standard-library item: core::ops::arith::{impl core::ops::arith::Mul<&'_0 isize, isize> for &'_1 isize}::mul
-  - missing_context: no Lean model for standard-library item: core::iter::traits::iterator::Iterator::map
-  - missing_context: no Lean model for standard-library item: core::iter::adapters::map::{impl core::iter::traits::iterator::Iterator<B> for core::iter::adapters::map::Map<I, F>}::next
+  - unsupported_code: library trait structure lacks the method (no model can be added from outside): `map` is not a field of structure `core.iter.traits.iterator.Iterator`
+  - unsupported_code: library trait structure lacks the method (no model can be added from outside): `collect` is not a field of structure `core.iter.traits.iterator.Iterator` 'Mbpp8SquareNums.square_nums' depends on axioms: [propext, Classical.choice, Quot.sound, Mbpp8SquareNums.Shared1Isize.Insts.CoreOpsArithMulShared0IsizeIsize.mul, Mbpp8SquareNums.core.iter.traits.iterator.Iterator.map.default, Mbpp8SquareNums.core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator.next] 'Mbpp8SquareNums.square_nums.closure.Insts.CoreOpsFunctionFnOnceTupleShared0IsizeIsize.call_once' depends on axioms: [propext, Classical.choice, Quot.sound, Mbpp8SquareNums.Shared1Isize.Insts.CoreOpsArithMulShared
+  - missing_model: no Lean model for standard-library item: core::ops::arith::{impl core::ops::arith::Mul<&'_0 isize, isize> for &'_1 isize}::mul
+  - missing_model: no Lean model for standard-library item: core::iter::traits::iterator::Iterator::map
+  - missing_model: no Lean model for standard-library item: core::iter::adapters::map::{impl core::iter::traits::iterator::Iterator<B> for core::iter::adapters::map::Map<I, F>}::next
 - still failing: 0
 - new: 0
 

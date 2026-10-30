@@ -4,7 +4,7 @@
     "aeneas": "ee1c669a",
     "aeneas_checkout": "mod",
     "aeneas_dir": "aeneas_mod",
-    "lean_lib": "aeneas/backends/lean",
+    "lean_lib": "aeneas_mod/backends/lean",
     "charon": "373d84044",
     "charon_matches_pin": true,
     "rustc": "nightly-2026-09-17",
@@ -101,12 +101,12 @@
       ]
     }
   ],
-  "verdict": "missing_context",
+  "verdict": "unsupported_code",
   "reasons": [
-    "missing_context: Lean library lacks a model: `map` is not a field of structure `core.iter.traits.iterator.Iterator`",
-    "missing_context: Lean library lacks a model: `collect` is not a field of structure `core.iter.traits.iterator.Iterator` 'Mbpp8SquareNums.square_nums' depends on axioms: [propext, Classical.choice, Quot.sound, Mbpp8SquareNums.Shared1Isize.Insts.CoreOpsArithMulShared0IsizeIsize.mul, Mbpp8SquareNums.core.iter.traits.iterator.Iterator.map.default, Mbpp8SquareNums.core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator.next] 'Mbpp8SquareNums.square_nums.closure.Insts.CoreOpsFunctionFnOnceTupleShared0IsizeIsize.call_once' depends on axioms: [propext, Classical.choice, Quot.sound, Mbpp8SquareNums.Shared1Isize.Insts.CoreOpsArithMulShared",
-    "missing_context: no Lean model for standard-library item: core::ops::arith::{impl core::ops::arith::Mul<&'_0 isize, isize> for &'_1 isize}::mul",
-    "missing_context: no Lean model for standard-library item: core::iter::traits::iterator::Iterator::map",
-    "missing_context: no Lean model for standard-library item: core::iter::adapters::map::{impl core::iter::traits::iterator::Iterator<B> for core::iter::adapters::map::Map<I, F>}::next"
+    "unsupported_code: library trait structure lacks the method (no model can be added from outside): `map` is not a field of structure `core.iter.traits.iterator.Iterator`",
+    "unsupported_code: library trait structure lacks the method (no model can be added from outside): `collect` is not a field of structure `core.iter.traits.iterator.Iterator` 'Mbpp8SquareNums.square_nums' depends on axioms: [propext, Classical.choice, Quot.sound, Mbpp8SquareNums.Shared1Isize.Insts.CoreOpsArithMulShared0IsizeIsize.mul, Mbpp8SquareNums.core.iter.traits.iterator.Iterator.map.default, Mbpp8SquareNums.core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator.next] 'Mbpp8SquareNums.square_nums.closure.Insts.CoreOpsFunctionFnOnceTupleShared0IsizeIsize.call_once' depends on axioms: [propext, Classical.choice, Quot.sound, Mbpp8SquareNums.Shared1Isize.Insts.CoreOpsArithMulShared",
+    "missing_model: no Lean model for standard-library item: core::ops::arith::{impl core::ops::arith::Mul<&'_0 isize, isize> for &'_1 isize}::mul",
+    "missing_model: no Lean model for standard-library item: core::iter::traits::iterator::Iterator::map",
+    "missing_model: no Lean model for standard-library item: core::iter::adapters::map::{impl core::iter::traits::iterator::Iterator<B> for core::iter::adapters::map::Map<I, F>}::next"
   ]
 }

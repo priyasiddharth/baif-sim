@@ -74,10 +74,10 @@
       ]
     }
   ],
-  "verdict": "missing_context",
+  "verdict": "missing_model",
   "reasons": [
-    "missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new",
-    "missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push",
-    "missing_context: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref"
+    "missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new",
+    "missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push",
+    "missing_model: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref"
   ]
 }

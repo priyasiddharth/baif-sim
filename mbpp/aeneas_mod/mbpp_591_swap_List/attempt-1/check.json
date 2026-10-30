@@ -4,7 +4,7 @@
     "aeneas": "ee1c669a",
     "aeneas_checkout": "mod",
     "aeneas_dir": "aeneas_mod",
-    "lean_lib": "aeneas/backends/lean",
+    "lean_lib": "aeneas_mod/backends/lean",
     "charon": "373d84044",
     "charon_matches_pin": true,
     "rustc": "nightly-2026-09-17",
@@ -47,7 +47,8 @@
       "origin": "stdlib",
       "used_by": [
         "Mbpp591SwapList.swap_List"
-      ]
+      ],
+      "note": "type may not carry the effect: raw-pointer argument, no output for the pointee"
     },
     {
       "lean": "Mbpp591SwapList.alloc.vec.Vec.as_mut_ptr",
@@ -55,7 +56,8 @@
       "origin": "stdlib",
       "used_by": [
         "Mbpp591SwapList.swap_List"
-      ]
+      ],
+      "note": "type may not carry the effect: raw-pointer argument, no output for the pointee"
     },
     {
       "lean": "Mbpp591SwapList.core.ptr.mut_ptr.RawPtrMutT.add",
@@ -63,13 +65,14 @@
       "origin": "stdlib",
       "used_by": [
         "Mbpp591SwapList.swap_List"
-      ]
+      ],
+      "note": "type may not carry the effect: raw-pointer argument, no output for the pointee"
     }
   ],
-  "verdict": "missing_context",
+  "verdict": "missing_model",
   "reasons": [
-    "missing_context: no Lean model for standard-library item: core::ptr::swap",
-    "missing_context: no Lean model for standard-library item: alloc::vec::{alloc::vec::Vec<T>}::as_mut_ptr",
-    "missing_context: no Lean model for standard-library item: core::ptr::mut_ptr::{*mut T}::add"
+    "missing_model: no Lean model for standard-library item: core::ptr::swap (type may not carry the effect: raw-pointer argument, no output for the pointee)",
+    "missing_model: no Lean model for standard-library item: alloc::vec::{alloc::vec::Vec<T>}::as_mut_ptr (type may not carry the effect: raw-pointer argument, no output for the pointee)",
+    "missing_model: no Lean model for standard-library item: core::ptr::mut_ptr::{*mut T}::add (type may not carry the effect: raw-pointer argument, no output for the pointee)"
   ]
 }

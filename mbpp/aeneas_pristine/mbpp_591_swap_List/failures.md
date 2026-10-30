@@ -1,12 +1,12 @@
 # mbpp_591_swap_List — failure log (aeneas: pristine)
 
-## Attempt 1 — check:missing_context
+## Attempt 1 — check:missing_model
 
 Initial version.
 Reasons:
-- missing_context: no Lean model for standard-library item: core::ptr::swap
-- missing_context: no Lean model for standard-library item: alloc::vec::{alloc::vec::Vec<T>}::as_mut_ptr
-- missing_context: no Lean model for standard-library item: core::ptr::mut_ptr::{*mut T}::add
+- missing_model: no Lean model for standard-library item: core::ptr::swap (type may not carry the effect: raw-pointer argument, no output for the pointee)
+- missing_model: no Lean model for standard-library item: alloc::vec::{alloc::vec::Vec<T>}::as_mut_ptr (type may not carry the effect: raw-pointer argument, no output for the pointee)
+- missing_model: no Lean model for standard-library item: core::ptr::mut_ptr::{*mut T}::add (type may not carry the effect: raw-pointer argument, no output for the pointee)
 
 Functions: swap_List translated
 Axioms: core::ptr::swap, alloc::vec::{alloc::vec::Vec<T>}::as_mut_ptr, core::ptr::mut_ptr::{*mut T}::add
@@ -31,9 +31,9 @@ fn swap_List(newList: Vec<isize>) -> Vec<isize> {
 
 Delta from attempt 1:
 - resolved: 3
-  - missing_context: no Lean model for standard-library item: core::ptr::swap
-  - missing_context: no Lean model for standard-library item: alloc::vec::{alloc::vec::Vec<T>}::as_mut_ptr
-  - missing_context: no Lean model for standard-library item: core::ptr::mut_ptr::{*mut T}::add
+  - missing_model: no Lean model for standard-library item: core::ptr::swap (type may not carry the effect: raw-pointer argument, no output for the pointee)
+  - missing_model: no Lean model for standard-library item: alloc::vec::{alloc::vec::Vec<T>}::as_mut_ptr (type may not carry the effect: raw-pointer argument, no output for the pointee)
+  - missing_model: no Lean model for standard-library item: core::ptr::mut_ptr::{*mut T}::add (type may not carry the effect: raw-pointer argument, no output for the pointee)
 - still failing: 0
 - new: 0
 

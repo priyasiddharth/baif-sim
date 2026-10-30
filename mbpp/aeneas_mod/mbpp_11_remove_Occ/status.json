@@ -34,7 +34,7 @@
         "passed": true,
         "stage": "run"
       },
-      "outcome": "check:missing_context",
+      "outcome": "check:missing_model",
       "aeneas": "mod"
     }
   ],

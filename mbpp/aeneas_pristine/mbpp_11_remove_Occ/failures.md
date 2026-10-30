@@ -38,9 +38,9 @@ Delta from attempt 1:
 - still failing: 0
 - new: 4
   - unsupported_code: Aeneas: Could not match the contexts — in `mbpp_11_remove_Occ::remove_Occ` at mbpp_11_remove_Occ.rs:9, used from mbpp_11_remove_Occ.rs:9:4
-  - missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new
-  - missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push
-  - missing_context: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
+  - missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new
+  - missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push
+  - missing_model: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
 
 Functions: remove_Occ sorry
 Axioms: alloc::string::{alloc::string::String}::new, alloc::string::{alloc::string::String}::push, alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
@@ -88,9 +88,9 @@ Delta from attempt 2:
 - resolved: 1
   - unsupported_code: Aeneas: Could not match the contexts — in `mbpp_11_remove_Occ::remove_Occ` at mbpp_11_remove_Occ.rs:9, used from mbpp_11_remove_Occ.rs:9:4
 - still failing: 3
-  - missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new
-  - missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push
-  - missing_context: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
+  - missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new
+  - missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push
+  - missing_model: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
 - new: 1
   - unsupported_code: Aeneas: Could not match the contexts — in `mbpp_11_remove_Occ::remove_Occ` at mbpp_11_remove_Occ.rs:14, used from mbpp_11_remove_Occ.rs:14:8
 
@@ -139,15 +139,15 @@ Code diff from attempt 2:
  }
 ```
 
-## Attempt 4 — check:missing_context
+## Attempt 4 — check:missing_model
 
 Delta from attempt 3:
 - resolved: 1
   - unsupported_code: Aeneas: Could not match the contexts — in `mbpp_11_remove_Occ::remove_Occ` at mbpp_11_remove_Occ.rs:14, used from mbpp_11_remove_Occ.rs:14:8
 - still failing: 3
-  - missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new
-  - missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push
-  - missing_context: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
+  - missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new
+  - missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push
+  - missing_model: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
 - new: 0
 
 Functions: remove_Occ translated

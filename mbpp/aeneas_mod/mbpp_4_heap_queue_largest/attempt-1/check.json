@@ -4,7 +4,7 @@
     "aeneas": "ee1c669a",
     "aeneas_checkout": "mod",
     "aeneas_dir": "aeneas_mod",
-    "lean_lib": "aeneas/backends/lean",
+    "lean_lib": "aeneas_mod/backends/lean",
     "charon": "373d84044",
     "charon_matches_pin": true,
     "rustc": "nightly-2026-09-17",
@@ -65,9 +65,9 @@
       ]
     }
   ],
-  "verdict": "missing_context",
+  "verdict": "missing_model",
   "reasons": [
-    "missing_context: no Lean model for standard-library item: alloc::vec::{alloc::vec::Vec<T>}::truncate",
-    "missing_context: no Lean model for standard-library item: core::slice::{[T"
+    "missing_model: no Lean model for standard-library item: alloc::vec::{alloc::vec::Vec<T>}::truncate",
+    "missing_model: no Lean model for standard-library item: core::slice::{[T"
   ]
 }

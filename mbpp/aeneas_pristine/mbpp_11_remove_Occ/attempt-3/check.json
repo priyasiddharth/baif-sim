@@ -98,8 +98,8 @@
   "verdict": "unsupported_code",
   "reasons": [
     "unsupported_code: Aeneas: Could not match the contexts \u2014 in `mbpp_11_remove_Occ::remove_Occ` at mbpp_11_remove_Occ.rs:14, used from mbpp_11_remove_Occ.rs:14:8",
-    "missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new",
-    "missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push",
-    "missing_context: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref"
+    "missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new",
+    "missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push",
+    "missing_model: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref"
   ]
 }

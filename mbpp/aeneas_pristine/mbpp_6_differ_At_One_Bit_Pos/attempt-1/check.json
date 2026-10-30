@@ -50,8 +50,8 @@
       ]
     }
   ],
-  "verdict": "missing_context",
+  "verdict": "missing_model",
   "reasons": [
-    "missing_context: no Lean model for standard-library item: core::num::{isize}::count_ones"
+    "missing_model: no Lean model for standard-library item: core::num::{isize}::count_ones"
   ]
 }

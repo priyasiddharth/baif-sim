@@ -38,9 +38,9 @@ Delta from attempt 1:
 - still failing: 0
 - new: 4
   - toolchain_problem: generated Lean does not type-check: Application type mismatch: The argument b has type Prop but is expected to have type Bool in the application (iter1, b)
-  - missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new
-  - missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push
-  - missing_context: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
+  - missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new
+  - missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push
+  - missing_model: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
 
 Functions: remove_Occ translated
 Axioms: alloc::string::{alloc::string::String}::new, alloc::string::{alloc::string::String}::push, alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
@@ -88,9 +88,9 @@ Delta from attempt 2:
 - resolved: 1
   - toolchain_problem: generated Lean does not type-check: Application type mismatch: The argument b has type Prop but is expected to have type Bool in the application (iter1, b)
 - still failing: 3
-  - missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new
-  - missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push
-  - missing_context: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
+  - missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new
+  - missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push
+  - missing_model: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
 - new: 1
   - toolchain_problem: generated Lean does not type-check: Application type mismatch: The argument b has type Prop but is expected to have type Bool in the application (seen2, b)
 
@@ -139,15 +139,15 @@ Code diff from attempt 2:
  }
 ```
 
-## Attempt 4 — check:missing_context
+## Attempt 4 — check:missing_model
 
 Delta from attempt 3:
 - resolved: 1
   - toolchain_problem: generated Lean does not type-check: Application type mismatch: The argument b has type Prop but is expected to have type Bool in the application (seen2, b)
 - still failing: 3
-  - missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new
-  - missing_context: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push
-  - missing_context: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
+  - missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new
+  - missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push
+  - missing_model: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
 - new: 0
 
 Functions: remove_Occ translated
