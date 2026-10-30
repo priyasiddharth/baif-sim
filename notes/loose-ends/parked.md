@@ -63,8 +63,17 @@
 
 ## Memory model for raw pointers in Aeneas (design question)
 **Status:** parked 2026-10-29
+**Update 2026-10-30:** upstream branch `origin/cezar/loops` (68 commits past de16f3c, last 2026-10-18) carries raw-pointer work: "Lean: heap cells with byte layouts; pointer casts, transmutes" (e315dd39), "Extraction: pointer casts between pointee types, transmutes, raw borrows of places" (d2cc241e), "Pre-pass: reuse the reads of values behind raw pointers" (94be8cea), experimental raw-pointer tests (8b4c7806). Unmerged; watch it before prototyping anything here.
 **Context:** Pointer writes through library calls are lost in translation (`swap_List` attempt 1). Options discussed: global heap (rejected: taxes safe code), local heap + ownership handoff (needs region-end info raw pointers don't have), per-pointer points-to tokens (Verus-style; needs annotations/inference). See 2026-10-29-swap-list-raw-pointers-become-opaque-values.md.
 **Why parked:** Aeneas feature work, out of scope for the brief; only needed if unsafe code must be verified.
 **To resume:** Check upstream Aeneas issues/PRs and the paper for raw-pointer plans; see how Charon represents `*mut T` deref/offset in LLBC; prototype the token typing of `ptr::swap` by hand in Lean against the generated `swap_List` to see what the Lean side would need.
 **Effort estimate:** unknown (research)
 **References:** 2026-10-29-swap-list-raw-pointers-become-opaque-values.md
+
+## String models for the fork's Lean library (remove_Occ)
+**Status:** parked 2026-10-30
+**Context:** remove_Occ attempt 4 needs `String::new`, `String::push`, `Deref<str> for String`; the library maps `String` to Lean's `String` but models no method. Three one-liners would make it translate. Alternative policy (undecided): isolate the unmodelled type behind a thin wrapper so only the conversions carry axioms. See 2026-10-30-unmodelled-type-in-signature-cannot-be-shimmed.md.
+**Why parked:** User's call between Lean models, boundary isolation in the skill, or leaving it as the recorded "cannot handle" case; discussion stopped before a choice.
+**To resume:** (a) add the three models to `aeneas_mod/backends/lean/Aeneas/Std/Alloc/String.lean` with `rust_fun` attributes, rebuild the fork's Lean lib, `mbpp.py recheck mbpp_11_remove_Occ --aeneas mod`; or (b) add the wrapper rule to the skill's `missing_model` section and run attempt 5.
+**Effort estimate:** (a) ~1 h; (b) ~1 h
+**References:** 2026-10-30-unmodelled-type-in-signature-cannot-be-shimmed.md, 2026-10-28-remove-occ-strings-expose-three-aeneas-limits.md
