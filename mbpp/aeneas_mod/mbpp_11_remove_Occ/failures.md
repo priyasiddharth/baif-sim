@@ -28,7 +28,7 @@ fn remove_Occ(s: String, ch: String) -> String {
 }
 ```
 
-## Attempt 2 — check:toolchain_problem
+## Attempt 2 — check:missing_model
 
 Delta from attempt 1:
 - resolved: 3
@@ -36,8 +36,7 @@ Delta from attempt 1:
   - unsupported_code: Aeneas: Unimplemented at /rustc/library/core/src/str/pattern.rs:99 (`pub trait Pattern: Sized {`)
   - unsupported_code: Aeneas: Aeneas aborted with exception Aeneas.Errors.CFailure(_) in Aeneas__SymbolicToPureTypes.translate_fwd_ty (symbolic/SymbolicToPureTypes.ml:392); no functions were translated
 - still failing: 0
-- new: 4
-  - toolchain_problem: generated Lean does not type-check: Application type mismatch: The argument b has type Prop but is expected to have type Bool in the application (iter1, b)
+- new: 3
   - missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new
   - missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push
   - missing_model: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
@@ -82,17 +81,15 @@ Code diff from attempt 1:
  }
 ```
 
-## Attempt 3 — check:toolchain_problem
+## Attempt 3 — check:missing_model
 
 Delta from attempt 2:
-- resolved: 1
-  - toolchain_problem: generated Lean does not type-check: Application type mismatch: The argument b has type Prop but is expected to have type Bool in the application (iter1, b)
+- resolved: 0
 - still failing: 3
   - missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new
   - missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push
   - missing_model: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
-- new: 1
-  - toolchain_problem: generated Lean does not type-check: Application type mismatch: The argument b has type Prop but is expected to have type Bool in the application (seen2, b)
+- new: 0
 
 Functions: remove_Occ translated
 Axioms: alloc::string::{alloc::string::String}::new, alloc::string::{alloc::string::String}::push, alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref
@@ -142,8 +139,7 @@ Code diff from attempt 2:
 ## Attempt 4 — check:missing_model
 
 Delta from attempt 3:
-- resolved: 1
-  - toolchain_problem: generated Lean does not type-check: Application type mismatch: The argument b has type Prop but is expected to have type Bool in the application (seen2, b)
+- resolved: 0
 - still failing: 3
   - missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new
   - missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push

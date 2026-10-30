@@ -101,11 +101,8 @@
       ]
     },
     "mod": {
-      "verdict": "toolchain_problem",
-      "reasons": [
-        "generated Lean does not type-check",
-        "has type Prop but is expected to have type"
-      ]
+      "verdict": "translates",
+      "axioms": 0
     }
   },
   "tests/unsupported/chars_next_before_loop.rs": {
@@ -158,7 +155,7 @@
   },
   "mbpp/aeneas_pristine/mbpp_11_remove_Occ/attempt-2/mbpp_11_remove_Occ.rs": {
     "pristine": "unsupported_code",
-    "mod": "toolchain_problem"
+    "mod": "missing_model"
   },
   "mbpp/aeneas_pristine/mbpp_11_remove_Occ/attempt-4/mbpp_11_remove_Occ.rs": {
     "pristine": "missing_model",

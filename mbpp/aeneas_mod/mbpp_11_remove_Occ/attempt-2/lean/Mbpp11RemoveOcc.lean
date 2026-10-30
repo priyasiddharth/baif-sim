@@ -92,7 +92,7 @@ def remove_Occ_loop1.body
         let seen2 ← seen + 1#i32
         let b ← if seen2 = 1#i32
                   then ok true
-                  else ok (seen2 = total)
+                  else ok (seen2 = total : Bool)
         ok (seen2, iter1, b)
       else ok (seen, iter1, false)
     if skip

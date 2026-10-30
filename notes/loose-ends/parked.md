@@ -21,7 +21,8 @@
 **References:** 2026-10-28-remove-occ-strings-expose-three-aeneas-limits.md
 
 ## Report the stored-`||`-in-loop Prop/Bool bug upstream (Aeneas)
-**Status:** parked 2026-10-28
+**Status:** fixed in the fork 2026-10-30 (aeneas_mod ed1312f, micro-pass variant); upstream has issue #1279 and open PR #1374 (broader fix); remaining step = offer our variant on that issue. See 2026-10-30-prop-bool-fix-in-fork.md.
+**Was:** parked 2026-10-28
 **Context:** `skip = a || b` inside a loop body → `let b ← if a then ok true else ok (b)` with `b : Prop`. Minimal repro is `tests/unsupported/or_in_loop_bool.rs` (standalone / in `if` / in tuple variants all translate, so the loop is required). Aeneas 399081f.
 **Why parked:** Workaround known (branch instead of store); not blocking.
 **To resume:** check `aeneas/src` for where `||` is translated (search for the short-circuit `if … then ok true else` shape in the pure AST passes) to see if a `decide` is missing in the loop-body path, then file an issue with the fixture.

@@ -7,7 +7,7 @@ Research notebook in `notes/`, managed with the **better-than-fish** skill
 
 ## Setup
 
-- **Clone:** `git clone --recurse-submodules git@github.com:priyasiddharth/baif-sim.git`. Submodules (`.gitmodules`): `aeneas/` (upstream pin de16f3c, never patched), `charon/` (373d840 = `aeneas/charon-pin`), `aeneas_mod/` (our fork priyasiddharth/aeneas, branch `main` = pin + local patches, ee1c669).
+- **Clone:** `git clone --recurse-submodules git@github.com:priyasiddharth/baif-sim.git`. Submodules (`.gitmodules`): `aeneas/` (upstream pin de16f3c, never patched), `charon/` (373d840 = `aeneas/charon-pin`), `aeneas_mod/` (our fork priyasiddharth/aeneas, branch `main` = pin + local patches, ed1312f).
 - **Pins:** rustc `nightly-2026-09-17` (`charon/rust-toolchain`), Lean `v4.35.0` (`aeneas/backends/lean/lean-toolchain`). Moving the pin: check out `aeneas/` and `charon/` together (per `charon-pin`), rebase the fork's commits, rebuild all three.
 - **Build (Nix, what CI does):** `nix build -L "path:$PWD/aeneas#charon" -o result-charon`, `… "path:$PWD/aeneas#aeneas" -o result-aeneas`, `… "path:$PWD/aeneas_mod#aeneas" -o result-aeneas-mod`; symlink `result-charon/bin/*` into `charon/bin/`, and each `result-*/bin/aeneas` into `aeneas/bin/` and `aeneas_mod/bin/`. The "Build Charon and Aeneas" step of `.github/workflows/check.yml` is the reference.
 - **Build (from source):** `make build-dev` in `charon/`, then in `aeneas/` (opam deps; `aeneas/charon` must be a symlink to `../charon`). Fork: `cd aeneas_mod/src && dune build && cp -f _build/default/main.exe ../bin/aeneas` (`aeneas_mod/charon -> ../charon`). Details: `notes/durable/how-to-translate-a-rust-file-to-lean-and-check-it.md`.

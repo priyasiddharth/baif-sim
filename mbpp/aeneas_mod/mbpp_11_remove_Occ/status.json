@@ -16,7 +16,7 @@
         "passed": true,
         "stage": "run"
       },
-      "outcome": "check:toolchain_problem",
+      "outcome": "check:missing_model",
       "aeneas": "mod"
     },
     {
@@ -25,7 +25,7 @@
         "passed": true,
         "stage": "run"
       },
-      "outcome": "check:toolchain_problem",
+      "outcome": "check:missing_model",
       "aeneas": "mod"
     },
     {

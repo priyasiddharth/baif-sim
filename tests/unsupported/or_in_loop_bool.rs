@@ -5,6 +5,9 @@
 //! type-check ("Application type mismatch ... Prop ... Bool"). The same
 //! statement outside a loop translates fine; branching on the condition
 //! (`if a || b { skip = true; }`) instead of storing it avoids the bug.
+//! Pristine pin: toolchain_problem (exit 4). Fork (`--aeneas mod`): translates;
+//! its type-annotation pass adds `: Bool` to a comparison whose expected type
+//! is unknown (upstream issue #1279, PR #1374 takes a broader route).
 pub fn count_skips(chars: Vec<char>, c: char, total: i32) -> i32 {
     let mut seen = 0;
     let mut skips = 0;

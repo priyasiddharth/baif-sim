@@ -27,14 +27,8 @@
       "errors": []
     },
     "lean": {
-      "status": "failed",
-      "errors": [
-        {
-          "message": "Application type mismatch: The argument b has type Prop but is expected to have type Bool in the application (iter1, b)",
-          "line": 96,
-          "col": 26
-        }
-      ]
+      "status": "ok",
+      "errors": []
     }
   },
   "functions": [
@@ -72,9 +66,8 @@
       ]
     }
   ],
-  "verdict": "toolchain_problem",
+  "verdict": "missing_model",
   "reasons": [
-    "toolchain_problem: generated Lean does not type-check: Application type mismatch: The argument b has type Prop but is expected to have type Bool in the application (iter1, b)",
     "missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::new",
     "missing_model: no Lean model for standard-library item: alloc::string::{alloc::string::String}::push",
     "missing_model: no Lean model for standard-library item: alloc::string::{impl core::ops::deref::Deref<str> for alloc::string::String}::deref"
