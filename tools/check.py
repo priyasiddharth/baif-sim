@@ -174,7 +174,14 @@ def name_to_str(name):
             parts.append(elem["Ident"][0])
         elif "Impl" in elem:
             parts.append("{impl}")
+        elif "Builtin" in elem:
+            parts.append("{" + str(elem["Builtin"][0]) + "}")
     return "::".join(parts)
+
+
+def is_compiler_generated(name):
+    """True for Charon-synthesised items such as `{DropGlue}` for a local type."""
+    return any("Builtin" in elem for elem in name)
 
 
 def span_start(span):
@@ -191,6 +198,10 @@ def local_functions(llbc_data):
             continue
         meta = decl["item_meta"]
         if not meta.get("is_local"):
+            continue
+        if is_compiler_generated(meta["name"]):
+            # Drop glue and other `Builtin` items Charon synthesises for local
+            # types: not user code, and Aeneas emits nothing for them.
             continue
         funs.append({
             "rust": name_to_str(meta["name"]),

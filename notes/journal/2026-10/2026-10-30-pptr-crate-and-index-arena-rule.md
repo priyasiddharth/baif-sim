@@ -44,3 +44,21 @@ input / `--include`). Test: `swap_List` against the crate should reach
   axiom cannot be filled correctly)
 - 2026-10-30-unmodelled-type-in-signature-cannot-be-shimmed.md
 - ../../loose-ends/parked.md ("Memory model for raw pointers")
+
+## Smallest arena example (added same day)
+
+[OBS 2026-10-30] `tests/arena_cycle.rs`: `Node { value: u32, next: usize }`,
+`Arena { nodes: Vec<Node> }`, `add` pushes and returns the index, `walk`
+follows `next` for k hops, `two_cycle` builds 1 → 2 → 1 and walks five hops
+(sum 7). Verdict `translates` under both checkouts, zero axioms; Lean `add :
+Arena → U32 → Usize → Result (Usize × Arena)` returns the handle with the
+updated arena, `walk_loop.body` is `Vec.index` + field reads. Expected rows
+added (46/46).
+[OBS 2026-10-30] check.py wart found by it: Charon synthesises drop glue for
+a local type that owns a `Vec` (`fun_decls` name `[…, Impl, Builtin
+DropGlue]`, `is_local`), Aeneas emits nothing for it, and the report listed
+`Arena::{impl}: missing (aeneas_error)` while the verdict stayed
+`translates`. Fixed: `local_functions` skips names with a `Builtin` segment
+(`is_compiler_generated`), `name_to_str` renders the segment as `{DropGlue}`;
+two unit tests (27 total). Verify: `tools/check.py tests/arena_cycle.rs --human`
+lists exactly three functions.

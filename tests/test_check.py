@@ -44,6 +44,23 @@ class Verdicts(unittest.TestCase):
         self.assertEqual(check.verdict_of([("unsupported_code", "a"), ("toolchain_problem", "b")]), "toolchain_problem")
 
 
+class LocalFunctions(unittest.TestCase):
+    def decl(self, name, local=True):
+        return {"item_meta": {"name": name, "is_local": local, "span": {"span": {"beg": {"line": 1, "col": 0}}}}, "body": None}
+
+    def test_drop_glue_is_skipped(self):
+        user = [{"Ident": ["crate", 0]}, {"Ident": ["add", 0]}]
+        glue = [{"Ident": ["crate", 0]}, {"Ident": ["Arena", 0]}, {"Impl": {"Trait": 8}}, {"Builtin": ["DropGlue", 0]}]
+        foreign = [{"Ident": ["core", 0]}, {"Ident": ["mem", 0]}, {"Ident": ["swap", 0]}]
+        data = {"translated": {"fun_decls": [self.decl(user), self.decl(glue), self.decl(foreign, local=False), None]}}
+        self.assertEqual([f["rust"] for f in check.local_functions(data)], ["crate::add"])
+
+    def test_builtin_segment_is_rendered(self):
+        glue = [{"Ident": ["crate", 0]}, {"Ident": ["Arena", 0]}, {"Impl": {"Trait": 8}}, {"Builtin": ["DropGlue", 0]}]
+        self.assertEqual(check.name_to_str(glue), "crate::Arena::{impl}::{DropGlue}")
+        self.assertTrue(check.is_compiler_generated(glue))
+
+
 class CharonStage(unittest.TestCase):
     def stage(self, compiled, errors=(), warnings=(), status="ok"):
         return {"rust_compiled": compiled, "errors": list(errors), "warnings": list(warnings), "status": status}

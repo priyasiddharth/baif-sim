@@ -234,5 +234,15 @@
       ],
       "axioms": 2
     }
+  },
+  "tests/arena_cycle.rs": {
+    "pristine": {
+      "verdict": "translates",
+      "axioms": 0
+    },
+    "mod": {
+      "verdict": "translates",
+      "axioms": 0
+    }
   }
 }
